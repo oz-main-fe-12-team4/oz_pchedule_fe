@@ -1,10 +1,10 @@
-import Input from "./components/Input";
+import Test from "./components/test.jsx";
 
 function App() {
   return (
     <>
       <div>pchedule</div>
-      <Input />
+      <Test />
     </>
   );
 }
