@@ -1,10 +1,10 @@
-import Input from "./components/Input";
+import Test from "./test";
 
 function App() {
   return (
     <>
       <div>pchedule</div>
-      <Input />
+      <Test />
     </>
   );
 }
