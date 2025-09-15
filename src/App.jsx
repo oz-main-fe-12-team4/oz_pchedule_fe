@@ -1,4 +1,4 @@
-import Test from "./test.jsx";
+import Test from "./components/test.jsx";
 
 function App() {
   return (
