@@ -1,6 +1,9 @@
 function ScheduleStoryCard({ schedule }) {
   return (
-    <div className="w-[500px] bg-white rounded-lg shadow p-5 mb-4 cursor-pointer hover:shadow-lg transition">
+    <div className="w-[300px] bg-white rounded-lg shadow p-5 mb-4 cursor-pointer hover:shadow-lg transition">
+      {/* 이미지 또는 플레이스홀더 박스 */}
+      <div className="bg-gray-300 rounded-md h-32 mb-4 w-full"></div>
+
       {/* 제목 */}
       <h3
         className="text-xl font-semibold mb-3 truncate"
@@ -9,12 +12,7 @@ function ScheduleStoryCard({ schedule }) {
         {schedule.title}
       </h3>
 
-      {/* 스토리 카드 내용 (요약) */}
-      <p className="text-gray-700 mb-4 line-clamp-3">
-        {schedule.story || "내용이 없습니다."}
-      </p>
-
-      {/* 좋아요 & 찜하기 */}
+      {/* 좋아요 & 찜하기 (이모지로 심플하게) */}
       <div className="flex space-x-6 text-gray-600 text-sm font-medium">
         <div>👍 좋아요: {schedule.like_count ?? 0}</div>
         <div>💖 찜하기: {schedule.favorite_count ?? 0}</div>
@@ -22,4 +20,5 @@ function ScheduleStoryCard({ schedule }) {
     </div>
   );
 }
+
 export default ScheduleStoryCard;
