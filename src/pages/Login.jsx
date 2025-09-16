@@ -4,6 +4,7 @@ import logo from "../assets/Logo.svg";
 import googleLogo from "../assets/google.png";
 import naverLogo from "../assets/naver.png";
 import kakaoLogo from "../assets/kakao.png";
+import { Link } from "react-router";
 
 function Login() {
   const [emailInputValue, setEmailInputValue] = useState("");
@@ -59,7 +60,9 @@ function Login() {
       </div>
       <p>
         계정이 없으신가요?{" "}
-        <span className="text-[#2F7884] font-bold">회원가입</span>
+        <Link to={"/signin"}>
+          <span className="text-[#2F7884] font-bold">회원가입</span>
+        </Link>
       </p>
     </div>
   );
