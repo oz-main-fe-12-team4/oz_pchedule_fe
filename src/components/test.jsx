@@ -1,7 +1,10 @@
+import { Header } from "./Header";
+
 function Test() {
   return (
     <>
-      <div>test</div>
+      <Header />
+      {/* <div>test</div> */}
     </>
   );
 }
