@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Input from "../components/Input";
 import { Link } from "react-router";
-// import logo from "../assets/Logo.svg";
+import logo from "../assets/Logo.svg";
 
 function Signin() {
   const [nameInputValue, setNameInputValue] = useState("");
@@ -15,7 +15,7 @@ function Signin() {
         name="login"
         className="flex flex-col justify-center items-center gap-5"
       >
-        {/* <img src={logo} alt="pchedule logo" className="w-[300px] scale-70" /> */}
+        <img src={logo} alt="pchedule logo" className="w-[300px] scale-70" />
         <div className="flex flex-col gap-1 justify-center items-start">
           <h2 className="text-[13px]">이름</h2>
           <Input
