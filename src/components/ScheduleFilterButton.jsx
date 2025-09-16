@@ -1,4 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
+import { FaShareAlt, FaUser } from "react-icons/fa";
+import { FaCircle } from "react-icons/fa6";
+import { IoMdShare } from "react-icons/io";
 
 const categoryOptionList = [
   { value: "daily", name: "🏠 일상" },
@@ -10,37 +13,67 @@ const categoryOptionList = [
 ];
 
 const priorityOptionList = [
-  { value: "urgent", name: "긴급" },
-  { value: "high", name: "상" },
-  { value: "medium", name: "중" },
-  { value: "low", name: "하" },
-  { value: "holding", name: "보류" },
+  {
+    value: "urgent",
+    name: "긴급",
+    icon: <FaCircle className="text-red-500" />,
+  },
+  { value: "high", name: "상", icon: <FaCircle className="text-orange-500" /> },
+  {
+    value: "medium",
+    name: "중",
+    icon: <FaCircle className="text-yellow-500" />,
+  },
+  { value: "low", name: "하", icon: <FaCircle className="text-green-500" /> },
+  {
+    value: "holding",
+    name: "보류",
+    icon: <FaCircle className="text-blue-400" />,
+  },
 ];
 
 const shareOption = [
-  { value: "personalSchedule", name: "개인일정" },
-  { value: "sharedSchedule", name: "공유하기" },
+  { value: "personalSchedule", name: "개인일정", icon: <FaUser /> },
+  { value: "sharedSchedule", name: "공유하기", icon: <FaShareAlt /> },
 ];
 
 const repeatOptionList = [
+  { value: "none", name: "반복없음" },
   { value: "daily", name: "매일반복" },
   { value: "weekly", name: "매주반복" },
   { value: "monthly", name: "매달반복" },
   { value: "yearly", name: "매년반복" },
 ];
 
-const ModalMenuList = ({ name, optionList, onChange, value }) => {
-  const optionRef = useRef(null);
+const ModalMenuList = ({
+  name,
+  optionList,
+  onChange,
+  value,
+  isOpen,
+  onToggle,
+}) => {
+  const handleSummaryClick = (e) => {
+    e.preventDefault();
+    onToggle(!isOpen);
+  };
   const handleSelect = (v) => {
     onChange(v);
-    if (optionRef.current) {
-      optionRef.current.removeAttribute("open");
-    }
+    onToggle(false);
   };
 
+  // const optionRef = useRef(null);
+  // const handleSelect = (v) => {
+  //   onChange(v);
+  //   if (optionRef.current) {
+  //     optionRef.current.removeAttribute("open");
+  //   }
+  // };
+
   return (
-    <details ref={optionRef} className="group relative">
+    <details open={isOpen} className="group relative">
       <summary
+        onClick={handleSummaryClick}
         className={`block w-full text-center list-none cursor-pointer select-none
           rounded-xl px-3 py-2 text-sm font-semibold shadow-sm
           transition-colors duration-200
@@ -69,6 +102,7 @@ const ModalMenuList = ({ name, optionList, onChange, value }) => {
                     : "hover:bg-gray-100"
                 }`}
             >
+              {opt.icon && <span className="text-[#223F43]">{opt.icon}</span>}
               {opt.name}
             </div>
           ))}
@@ -88,7 +122,10 @@ export const ScheduleFilterButton = ({ filteredList = [] }) => {
   const [categoryType, setCategoryType] = useState("daily");
   const [priorityType, setPriorityType] = useState("medium");
   const [shareType, setShareType] = useState("personalSchedule");
-  const [repeatType, setRepeatType] = useState("");
+  const [repeatType, setRepeatType] = useState("반복없음");
+
+  // 어떤 패널이 열려있는지 확인
+  const [openFilter, setOpenFilter] = useState(null);
 
   // const filteredList = [
   //   {
@@ -126,35 +163,53 @@ export const ScheduleFilterButton = ({ filteredList = [] }) => {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-4 gap-3">
-        <ModalMenuList
-          name="카테고리"
-          value={categoryType}
-          onChange={setCategoryType}
-          optionList={categoryOptionList}
-        />
-        <ModalMenuList
-          name="중요도"
-          value={priorityType}
-          onChange={setPriorityType}
-          optionList={priorityOptionList}
-        />
-        <ModalMenuList
-          name="공유"
-          value={shareType}
-          onChange={setShareType}
-          optionList={shareOption}
-        />
-        <ModalMenuList
-          name="반복"
-          value={repeatType}
-          onChange={setRepeatType}
-          optionList={repeatOptionList}
-        />
+    <div className="flex gap-6">
+      {/* 버튼 그룹: 화면 기준 30% 폭 */}
+      <div className="flex w-[370px] gap-2">
+        <div className="flex-1">
+          <ModalMenuList
+            name="카테고리"
+            value={categoryType}
+            onChange={setCategoryType}
+            optionList={categoryOptionList}
+            isOpen={openFilter === "category"}
+            onToggle={(open) => setOpenFilter(open ? "category" : null)}
+          />
+        </div>
+        <div className="flex-1">
+          <ModalMenuList
+            name="중요도"
+            value={priorityType}
+            onChange={setPriorityType}
+            optionList={priorityOptionList}
+            isOpen={openFilter === "priority"}
+            onToggle={(open) => setOpenFilter(open ? "priority" : null)}
+          />
+        </div>
+        <div className="flex-1">
+          <ModalMenuList
+            name="공유"
+            value={shareType}
+            onChange={setShareType}
+            optionList={shareOption}
+            isOpen={openFilter === "share"}
+            onToggle={(open) => setOpenFilter(open ? "share" : null)}
+          />
+        </div>
+        <div className="flex-1">
+          <ModalMenuList
+            name="반복"
+            value={repeatType}
+            onChange={setRepeatType}
+            optionList={repeatOptionList}
+            isOpen={openFilter === "repeat"}
+            onToggle={(open) => setOpenFilter(open ? "repeat" : null)}
+          />
+        </div>
       </div>
 
-      <div className="mt-4 space-y-2">
+      {/* 오른쪽 결과 영역 */}
+      <div className="flex-1 mt-4 space-y-2">
         {getProcessedFilterList().map((it) => (
           <div
             key={it.id}
