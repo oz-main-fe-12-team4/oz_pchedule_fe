@@ -62,14 +62,6 @@ const ModalMenuList = ({
     onToggle(false);
   };
 
-  // const optionRef = useRef(null);
-  // const handleSelect = (v) => {
-  //   onChange(v);
-  //   if (optionRef.current) {
-  //     optionRef.current.removeAttribute("open");
-  //   }
-  // };
-
   return (
     <details open={isOpen} className="group relative">
       <summary
@@ -122,7 +114,7 @@ export const ScheduleFilterButton = ({ filteredList = [] }) => {
   const [categoryType, setCategoryType] = useState("daily");
   const [priorityType, setPriorityType] = useState("medium");
   const [shareType, setShareType] = useState("personalSchedule");
-  const [repeatType, setRepeatType] = useState("반복없음");
+  const [repeatType, setRepeatType] = useState("none");
 
   // 어떤 패널이 열려있는지 확인
   const [openFilter, setOpenFilter] = useState(null);
@@ -208,7 +200,6 @@ export const ScheduleFilterButton = ({ filteredList = [] }) => {
         </div>
       </div>
 
-      {/* 오른쪽 결과 영역 */}
       <div className="flex-1 mt-4 space-y-2">
         {getProcessedFilterList().map((it) => (
           <div
