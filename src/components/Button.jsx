@@ -20,7 +20,7 @@ export const Button = ({
       >
         {confirmText}
       </button>
-      <button
+      {/* <button
         className="rounded-lg px-6 py-2 text-sm font-bold bg-[#f5f5f5] hover:bg-[#d9d9d9]"
         onClick={onCancelClick}
       >
@@ -31,7 +31,7 @@ export const Button = ({
         onClick={onConfirmClick}
       >
         {confirmText}
-      </button>
+      </button> */}
     </div>
   );
 };
