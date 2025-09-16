@@ -22,3 +22,4 @@ function ScheduleStoryCard({ schedule }) {
     </div>
   );
 }
+export default ScheduleStoryCard;
