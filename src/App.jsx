@@ -1,7 +1,5 @@
 import Test from "./components/test.jsx";
 
-import { Button } from "./assets/components/Button";
-
 function App() {
   return (
     <>
