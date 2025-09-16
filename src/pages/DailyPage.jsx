@@ -1,0 +1,100 @@
+import React from "react";
+import { FaUser } from "react-icons/fa6";
+import { IoShare } from "react-icons/io5";
+import { FaPlaneDeparture } from "react-icons/fa";
+import { FaCheckSquare, FaRegSquare } from "react-icons/fa";
+
+const items = [
+  {
+    date: "2025년 10월 26일",
+    color: "border-orange-400",
+    leftIcon: <FaUser className="text-gray-500" />,
+    titleIcon: <FaPlaneDeparture className="text-blue-500" />,
+    title: "일본 여행",
+    task: "일본 맛집 우동집 가기",
+    done: true,
+  },
+  {
+    date: "2025년 10월 26일",
+    color: "border-green-500",
+    leftIcon: <FaUser className="text-gray-500" />,
+    titleIcon: <FaPlaneDeparture className="text-blue-500" />,
+    title: "일본 여행",
+    task: "유명 신사 가기",
+    done: false,
+  },
+  {
+    date: "2025년 10월 27일",
+    color: "border-blue-500",
+    leftIcon: <IoShare className="text-gray-500" />,
+    titleIcon: <FaPlaneDeparture className="text-blue-500" />,
+    title: "일본 여행",
+    task: "꼬치 맛집 가기",
+    done: false,
+  },
+  {
+    date: "2025년 10월 27일",
+    color: "border-red-500",
+    leftIcon: <IoShare className="text-gray-500" />,
+    titleIcon: <FaPlaneDeparture className="text-blue-500" />,
+    title: "일본 여행",
+    task: "공원 놀러가기",
+    done: true,
+  },
+];
+
+export const DailyPage = () => {
+  return (
+    <div className="p-4 max-w-screen-lg mx-auto">
+      {/* 기간 */}
+      <div className="mb-4 text-gray-700">
+        <p className="text-xl font-bold">2025년 10월 26일 ~ 2025년 10월 30일</p>
+      </div>
+      <div className="flex flex-row gap-3 mb-4">
+        <p>전체</p>
+        <p>완료된일</p>
+        <p>해야할일</p>
+      </div>
+
+      <div className="divide-y-[0.5px] divide-gray-200">
+        {items.map((it, index) => (
+          <div key={index}>
+            {/* 위쪽 선 */}
+            <div className="border-gray-200 mb-4" />
+
+            {/* 카드 내용 */}
+            <div
+              className={`flex items-center gap-4 border-l-4 ${it.color} pl-3 py-2`}
+            >
+              {/* 왼쪽: 날짜 + 아이콘 */}
+              <div className="flex flex-col items-start min-w-[140px]">
+                <p className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  {it.date}
+                  {it.leftIcon}
+                </p>
+              </div>
+
+              {/* 오른쪽: 일정 내용 */}
+              <div className="flex w-full flex-col items-start justify-start p-3 px-6 gap-2 bg-white rounded-xl shadow-sm">
+                {/* 제목 */}
+                <div className="flex items-center gap-2">
+                  {it.titleIcon}
+                  <p className="font-semibold text-gray-800">{it.title}</p>
+                </div>
+
+                {/* 체크박스 + 태스크 */}
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  {it.done ? <FaCheckSquare /> : <FaRegSquare />}
+                  <span>{it.task}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* 아래쪽 선 */}
+            <div className="border-b border-gray-200 mt-4" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
