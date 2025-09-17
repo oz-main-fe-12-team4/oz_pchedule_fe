@@ -1,12 +1,7 @@
 import LikeButton from "./LikeButton";
 
 function Test() {
-  return (
-    <div>
-      좋아요버튼
-      <LikeButton />
-    </div>
-  );
+  return <div>text</div>;
 }
 
 export default Test;
