@@ -1,6 +1,12 @@
-import LikeButton from "../components/LikeButton";
+import LikeButton from "./LikeButton";
+
 function Test() {
-  return <div>test</div>;
+  return (
+    <div>
+      좋아요버튼
+      <LikeButton />
+    </div>
+  );
 }
 
 export default Test;
