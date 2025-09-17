@@ -11,10 +11,10 @@ function ConfirmModal({
         className="relative bg-gray-700 rounded-lg p-6 w-[320px] shadow-lg 
       flex flex-col items-center justify-center text-center"
       >
-        {/* 오른쪽 상단에 둥근 닫기 버튼 */}
+        {/* 오른쪽 상단에 닫기 버튼 */}
         <div
-          className="absolute top-1 right-1 w-4 h-4 rounded-full
-         bg-gray-500 text-white flex items-center justify-center cursor-pointer select-none"
+          className="absolute top-1 right-1 w-4 h-4 rounded-full p-3
+          text-white flex items-center justify-center cursor-pointer select-none"
         >
           ×
         </div>
