@@ -2,6 +2,7 @@ import { useState } from "react";
 
 const Input = ({
   label,
+  inputId,
   setValue,
   errorMessage,
   compareValue = null,
@@ -19,11 +20,11 @@ const Input = ({
   };
   return (
     <>
-      <label htmlFor={label} className="text-[13px] flex flex-col gap-1">
+      <label htmlFor={inputId} className="text-[13px] flex flex-col gap-1">
         {label}
       </label>
       <input
-        id={label}
+        id={inputId}
         className={`w-[300px] h-10 p-[0_25px] rounded-xl border border-[#C2C2C2]`}
         onChange={handleChange}
         {...props}

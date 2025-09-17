@@ -20,6 +20,7 @@ function Login() {
         <div className="flex flex-col gap-1 justify-center items-start">
           <Input
             label={"이메일"}
+            inputId={"이메일"}
             type={"email"}
             placeHolder={"이메일을 입력하세요."}
             value={emailInputValue}
@@ -30,6 +31,7 @@ function Login() {
         <div className="flex flex-col gap-1 justify-center items-start">
           <Input
             label={"비밀번호"}
+            inputId={"비밀번호"}
             type={"password"}
             placeHolder={"비밀번호를 입력하세요."}
             value={passwordInputValue}
