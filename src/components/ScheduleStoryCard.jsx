@@ -8,12 +8,12 @@ function ScheduleStoryCard({ schedule }) {
       <div className="bg-gray-300 rounded-md h-32 mb-4 w-[300px]"></div>
 
       {/* 제목 */}
-      <h3
+      <h2
         className="text-xl font-semibold mb-3 truncate"
         title={schedule.title}
       >
         {schedule.title}
-      </h3>
+      </h2>
 
       {/* 좋아요 & 찜하기 */}
       <div className="flex space-x-6 text-gray-600 text-sm font-medium justify-center">
