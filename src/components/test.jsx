@@ -2,17 +2,20 @@ import ScheduleStoryCard from "./ScheduleStoryCard";
 
 function Test() {
   const dummySchedule = {
-    id: 1,
-    title: "오로지 내 취향으로만 가득한 여행일정!",
-    likes: 22,
-    bookmarks: 207,
-    isBookmarked: false,
-    isReported: false,
+    post_id: 1,
+    title: "일정스토리의 제목입니다.",
+    start_time: "...",
+    category: "...",
+    is_shared: true,
+    like_count: 500,
+    favorite_count: 200,
+    is_reported: false,
+    is_completed: false,
   };
 
   return (
     <div>
-      <ScheduleStoryCard schedule={dummySchedule} isAdmin={false} />
+      <ScheduleStoryCard schedule={dummySchedule} />
     </div>
   );
 }
