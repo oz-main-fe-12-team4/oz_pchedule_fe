@@ -21,7 +21,9 @@ const getColor = (priority) => {
   }
 };
 
-export const ScheduleCard = ({ post }) => {
+export const ScheduleCard = (props) => {
+  const post = props.post;
+
   return (
     <div
       className={`flex items-center gap-4 border-l-4 ${getColor(
