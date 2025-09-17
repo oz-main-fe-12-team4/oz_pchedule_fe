@@ -1,5 +1,6 @@
 import React from "react";
 import { FaUser } from "react-icons/fa6";
+import { TbTrash } from "react-icons/tb";
 import { IoShare } from "react-icons/io5";
 import { FaCheckSquare, FaRegSquare } from "react-icons/fa";
 
@@ -121,19 +122,22 @@ export const DailyPage = () => {
                 </p>
               </div>
 
-              {/* 오른쪽: 일정 내용 */}
-              <div className="flex w-full flex-col items-start justify-start p-3 px-6 gap-2 bg-white rounded-xl shadow-sm">
-                {/* 제목 */}
-                <div className="flex items-center gap-2">
-                  <p className="font-semibold text-gray-800">{it.title}</p>
-                </div>
+              <div className="flew w-full justify-between">
+                {/* 오른쪽: 일정 내용 */}
+                <div className="flex w-full flex-col items-start justify-start p-3 px-6 gap-2 bg-white rounded-xl shadow-sm">
+                  {/* 제목 */}
+                  <div className="flex items-center gap-2">
+                    <p className="font-semibold text-gray-800">{it.title}</p>
+                  </div>
 
-                {/* 체크박스 + 태스크 */}
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  {it.is_completed ? <FaCheckSquare /> : <FaRegSquare />}
-                  <span>{it.schedule}</span>
+                  {/* 체크박스 + 태스크 */}
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    {it.is_completed ? <FaCheckSquare /> : <FaRegSquare />}
+                    <span>{it.schedule}</span>
+                  </div>
                 </div>
               </div>
+              <TbTrash size={30} />
             </div>
 
             {/* 아래쪽 선 */}
