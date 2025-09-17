@@ -1,14 +1,11 @@
 import { useState } from "react";
 
 const Input = ({
-  type,
-  placeHolder,
-  value,
+  label,
   setValue,
-  pattern,
   errorMessage,
-  required,
   compareValue = null,
+  ...props
 }) => {
   const [isError, setIsError] = useState(false);
 
@@ -22,18 +19,16 @@ const Input = ({
   };
   return (
     <>
-      <label className="flex flex-col gap-1">
-        <input
-          type={type}
-          placeholder={placeHolder}
-          value={value}
-          pattern={pattern}
-          required={required}
-          className={`w-[300px] h-10 p-[0_25px] rounded-xl border border-[#C2C2C2]`}
-          onChange={handleChange}
-        />
-        {isError && <p className="text-[#790000]">{errorMessage}</p>}
+      <label htmlFor={label} className="text-[13px] flex flex-col gap-1">
+        {label}
       </label>
+      <input
+        id={label}
+        className={`w-[300px] h-10 p-[0_25px] rounded-xl border border-[#C2C2C2]`}
+        onChange={handleChange}
+        {...props}
+      />
+      {isError && <p className="text-[#790000]">{errorMessage}</p>}
     </>
   );
 };
