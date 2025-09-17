@@ -137,7 +137,10 @@ export const DailyPage = () => {
                   </div>
                 </div>
               </div>
-              <TbTrash size={30} />
+              <TbTrash
+                size={30}
+                className="text-[#d0d0d0] hover:text-[#5c5c5c]"
+              />
             </div>
 
             {/* 아래쪽 선 */}
