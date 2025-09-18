@@ -5,7 +5,7 @@ import googleLogo from "../assets/google.png";
 import naverLogo from "../assets/naver.png";
 import kakaoLogo from "../assets/kakao.png";
 import { Link } from "react-router";
-import { Button } from "../components/Button";
+import Button from "../components/Button";
 
 const Login = () => {
   const [emailInputValue, setEmailInputValue] = useState("");
