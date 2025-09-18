@@ -17,12 +17,10 @@ const MainCalendar = () => {
   const weeks = groupDatesByWeek(firstDayOfMonth, lastDayOfMonth); // 주들을 모을 배열
 
   return (
-    <>
+    <div className="w-[calc(100vw-200px)] p-5">
       <DisplayDays />
-      <div>
-        <DisplayWeeks weeks={weeks} />
-      </div>
-    </>
+      <DisplayWeeks weeks={weeks} />
+    </div>
   );
 };
 
