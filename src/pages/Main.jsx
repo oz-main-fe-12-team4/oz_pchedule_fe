@@ -2,7 +2,7 @@ import { useState } from "react";
 import MainCalendar from "../components/calendar/MainCalendar";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import { MdOutlineNavigateBefore } from "react-icons/md";
-import { Button } from "../components/Button";
+import Button from "../components/Button";
 
 const Main = () => {
   const [currentDate] = useState(new Date());
