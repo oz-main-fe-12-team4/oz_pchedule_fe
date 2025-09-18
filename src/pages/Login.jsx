@@ -5,6 +5,7 @@ import googleLogo from "../assets/google.png";
 import naverLogo from "../assets/naver.png";
 import kakaoLogo from "../assets/kakao.png";
 import { Link } from "react-router";
+import { Button } from "../components/Button";
 
 function Login() {
   const [emailInputValue, setEmailInputValue] = useState("");
@@ -39,9 +40,7 @@ function Login() {
             required={true}
           />
         </div>
-        <button className="w-[300px] h-8 m-3 rounded-xl bg-[#D9D9D9] hover:bg-[#5AA5B2]">
-          Login
-        </button>
+        <Button variant={"login"} children={"로그인"} />
       </form>
       <div className="w-[300px] flex justify-center items-center gap-10 p-8 border-t border-[#d9d9d9]">
         <img
