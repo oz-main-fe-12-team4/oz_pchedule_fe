@@ -46,18 +46,20 @@ const repeatOptionList = [
   { value: "yearly", name: "매년반복" },
 ];
 
-const ModalMenuList = ({
-  name,
-  optionList,
-  onChange,
-  value,
-  isOpen,
-  onToggle,
-}) => {
+const FILTERS = {
+  category: { label: "카테고리", options: categoryOptionList },
+  priority: { label: "중요도", options: priorityOptionList },
+  share: { label: "공유", options: shareOption },
+  repeat: { label: "반복", options: repeatOptionList },
+};
+
+const ModalMenuList = ({ filterType, value, onChange, isOpen, onToggle }) => {
   const handleSelect = (v) => {
     onChange(v);
     onToggle(false);
   };
+
+  const currentFilter = FILTERS[filterType];
 
   return (
     <div className="relative">
@@ -66,13 +68,13 @@ const ModalMenuList = ({
         onClick={() => onToggle(!isOpen)}
         type="button"
       >
-        {name}
+        {currentFilter.label}
       </Button>
 
       {isOpen && (
         <div className="absolute z-10 mt-2 w-[360px] rounded-2xl bg-white p-5 shadow-md animate-[slide-up_160ms_ease-out] max-h-[70vh] overflow-auto">
           <div className="grid grid-cols-2 gap-y-6 gap-x-10">
-            {optionList.map((opt) => (
+            {currentFilter.options.map((opt) => (
               <button
                 type="button"
                 key={opt.value}
@@ -101,24 +103,32 @@ const ModalMenuList = ({
 };
 
 export const ScheduleFilterButton = ({ filteredList = [] }) => {
-  const [categoryType, setCategoryType] = useState("daily");
-  const [priorityType, setPriorityType] = useState("medium");
-  const [shareType, setShareType] = useState("personalSchedule");
-  const [repeatType, setRepeatType] = useState("none");
+  const [filters, setFilters] = useState({
+    category: "daily",
+    priority: "medium",
+    share: "personalSchedule",
+    repeat: "none",
+  });
 
-  // 어떤 패널이 열려있는지 확인
   const [openFilter, setOpenFilter] = useState(null);
+
+  const handleFilterChange = (filterType, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [filterType]: value,
+    }));
+  };
 
   const getProcessedFilterList = () => {
     const copyList = JSON.parse(JSON.stringify(filteredList));
     const filtered = copyList.filter((it) => {
-      const okCategory = !categoryType || it.category === categoryType;
-      const okPriority = !priorityType || it.priority === priorityType;
+      const okCategory = !filters.category || it.category === filters.category;
+      const okPriority = !filters.priority || it.priority === filters.priority;
       const okShare =
-        shareType === "personalSchedule"
+        filters.share === "personalSchedule"
           ? it.isShared === false
           : it.isShared === true;
-      const okRepeat = !repeatType || it.repeat === repeatType;
+      const okRepeat = !filters.repeat || it.repeat === filters.repeat;
       return okCategory && okPriority && okShare && okRepeat;
     });
     console.log(filtered);
@@ -127,53 +137,21 @@ export const ScheduleFilterButton = ({ filteredList = [] }) => {
 
   return (
     <div className="flex">
-      {/* 필터링 버튼 그룹 */}
+      {/* 필터링 버튼 */}
       <div className="flex w-[300px] gap-2 shrink-0">
-        <div>
-          <ModalMenuList
-            name="카테고리"
-            value={categoryType}
-            onChange={setCategoryType}
-            optionList={categoryOptionList}
-            isOpen={openFilter === "category"}
-            onToggle={(open) => setOpenFilter(open ? "category" : null)}
-          />
-        </div>
-
-        <div>
-          <ModalMenuList
-            name="중요도"
-            value={priorityType}
-            onChange={setPriorityType}
-            optionList={priorityOptionList}
-            isOpen={openFilter === "priority"}
-            onToggle={(open) => setOpenFilter(open ? "priority" : null)}
-          />
-        </div>
-
-        <div>
-          <ModalMenuList
-            name="공유"
-            value={shareType}
-            onChange={setShareType}
-            optionList={shareOption}
-            isOpen={openFilter === "share"}
-            onToggle={(open) => setOpenFilter(open ? "share" : null)}
-          />
-        </div>
-
-        <div>
-          <ModalMenuList
-            name="반복"
-            value={repeatType}
-            onChange={setRepeatType}
-            optionList={repeatOptionList}
-            isOpen={openFilter === "repeat"}
-            onToggle={(open) => setOpenFilter(open ? "repeat" : null)}
-          />
-        </div>
+        {Object.keys(FILTERS).map((filterKey) => (
+          <div key={filterKey}>
+            <ModalMenuList
+              filterType={filterKey}
+              value={filters[filterKey]}
+              onChange={(value) => handleFilterChange(filterKey, value)}
+              isOpen={openFilter === filterKey}
+              onToggle={(open) => setOpenFilter(open ? filterKey : null)}
+            />
+          </div>
+        ))}
       </div>
-
+      {/* 모달 옵션 */}
       <div className="flex-1 mt-4 space-y-2">
         {getProcessedFilterList().map((it) => (
           <div
