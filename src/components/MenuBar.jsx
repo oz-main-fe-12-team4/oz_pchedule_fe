@@ -8,7 +8,7 @@ import { BiSolidUserRectangle } from "react-icons/bi";
 const MenuBar = () => {
   return (
     <>
-      <nav className="w-[200px] h-screen p-9 border-r border-[#D9D9D9]">
+      <nav className="w-[200px] h-[calc(100vh-100.18px)] p-9 border-r border-[#D9D9D9]">
         <ul className="flex flex-col justify-center items-start gap-10 text-xl">
           <li className="flex gap-2 items-center">
             <FaRegCalendarAlt />

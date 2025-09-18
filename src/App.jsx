@@ -1,10 +1,10 @@
+import { Layout } from "./components/Layout.jsx";
 import Test from "./components/test.jsx";
 
 function App() {
   return (
     <>
-      {/* <div>pchedule</div> */}
-      <Test />
+      <Layout />
     </>
   );
 }
