@@ -16,7 +16,7 @@ let router = createBrowserRouter([
     Component: App,
     children: [
       {
-        path: "/calendar",
+        path: "/",
         Component: Main,
       },
       {
