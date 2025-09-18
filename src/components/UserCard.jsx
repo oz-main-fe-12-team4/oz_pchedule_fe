@@ -2,11 +2,11 @@ import { useState } from "react";
 
 export default function UserCard() {
   const profileImage = "https://via.placeholder.com/150";
-  const userName = "능지호";
-  const userEmail = "jihojiho@gmail.com";
+  const userName = "홍길동";
+  const userEmail = "hong.gildong@example.com";
 
-  const [isReported, setIsReported] = useState(true);
-  const reportReason = "나에게 모욕감을 줌 ";
+  const isReported = true;
+  const reportReason = "지속적인 욕설 사용";
 
   const [showReportReason, setShowReportReason] = useState(false);
 
@@ -14,15 +14,12 @@ export default function UserCard() {
     setShowReportReason((prev) => !prev);
   };
 
-  // 계정 잠금 및 삭제 버튼 클릭 핸들러
   const handleLockAccount = () => {
     console.log("계정 잠금 버튼이 클릭되었습니다.");
-    // 나중에 여기에 계정 잠금 API 호출 로직이 들어갑니다.
   };
 
   const handleDeleteAccount = () => {
     console.log("계정 삭제 버튼이 클릭되었습니다.");
-    // 나중에 여기에 계정 삭제 API 호출 로직이 들어갑니다.
   };
 
   return (
@@ -47,7 +44,6 @@ export default function UserCard() {
           </button>
         )}
 
-        {/* 계정 잠금 버튼 추가 */}
         <button
           className="text-gray-700 font-bold px-2 py-1 rounded hover:bg-gray-200 transition-colors"
           onClick={handleLockAccount}
@@ -55,7 +51,6 @@ export default function UserCard() {
           계정 잠금
         </button>
 
-        {/* 계정 삭제 버튼 추가 */}
         <button
           className="text-gray-700 font-bold px-2 py-1 rounded hover:bg-gray-200 transition-colors"
           onClick={handleDeleteAccount}
