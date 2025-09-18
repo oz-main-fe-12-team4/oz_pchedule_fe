@@ -9,6 +9,29 @@ let router = createBrowserRouter([
   {
     path: "/",
     Component: App,
+    children: [
+      {
+        path: "/calendar",
+      },
+      {
+        path: "/schedule",
+      },
+      {
+        path: "/routine",
+      },
+      {
+        path: "/someday",
+      },
+      {
+        path: "/share_schedule",
+      },
+      {
+        path: "/admin/user_list",
+      },
+      {
+        path: "/admin/share_schedule",
+      },
+    ],
   },
   {
     path: "/login",
@@ -17,6 +40,21 @@ let router = createBrowserRouter([
   {
     path: "/signin",
     Component: Signin,
+  },
+  {
+    path: "/my_page",
+  },
+  {
+    path: "/testH",
+  },
+  {
+    path: "/testD",
+  },
+  {
+    path: "/testJ",
+  },
+  {
+    path: "/testL",
   },
 ]);
 
