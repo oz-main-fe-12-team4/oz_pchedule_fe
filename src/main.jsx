@@ -8,6 +8,7 @@ import TestH from "./test/TestH";
 import TestD from "./test/TestD";
 import TestJ from "./test/TestJ";
 import TestL from "./test/TestL";
+import Main from "./pages/Main";
 
 let router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ let router = createBrowserRouter([
     children: [
       {
         path: "/calendar",
+        Component: Main,
       },
       {
         path: "/schedule",
