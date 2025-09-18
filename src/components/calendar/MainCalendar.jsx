@@ -3,7 +3,7 @@ import { groupDatesByWeek } from "../../utils/groupDatesByWeek";
 import DisplayWeeks from "./DisplayWeeks";
 import DisplayDays from "./DisplayDays";
 
-function MainCalendar() {
+const MainCalendar = () => {
   const [currentDate] = useState(new Date());
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -24,6 +24,6 @@ function MainCalendar() {
       </div>
     </>
   );
-}
+};
 
 export default MainCalendar;

@@ -2,9 +2,9 @@ import { useState } from "react";
 import Input from "../components/Input";
 import { Link } from "react-router";
 import logo from "../assets/Logo.svg";
-import { Button } from "../components/Button";
+import Button from "../components/Button";
 
-function Signin() {
+const Signin = () => {
   const [nameInputValue, setNameInputValue] = useState("");
   const [emailInputValue, setEmailInputValue] = useState("");
   const [passwordInputValue, setPasswordInputValue] = useState("");
@@ -72,6 +72,6 @@ function Signin() {
       </p>
     </div>
   );
-}
+};
 
 export default Signin;

@@ -22,7 +22,7 @@ const getColor = (priority) => {
   }
 };
 
-export const ScheduleCard = () => {
+const ScheduleCard = () => {
   // const post = props.post;
 
   return (
@@ -67,3 +67,5 @@ export const ScheduleCard = () => {
     </div>
   );
 };
+
+export default ScheduleCard;
