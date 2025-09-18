@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import Login from "./pages/Login";
+import Signin from "./pages/Signin";
 
 let router = createBrowserRouter([
   {
@@ -12,6 +13,10 @@ let router = createBrowserRouter([
   {
     path: "/login",
     Component: Login,
+  },
+  {
+    path: "/signin",
+    Component: Signin,
   },
 ]);
 
