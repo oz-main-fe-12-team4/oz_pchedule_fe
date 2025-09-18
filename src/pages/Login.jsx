@@ -18,8 +18,9 @@ function Login() {
       >
         <img src={logo} alt="pchedule logo" className="w-[300px] scale-70" />
         <div className="flex flex-col gap-1 justify-center items-start">
-          <h2 className="text-[13px]">이메일</h2>
           <Input
+            label={"이메일"}
+            inputId={"이메일"}
             type={"email"}
             placeHolder={"이메일을 입력하세요."}
             value={emailInputValue}
@@ -28,8 +29,9 @@ function Login() {
           />
         </div>
         <div className="flex flex-col gap-1 justify-center items-start">
-          <h2 className="text-[13px]">비밀번호</h2>
           <Input
+            label={"비밀번호"}
+            inputId={"비밀번호"}
             type={"password"}
             placeHolder={"비밀번호를 입력하세요."}
             value={passwordInputValue}
