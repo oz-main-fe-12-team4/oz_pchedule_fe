@@ -1,7 +1,9 @@
 import React from "react";
-import { ScheduleCard } from "../components/ScheduleCard"; // ⭐ ScheduleCard 불러오기
+import ScheduleCard from "../components/ScheduleCard";
+import FilterButtons from "../components/FilterButtons";
 
-export const DailyPage = ({ posts }) => {
+const DailyPage = ({ posts }) => {
+  const list = posts?.data ?? [];
   return (
     <div className="p-4 max-w-screen-lg mx-auto">
       {/* 기간 */}
@@ -11,9 +13,7 @@ export const DailyPage = ({ posts }) => {
 
       {/* 카테고리 */}
       <div className="flex flex-row gap-3 mb-4">
-        <p>기간별</p>
-        <p>날짜별</p>
-        <p>중요도</p>
+        <FilterButtons />
       </div>
 
       {/* 필터 */}
@@ -25,12 +25,14 @@ export const DailyPage = ({ posts }) => {
 
       {/* 카드 리스트 */}
       <div className="divide-y-[0.5px] divide-gray-200">
-        {posts.data.map((post) => (
+        {list.map((post) => (
           <div key={post.post_id} className="py-4">
-            <ScheduleCard post={post} /> {/* ⭐ post props로 넘겨줌 */}
+            <ScheduleCard post={post} />
           </div>
         ))}
       </div>
     </div>
   );
 };
+
+export default DailyPage;

@@ -3,14 +3,6 @@ import MenuBar from "../components/MenuBar";
 import PlusButton from "../components/PlusButton";
 
 function TestD() {
-  return (
-    <div>
-      <Header />
-      <div className="flex">
-        <MenuBar />
-        <PlusButton />
-      </div>
-    </div>
-  );
+  return <div>단비의 테스트 페이지</div>;
 }
 export default TestD;
