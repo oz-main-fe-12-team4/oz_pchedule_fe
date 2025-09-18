@@ -1,3 +1,5 @@
+import { Button } from "./Button";
+
 function ConfirmModal({
   message,
   leftBtnText,
@@ -12,7 +14,7 @@ function ConfirmModal({
         className="relative bg-gray-700 rounded-lg p-6 w-[320px] shadow-lg 
       flex flex-col items-center justify-center text-center"
       >
-        {/* 오른쪽 상단에 닫기 버튼 */}
+        {/* 오른쪽 상단에 닫기 버튼*/}
         <button
           type="button"
           className="absolute top-1 right-1 w-4 h-4 
@@ -25,18 +27,16 @@ function ConfirmModal({
 
         <p className="mb-3 text-white">{message}</p>
         <div className="flex justify-center space-x-4">
-          <button
-            className="bg-black text-white rounded px-4 py-2 hover:bg-gray-900 "
+          <Button
+            children={leftBtnText}
+            variant="cancel"
             onClick={onLeftClick}
-          >
-            {leftBtnText}
-          </button>
-          <button
-            className="bg-gray-300 rounded px-4 py-2 hover:bg-gray-400"
+          />
+          <Button
+            children={rightBtnText}
+            variant="confirm"
             onClick={onRightClick}
-          >
-            {rightBtnText}
-          </button>
+          />
         </div>
       </div>
     </div>
