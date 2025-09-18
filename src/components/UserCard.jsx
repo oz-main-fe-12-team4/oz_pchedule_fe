@@ -1,12 +1,9 @@
 import { useState } from "react";
+import { userData } from "../assets/data/userdata";
 
 export default function UserCard() {
-  const profileImage = "https://via.placeholder.com/150";
-  const userName = "홍길동";
-  const userEmail = "hong.gildong@example.com";
-
-  const isReported = true;
-  const reportReason = "지속적인 욕설 사용";
+  const { profileImage, userName, userEmail, isReported, reportReason } =
+    userData;
 
   const [showReportReason, setShowReportReason] = useState(false);
 
