@@ -1,3 +1,6 @@
+import { FaCircle, FaUser } from "react-icons/fa6";
+import { FaShareAlt } from "react-icons/fa";
+
 export const FILTER_LABELS = {
   category: "카테고리",
   priority: "중요도",
@@ -16,28 +19,21 @@ export const CATEGORY_OPTION_LIST = [
 ];
 
 export const PRIORITY_OPTION_LIST = [
-  {
-    value: "urgent",
-    name: "긴급",
-    icon: <FaCircle className="text-red-500" />,
-  },
-  { value: "high", name: "상", icon: <FaCircle className="text-orange-500" /> },
-  {
-    value: "medium",
-    name: "중",
-    icon: <FaCircle className="text-yellow-500" />,
-  },
-  { value: "low", name: "하", icon: <FaCircle className="text-green-500" /> },
+  { value: "urgent", name: "긴급", Icon: FaCircle, iconClass: "text-red-500" },
+  { value: "high", name: "상", Icon: FaCircle, iconClass: "text-orange-500" },
+  { value: "medium", name: "중", Icon: FaCircle, iconClass: "text-yellow-500" },
+  { value: "low", name: "하", Icon: FaCircle, iconClass: "text-green-500" },
   {
     value: "holding",
     name: "보류",
-    icon: <FaCircle className="text-blue-400" />,
+    Icon: FaCircle,
+    iconClass: "text-blue-400",
   },
 ];
 
 export const SHARE_OPTION = [
-  { value: "personalSchedule", name: "개인일정", icon: <FaUser /> },
-  { value: "sharedSchedule", name: "공유하기", icon: <FaShareAlt /> },
+  { value: "personalSchedule", name: "개인일정", Icon: FaUser },
+  { value: "sharedSchedule", name: "공유하기", Icon: FaShareAlt },
 ];
 
 export const REPEAT_OPTION_LIST = [
