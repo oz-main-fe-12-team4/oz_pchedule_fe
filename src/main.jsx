@@ -4,6 +4,10 @@ import App from "./App";
 import "./index.css";
 import Login from "./pages/Login";
 import Signin from "./pages/Signin";
+import TestH from "./test/TestH";
+import TestD from "./test/TestD";
+import TestJ from "./test/TestJ";
+import TestL from "./test/TestL";
 
 let router = createBrowserRouter([
   {
@@ -46,15 +50,19 @@ let router = createBrowserRouter([
   },
   {
     path: "/testH",
+    Component: TestH,
   },
   {
     path: "/testD",
+    Component: TestD,
   },
   {
     path: "/testJ",
+    Component: TestJ,
   },
   {
     path: "/testL",
+    Component: TestL,
   },
 ]);
 

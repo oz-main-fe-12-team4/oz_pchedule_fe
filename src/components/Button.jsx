@@ -16,7 +16,7 @@ const baseStyle =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5AA5B2] " +
   "disabled:opacity-50 disabled:cursor-not-allowed shadow-md";
 
-export const Button = ({
+const Button = ({
   variant = "confirm",
   children,
   additionalClass = "",
@@ -35,3 +35,5 @@ export const Button = ({
     </button>
   );
 };
+
+export default Button;

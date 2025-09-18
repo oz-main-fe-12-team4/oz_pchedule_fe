@@ -7,7 +7,7 @@ import kakaoLogo from "../assets/kakao.png";
 import { Link } from "react-router";
 import { Button } from "../components/Button";
 
-function Login() {
+const Login = () => {
   const [emailInputValue, setEmailInputValue] = useState("");
   const [passwordInputValue, setPasswordInputValue] = useState("");
 
@@ -67,6 +67,6 @@ function Login() {
       </p>
     </div>
   );
-}
+};
 
 export default Login;

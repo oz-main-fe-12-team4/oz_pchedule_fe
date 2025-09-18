@@ -4,7 +4,7 @@ import { IoSearch } from "react-icons/io5";
 import { IoMdNotifications } from "react-icons/io";
 import { FaCircleUser } from "react-icons/fa6";
 
-export const Header = () => {
+const Header = () => {
   return (
     <div>
       <header className="flex items-center justify-between flex-row mx-10 my-3">
@@ -19,3 +19,5 @@ export const Header = () => {
     </div>
   );
 };
+
+export default Header;
