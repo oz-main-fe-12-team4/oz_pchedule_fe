@@ -4,6 +4,7 @@ function ConfirmModal({
   rightBtnText,
   onLeftClick,
   onRightClick,
+  onClose,
 }) {
   return (
     <div className="fixed inset-0 bg-gray-300 bg-opacity-40 flex items-center justify-center z-50">
@@ -12,12 +13,15 @@ function ConfirmModal({
       flex flex-col items-center justify-center text-center"
       >
         {/* 오른쪽 상단에 닫기 버튼 */}
-        <div
-          className="absolute top-1 right-1 w-4 h-4 rounded-full p-3
-          text-white flex items-center justify-center cursor-pointer select-none"
+        <button
+          type="button"
+          className="absolute top-1 right-1 w-4 h-4 
+          rounded-full p-3  text-white flex items-center justify-center cursor-pointer select-none"
+          aria-label="닫기"
+          onClick={onClose}
         >
           ×
-        </div>
+        </button>
 
         <p className="mb-3 text-white">{message}</p>
         <div className="flex justify-center space-x-4">
