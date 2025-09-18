@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { groupDatesByWeek } from "../../utils/groupDatesByWeek";
 import DisplayWeeks from "./DisplayWeeks";
 import DisplayDays from "./DisplayDays";
@@ -8,6 +7,7 @@ const MainCalendar = () => {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
+function MainCalendar({ year, month }) {
   // 매 달 1일
   const firstDayOfMonth = new Date(year, month, 1);
 
