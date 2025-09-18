@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaShareAlt, FaUser } from "react-icons/fa";
 import { FaCircle } from "react-icons/fa6";
 import { IoMdShare } from "react-icons/io";
+import { Button } from "./Button";
 
 const categoryOptionList = [
   { value: "daily", name: "🏠 일상" },
@@ -53,60 +54,49 @@ const ModalMenuList = ({
   isOpen,
   onToggle,
 }) => {
-  const handleSummaryClick = (e) => {
-    e.preventDefault();
-    onToggle(!isOpen);
-  };
   const handleSelect = (v) => {
     onChange(v);
     onToggle(false);
   };
 
   return (
-    <details open={isOpen} className="group relative">
-      <summary
-        onClick={handleSummaryClick}
-        className={`block w-full text-center list-none cursor-pointer select-none
-          rounded-xl px-3 py-2 text-sm font-semibold shadow-sm
-          transition-colors duration-200
-          ${
-            value
-              ? "bg-[#223F43] text-white shadow-md"
-              : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-          }`}
+    <div className="relative">
+      <Button
+        variant="category"
+        onClick={() => onToggle(!isOpen)}
+        type="button"
       >
         {name}
-      </summary>
+      </Button>
 
-      <div
-        className="absolute mt-2 w-[360px] rounded-2xl bg-white p-5 shadow-md
-                  animate-[slide-up_160ms_ease-out] max-h-[70vh] overflow-auto"
-      >
-        <div className="grid grid-cols-2 gap-y-6 gap-x-10">
-          {optionList.map((opt) => (
-            <div
-              key={opt.value}
-              onClick={() => handleSelect(opt.value)}
-              className={`text-left text-lg font-semibold rounded-md px-2 py-1 transition-colors
-                ${
-                  value === opt.value
-                    ? "bg-[#CAE8F2] text-[#223F43]"
-                    : "hover:bg-gray-100"
-                }`}
-            >
-              {opt.icon && <span className="text-[#223F43]">{opt.icon}</span>}
-              {opt.name}
-            </div>
-          ))}
+      {isOpen && (
+        <div className="absolute z-10 mt-2 w-[360px] rounded-2xl bg-white p-5 shadow-md animate-[slide-up_160ms_ease-out] max-h-[70vh] overflow-auto">
+          <div className="grid grid-cols-2 gap-y-6 gap-x-10">
+            {optionList.map((opt) => (
+              <button
+                type="button"
+                key={opt.value}
+                onClick={() => handleSelect(opt.value)}
+                className={`flex items-center gap-2 text-left text-lg font-semibold rounded-md px-2 py-1 transition-colors
+                  ${
+                    value === opt.value
+                      ? "bg-[#CAE8F2] text-[#223F43]"
+                      : "hover:bg-gray-100 text-gray-800"
+                  }`}
+                role="option"
+                aria-selected={value === opt.value}
+              >
+                {opt.icon && <span className="text-[#223F43]">{opt.icon}</span>}
+                {opt.name}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
-
-      {/*::-webkit-details-marker => summary 앞에 자동으로 붙이는 기본 화살표(▶) 를 없애는 코드 */}
+      )}
       <style>{`
-        details > summary::-webkit-details-marker { display: none; }
         @keyframes slide-up { from { transform: translateY(8%); opacity:.6 } to { transform: translateY(0); opacity:1 } }
       `}</style>
-    </details>
+    </div>
   );
 };
 
@@ -118,25 +108,6 @@ export const ScheduleFilterButton = ({ filteredList = [] }) => {
 
   // 어떤 패널이 열려있는지 확인
   const [openFilter, setOpenFilter] = useState(null);
-
-  // const filteredList = [
-  //   {
-  //     id: 1,
-  //     content: "🏠 집안일 하기",
-  //     category: "daily",
-  //     priority: "medium",
-  //     isShared: false,
-  //     repeat: "daily",
-  //   },
-  //   {
-  //     id: 2,
-  //     content: "✈️ 일본 여행 계획",
-  //     category: "travel",
-  //     priority: "high",
-  //     isShared: true,
-  //     repeat: "monthly",
-  //   },
-  // ];
 
   const getProcessedFilterList = () => {
     const copyList = JSON.parse(JSON.stringify(filteredList));
@@ -155,10 +126,10 @@ export const ScheduleFilterButton = ({ filteredList = [] }) => {
   };
 
   return (
-    <div className="flex gap-6">
-      {/* 버튼 그룹: 화면 기준 30% 폭 */}
-      <div className="flex w-[370px] gap-2">
-        <div className="flex-1">
+    <div className="flex">
+      {/* 필터링 버튼 그룹 */}
+      <div className="flex w-[300px] gap-2 shrink-0">
+        <div>
           <ModalMenuList
             name="카테고리"
             value={categoryType}
@@ -168,7 +139,8 @@ export const ScheduleFilterButton = ({ filteredList = [] }) => {
             onToggle={(open) => setOpenFilter(open ? "category" : null)}
           />
         </div>
-        <div className="flex-1">
+
+        <div>
           <ModalMenuList
             name="중요도"
             value={priorityType}
@@ -178,7 +150,8 @@ export const ScheduleFilterButton = ({ filteredList = [] }) => {
             onToggle={(open) => setOpenFilter(open ? "priority" : null)}
           />
         </div>
-        <div className="flex-1">
+
+        <div>
           <ModalMenuList
             name="공유"
             value={shareType}
@@ -188,7 +161,8 @@ export const ScheduleFilterButton = ({ filteredList = [] }) => {
             onToggle={(open) => setOpenFilter(open ? "share" : null)}
           />
         </div>
-        <div className="flex-1">
+
+        <div>
           <ModalMenuList
             name="반복"
             value={repeatType}
