@@ -1,4 +1,8 @@
+import React from "react";
+import ErrorPage from "../components/ErrorPage";
+
 function TestJ() {
-  return <div>종원의 테스트 페이지</div>;
+  return <ErrorPage />;
 }
+
 export default TestJ;
