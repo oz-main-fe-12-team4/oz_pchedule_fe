@@ -12,7 +12,7 @@ const DisplayDays = () => {
               ? "text-[#7892f0]"
               : "text-black"
           }
-                        w-[80px] h-[30px]`}
+                        h-[30px]`}
           key={el}
         >
           {el}

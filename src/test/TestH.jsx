@@ -1,12 +1,15 @@
-import { posts } from "../assets/data/dummyPostList";
-import RoutineCard from "../components/RoutineCard";
+import Header from "../components/Header";
+import MenuBar from "../components/MenuBar";
+import Routine from "../pages/Routine";
 
 function TestH() {
   return (
     <div>
-      {posts.data.map((el) => (
-        <RoutineCard key={el.post_id} post={el} />
-      ))}
+      <Header />
+      <div className="flex">
+        <MenuBar />
+        <Routine />
+      </div>
     </div>
   );
 }
