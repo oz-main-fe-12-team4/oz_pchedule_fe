@@ -2,11 +2,10 @@ import React from "react";
 import Button from "./Button";
 import { FILTER_LABELS } from "../constants/filterList";
 
-const FilterButtons = ({ onFilterToggle }) => {
-  const KEYS = ["category", "latest", "priority"];
+const FilterButtons = ({ keys, onFilterToggle }) => {
   return (
     <div className="flex w-[300px] gap-2 shrink-0">
-      {KEYS.map((key) => (
+      {keys.map((key) => (
         <div key={key}>
           <Button
             variant="category"

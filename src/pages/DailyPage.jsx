@@ -10,7 +10,7 @@ const DailyPage = ({ posts }) => {
         <p className="text-2xl mb-1 font-bold">일정</p>
       </div>
       <div className="flex flex-row gap-3 mb-4">
-        <FilterButtons />
+        <FilterButtons keys={["category", "latest", "priority"]} />
       </div>
 
       <div className="flex flex-row gap-3 mb-4 border-b border-gray-200 pb-2">
