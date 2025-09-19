@@ -1,4 +1,3 @@
-import React from "react";
 import Button from "./Button";
 import ErrorImage from "../assets/errorLogo.png"; // 네 이미지 경로에 맞춰서!
 
