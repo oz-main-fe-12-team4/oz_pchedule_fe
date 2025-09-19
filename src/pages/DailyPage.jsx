@@ -5,7 +5,7 @@ import FilterButtons from "../components/FilterButtons";
 const DailyPage = ({ posts }) => {
   const list = posts?.data ?? [];
   return (
-    <div className="p-4 max-w-screen-lg mx-auto">
+    <div className="w-full px-4 md:px-6 lg:px-8 py-4 text-left">
       <div className="mb-4 text-gray-700">
         <p className="text-xl font-bold">2025년 10월 26일 ~ 2025년 10월 30일</p>
       </div>
@@ -13,7 +13,7 @@ const DailyPage = ({ posts }) => {
         <FilterButtons />
       </div>
 
-      <div className="flex flex-row gap-3 mb-4">
+      <div className="flex flex-row gap-3 mb-4 border-b border-gray-200 pb-2">
         <p>전체</p>
         <p>완료된일</p>
         <p>해야할일</p>

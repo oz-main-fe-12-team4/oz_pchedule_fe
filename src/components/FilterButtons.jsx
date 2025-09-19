@@ -3,16 +3,17 @@ import Button from "./Button";
 import { FILTER_LABELS } from "../constants/filterList";
 
 const FilterButtons = ({ onFilterToggle }) => {
+  const KEYS = ["category", "latest", "priority"];
   return (
     <div className="flex w-[300px] gap-2 shrink-0">
-      {Object.entries(FILTER_LABELS).map(([key, label]) => (
+      {KEYS.map((key) => (
         <div key={key}>
           <Button
             variant="category"
             onClick={() => onFilterToggle(key)}
             type="button"
           >
-            {label}
+            {FILTER_LABELS[key]}
           </Button>
         </div>
       ))}
