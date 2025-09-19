@@ -9,6 +9,7 @@ import TestD from "./test/TestD";
 import TestJ from "./test/TestJ";
 import TestL from "./test/TestL";
 import Main from "./pages/Main";
+import DailyPage from "./pages/DailyPage";
 
 let router = createBrowserRouter([
   {
@@ -20,7 +21,8 @@ let router = createBrowserRouter([
         Component: Main,
       },
       {
-        path: "/schedule",
+        path: "/daily",
+        Component: DailyPage,
       },
       {
         path: "/routine",
