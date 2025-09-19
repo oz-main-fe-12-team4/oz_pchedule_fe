@@ -7,6 +7,8 @@ export const FILTER_LABELS = {
   share: "공유",
   repeat: "반복",
   latest: "최신순",
+  period: "기간별",
+  time: "시간별",
 };
 
 export const CATEGORY_OPTION_LIST = [

@@ -6,6 +6,9 @@ import { MdOutlineNavigateBefore } from "react-icons/md";
 import { BsList } from "react-icons/bs";
 import { CiCalendar } from "react-icons/ci";
 import { useState } from "react";
+import FilterButtons from "../components/FilterButtons";
+import ScheduleCard from "../components/ScheduleCard";
+import { posts } from "../assets/data/dummyPostList";
 
 const Routine = () => {
   const [isWeekly, setIsWeekly] = useState(true);
@@ -15,6 +18,9 @@ const Routine = () => {
   const currentDayOfThisWeek = currentDate.getDay();
   const firstDateOfThisWeek = currentDate.getDate() - currentDayOfThisWeek;
   const lastDateOfThisWeek = currentDate.getDate() + (6 - currentDayOfThisWeek);
+
+  const filterKeys = ["period", "time", "priority"];
+  const list = posts.data;
 
   const handleClickListButton = () => {
     setIsWeekly(false);
@@ -56,9 +62,27 @@ const Routine = () => {
           <Weekly firstDateOfThisWeek={firstDateOfThisWeek} />
         </div>
       )}
-      {/* {!isWeekly && (
-
-      )} */}
+      {!isWeekly && (
+        <div className="flex flex-col gap-1">
+          <FilterButtons keys={filterKeys} />
+          <h1 className="flex items-center gap-3 pb-3">
+            {thisYear}.{thisMonth}.{firstDateOfThisWeek} ~ {thisYear}.
+            {thisMonth}.{lastDateOfThisWeek}
+          </h1>
+          <div className="flex flex-row gap-3 mb-4 border-b border-gray-200 pb-2">
+            <p>전체</p>
+            <p>완료된일</p>
+            <p>해야할일</p>
+          </div>
+          <div className="divide-y-[0.5px] divide-gray-200">
+            {list.map((post) => (
+              <div key={post.post_id} className="py-4">
+                <ScheduleCard post={post} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
