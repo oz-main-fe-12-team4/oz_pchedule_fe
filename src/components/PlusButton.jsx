@@ -1,12 +1,6 @@
 import { BsCalendarPlus } from "react-icons/bs";
 
-const PlusButton = ({
-  onClick,
-  size = 32,
-  title = "일정 추가",
-  className = "",
-  disabled = false,
-}) => {
+const PlusButton = ({ onClick, title = "일정 추가", disabled = false }) => {
   return (
     <button
       type="button"
@@ -15,11 +9,10 @@ const PlusButton = ({
       disabled={disabled}
       className={`group fixed right-4 bottom-4 z-50
                   inline-flex items-center justify-center
-                  w-12 h-12 text-[#223F43]
-                  ${className}`}
+                  w-12 h-12 text-[#223F43]`}
     >
       <BsCalendarPlus
-        size={size}
+        size={32}
         className="transition-transform duration-150 group-hover:scale-110"
       />
     </button>
