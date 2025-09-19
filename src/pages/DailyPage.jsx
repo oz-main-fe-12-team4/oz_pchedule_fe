@@ -7,7 +7,7 @@ const DailyPage = ({ posts }) => {
   return (
     <div className="w-full px-4 md:px-6 lg:px-8 py-4 text-left">
       <div className="mb-4 text-gray-700">
-        <p className="text-xl font-bold">2025년 10월 26일 ~ 2025년 10월 30일</p>
+        <p className="text-2xl mb-1 font-bold">일정</p>
       </div>
       <div className="flex flex-row gap-3 mb-4">
         <FilterButtons />
