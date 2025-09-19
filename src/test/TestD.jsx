@@ -1,4 +1,12 @@
+import Layout from "../components/Layout";
+import PlusButton from "../components/PlusButton";
+
 function TestD() {
-  return <div>단비의 테스트 페이지</div>;
+  return (
+    <div>
+      <Layout />
+      <PlusButton />
+    </div>
+  );
 }
 export default TestD;
