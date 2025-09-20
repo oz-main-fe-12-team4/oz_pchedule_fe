@@ -1,4 +1,13 @@
+import { posts } from "../assets/data/dummyPostList";
+import RoutineCard from "../components/RoutineCard";
+
 function TestH() {
-  return <div>혜림의 테스트 페이지</div>;
+  return (
+    <div>
+      {posts.data.map((el) => (
+        <RoutineCard key={el.post_id} post={el} />
+      ))}
+    </div>
+  );
 }
 export default TestH;
