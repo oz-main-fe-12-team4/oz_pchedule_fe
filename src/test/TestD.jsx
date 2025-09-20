@@ -1,6 +1,7 @@
 import CalenderModal from "../components/CalendarModal";
 import Header from "../components/Header";
 import MenuBar from "../components/MenuBar";
+import Someday from "../pages/Someday";
 
 function TestD() {
   return (
@@ -8,7 +9,7 @@ function TestD() {
       <Header />
       <div className="flex">
         <MenuBar />
-        <CalenderModal />
+        <Someday />
       </div>
     </div>
   );
