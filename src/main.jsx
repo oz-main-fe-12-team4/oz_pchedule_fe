@@ -10,6 +10,7 @@ import TestJ from "./test/TestJ";
 import TestL from "./test/TestL";
 import Main from "./pages/Main";
 import DailyPage from "./pages/DailyPage";
+import ScheduleStory from "./pages/ScheduleStory";
 
 let router = createBrowserRouter([
   {
@@ -31,7 +32,8 @@ let router = createBrowserRouter([
         path: "/someday",
       },
       {
-        path: "/share_schedule",
+        path: "/schedule_story",
+        Component: ScheduleStory,
       },
       {
         path: "/admin/user_list",
