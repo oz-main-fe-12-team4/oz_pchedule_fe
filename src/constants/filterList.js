@@ -8,7 +8,7 @@ export const FILTER_LABELS = {
   repeat: "반복",
   latest: "최신순",
   period: "기간별",
-  time: "시간별",
+  date: "날짜별",
 };
 
 export const CATEGORY_OPTION_LIST = [
