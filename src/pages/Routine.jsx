@@ -7,8 +7,8 @@ import { BsList } from "react-icons/bs";
 import { CiCalendar } from "react-icons/ci";
 import { useState } from "react";
 import FilterButtons from "../components/FilterButtons";
-import ScheduleCard from "../components/ScheduleCard";
 import { posts } from "../assets/data/dummyPostList";
+import RoutineCard from "../components/RoutineCard";
 
 const Routine = () => {
   const [isWeekly, setIsWeekly] = useState(true);
@@ -77,7 +77,7 @@ const Routine = () => {
           <div className="divide-y-[0.5px] divide-gray-200">
             {list.map((post) => (
               <div key={post.post_id} className="py-4">
-                <ScheduleCard post={post} />
+                <RoutineCard post={post} />
               </div>
             ))}
           </div>
