@@ -19,7 +19,7 @@ const Routine = () => {
   const firstDateOfThisWeek = currentDate.getDate() - currentDayOfThisWeek;
   const lastDateOfThisWeek = currentDate.getDate() + (6 - currentDayOfThisWeek);
 
-  const filterKeys = ["period", "time", "priority"];
+  const filterKeys = ["period", "date", "priority"];
   const list = posts.data;
 
   const handleClickListButton = () => {
