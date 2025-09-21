@@ -1,17 +1,7 @@
 import { useState } from "react";
 
 const TabButton = ({
-  tabs = [
-    "전체",
-    "내가작성글",
-    "일정스토리",
-    "완료된일",
-    "해야할일",
-    "할일",
-    "루틴",
-    "언젠가",
-    "일정스토리",
-  ],
+  tabs = ["전체", "완료된일", "해야할일"],
   defaultTab = "전체",
   onTabChange = null,
 }) => {
