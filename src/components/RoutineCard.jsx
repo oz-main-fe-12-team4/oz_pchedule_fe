@@ -2,9 +2,9 @@ import { FaUser } from "react-icons/fa6";
 import { IoShare } from "react-icons/io5";
 import { FaCheckSquare, FaRegSquare } from "react-icons/fa";
 import { TbTrash } from "react-icons/tb";
-import { getColorOfPriority } from "../utils/getColorOfPriority";
 import { getRecurrenceType } from "../utils/getRecurrenceType";
 import RenderRecurrenceByType from "./RenderRecurrenceByType";
+import { getColorOfPriority } from "../utils/getColorOfPriority.js";
 
 const RoutineCard = ({ post }) => {
   const { priority, recurrence, start_period, is_shared, title, is_completed } =

@@ -73,7 +73,7 @@ const Routine = () => {
           <TabButton />
           <div className="divide-y-[0.5px] divide-gray-200">
             {list.map((post) => (
-              <div key={post.post_id} className="py-4">
+              <div key={post.id} className="py-4">
                 <RoutineCard post={post} />
               </div>
             ))}

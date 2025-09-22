@@ -9,8 +9,8 @@ export const posts = {
         id: 1,
         name: "여행",
       },
-      share_type: "전체공개/나만보기",
-      priority: "긴급/높음/중간/낮음/보류",
+      share_type: "전체공개",
+      priority: "낮음",
       detail_schedule: [
         {
           id: 1,
@@ -40,8 +40,8 @@ export const posts = {
         id: 1,
         name: "여행",
       },
-      share_type: "전체공개/나만보기",
-      priority: "긴급/높음/중간/낮음/보류",
+      share_type: "나만보기",
+      priority: "보류",
       detail_schedule: [
         {
           id: 1,
@@ -71,8 +71,8 @@ export const posts = {
         id: 1,
         name: "여행",
       },
-      share_type: "전체공개/나만보기",
-      priority: "긴급/높음/중간/낮음/보류",
+      share_type: "전체공개",
+      priority: "중간",
       detail_schedule: [
         {
           id: 1,
@@ -102,8 +102,8 @@ export const posts = {
         id: 1,
         name: "여행",
       },
-      share_type: "전체공개/나만보기",
-      priority: "긴급/높음/중간/낮음/보류",
+      share_type: "나만보기",
+      priority: "높음",
       detail_schedule: [
         {
           id: 1,
