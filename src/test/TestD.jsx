@@ -1,4 +1,3 @@
-import CalenderModal from "../components/CalendarModal";
 import Header from "../components/Header";
 import MenuBar from "../components/MenuBar";
 
