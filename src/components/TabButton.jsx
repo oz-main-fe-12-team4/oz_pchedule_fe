@@ -2,8 +2,8 @@ import { useState } from "react";
 
 const TabButton = ({
   tabs = ["전체", "완료된일", "해야할일"],
-  defaultTab = "전체",
   onTabChange = null,
+  defaultTab = "전체",
 }) => {
   const [activeTab, setActiveTab] = useState(defaultTab);
 
