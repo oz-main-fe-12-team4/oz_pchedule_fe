@@ -1,5 +1,3 @@
-// src/components/UserCard.jsx
-
 import React, { useState } from "react";
 import { FaUserCircle, FaLock, FaTrash } from "react-icons/fa";
 
@@ -17,7 +15,7 @@ export default function UserCard({ user }) {
   };
 
   return (
-    <div className="relative flex items-center space-x-4 p-4 border rounded-lg shadow-sm">
+    <div className="flex items-center space-x-4 p-4 border rounded-lg shadow-sm">
       <FaUserCircle
         className={`w-12 h-12 ${isReported ? "text-red-500" : "text-gray-500"}`}
       />
