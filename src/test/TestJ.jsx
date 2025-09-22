@@ -33,7 +33,7 @@ const myScheduleData = {
       },
       {
         id: 4,
-        title: "호텔 체크아웃",
+        title: "호텔 체크아웃임",
         description: "199999999999999999999999999999972년후 체크아웃",
         start_time: "15:00:00",
         end_time: "16:00:00",
