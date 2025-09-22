@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import LoadingPage from "../components/LoadingPage"; // 상대경로 주의!!!
+import LoadingPage from "../pages/LoadingPage"; // 상대경로 주의!!!
 
 function TestJ() {
   const [loading, setLoading] = useState(true);
