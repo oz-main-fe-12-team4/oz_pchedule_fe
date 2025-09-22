@@ -3,8 +3,9 @@ import { useState } from "react";
 const TabButton = ({
   tabs = ["전체", "완료된일", "해야할일"],
   onTabChange = null,
+  defaultTab = "전체",
 }) => {
-  const [activeTab, setActiveTab] = useState(null);
+  const [activeTab, setActiveTab] = useState(defaultTab);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -14,7 +15,6 @@ const TabButton = ({
   };
 
   return (
-
     <div className="w-full min-h-screen bg-gray-50">
       <div className={`bg-white border-b border-gray-200`}>
         <div className="flex">
