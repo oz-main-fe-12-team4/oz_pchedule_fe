@@ -9,6 +9,7 @@ import { useState } from "react";
 import FilterButtons from "../components/FilterButtons";
 import { posts } from "../assets/data/dummyPostList";
 import RoutineCard from "../components/RoutineCard";
+import TabButton from "../components/TabButton";
 
 const Routine = () => {
   const [isWeekly, setIsWeekly] = useState(true);
@@ -69,11 +70,7 @@ const Routine = () => {
             {thisYear}.{thisMonth}.{firstDateOfThisWeek} ~ {thisYear}.
             {thisMonth}.{lastDateOfThisWeek}
           </h1>
-          <div className="flex flex-row gap-3 mb-4 border-b border-gray-200 pb-2">
-            <p>전체</p>
-            <p>완료된일</p>
-            <p>해야할일</p>
-          </div>
+          <TabButton />
           <div className="divide-y-[0.5px] divide-gray-200">
             {list.map((post) => (
               <div key={post.post_id} className="py-4">

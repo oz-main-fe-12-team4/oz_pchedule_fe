@@ -3,10 +3,14 @@ import { IoShare } from "react-icons/io5";
 import { FaCheckSquare, FaRegSquare } from "react-icons/fa";
 import { TbTrash } from "react-icons/tb";
 import { getColorOfPriority } from "../utils/getColorOfPriority";
+import { getRecurrenceType } from "../utils/getRecurrenceType";
+import RenderRecurrenceByType from "./RenderRecurrenceByType";
 
 const RoutineCard = ({ post }) => {
-  const { priority, start_time, is_shared, title, is_completed } = post;
+  const { priority, recurrence, start_period, is_shared, title, is_completed } =
+    post;
   const priorityColor = getColorOfPriority(priority);
+  const recurrenceType = getRecurrenceType(recurrence.type);
 
   return (
     <div
@@ -15,14 +19,19 @@ const RoutineCard = ({ post }) => {
       {/* 왼쪽: 날짜 + 아이콘 */}
       <div className="flex flex-col items-start min-w-[140px]">
         <p className="text-l font-bold text-gray-700 flex items-center gap-2">
-          {start_time ? new Date(start_time).toLocaleDateString("ko-KR") : "-"}
+          {start_period
+            ? new Date(start_period).toLocaleDateString("ko-KR")
+            : "-"}
           {is_shared ? (
             <IoShare className="text-gray-500" />
           ) : (
             <FaUser className="text-gray-500" />
           )}
         </p>
-        <p className="text-sm text-[#C2C2C2]">반복주기</p>
+        <p className="text-sm text-[#C2C2C2]">
+          {recurrenceType}반복 :{" "}
+          <RenderRecurrenceByType recurrence={recurrence} />
+        </p>
       </div>
 
       {/* 오른쪽: 일정 내용 */}
