@@ -10,6 +10,7 @@ import TestJ from "./test/TestJ";
 import TestL from "./test/TestL";
 import Main from "./pages/Main";
 import DailyPage from "./pages/DailyPage";
+import Search from "./pages/Search";
 
 let router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ let router = createBrowserRouter([
       },
       {
         path: "/share_schedule",
+      },
+      {
+        path: "/search",
+        Component: Search,
       },
       {
         path: "/admin/user_list",
