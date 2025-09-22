@@ -13,7 +13,7 @@ import Search from "./pages/Search";
 import Routine from "./pages/Routine";
 import ScheduleStory from "./pages/ScheduleStory";
 import Someday from "./pages/Someday";
-import Daily from "./pages/DailyPage";
+import Daily from "./pages/Daily";
 
 let router = createBrowserRouter([
   {
