@@ -18,7 +18,7 @@ function ScheduleStoryCard({ schedule }) {
       {/* 좋아요 & 찜하기 */}
       <div className="flex space-x-6 text-gray-600 text-sm font-medium justify-center">
         <div> 좋아요: {schedule.like_count ?? 0}</div>
-        <div> 찜하기: {schedule.favorite_count ?? 0}</div>
+        <div> 찜하기: {schedule.bookmark_count ?? 0}</div>
       </div>
     </div>
   );

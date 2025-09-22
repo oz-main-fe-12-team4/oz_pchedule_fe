@@ -10,12 +10,12 @@ const ScheduleStory = () => {
       </div>
 
       <div className="text-sm p-4 border-t border-gray-200 pb-2">
-        <p>전체 : {posts.post_count}</p>
+        <p>전체 : {posts.schedule_count}</p>
       </div>
 
       <div className="flex flex-wrap justify-center items-center gap-2">
         {posts.data.map((post) => (
-          <div key={post.post_id} className="py-4">
+          <div key={post.id} className="py-4">
             <ScheduleStoryCard schedule={post} />
           </div>
         ))}
