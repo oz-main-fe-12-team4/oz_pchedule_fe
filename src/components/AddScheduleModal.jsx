@@ -3,18 +3,30 @@ import Button from "./Button";
 import FilterButtons from "./FilterButtons";
 import Input from "./Input";
 import { useState } from "react";
+import CalendarModal from "./CalendarModal";
+import FilterOptionList from "./FilterOptionList";
 
 const formatDate = (date) =>
   `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
 
-const AddScheduleModal = ({ title, period, content }) => {
+const AddScheduleModal = ({ title, content }) => {
   const today = new Date();
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
+
   const [titleValue, setTitleValue] = useState(title);
+  const [contentValue, setContentValue] = useState(content);
 
   const [calendarModal, setCalendarModal] = useState(false);
-  const [activeDate, setActiveDate] = useState(null);
+  const [activeDate, setActiveDate] = useState(null); // 'start' | 'end'
+
+  const [openFilter, setOpenFilter] = useState(null);
+  const [filters, setFilters] = useState({
+    category: null,
+    priority: null,
+    share: null,
+    repeat: null,
+  });
 
   const openCalendar = (dateType) => {
     setActiveDate(dateType);
@@ -26,13 +38,27 @@ const AddScheduleModal = ({ title, period, content }) => {
     setActiveDate(null);
   };
 
-  const handleDateSelect = (selectedDate) => {
+  const handleFilterToggle = (key) => {
+    setOpenFilter((prev) => (prev === key ? null : key));
+  };
+
+  const handleFilterChange = (key, value) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleDateSelect = (date) => {
+    const selected = Array.isArray(date) ? date[0] : date;
+    if (!selected) return;
+
     if (activeDate === "start") {
-      setActiveDate(selectedDate);
+      setStartDate(selected);
+      if (selected > endDate) setEndDate(selected); // 역전 방지
     } else if (activeDate === "end") {
-      setEndDate(selectedDate);
+      setEndDate(selected);
+      if (selected < startDate) setStartDate(selected); // 역전 방지
     }
-    closeCalendar;
+
+    closeCalendar();
   };
 
   return (
@@ -42,11 +68,10 @@ const AddScheduleModal = ({ title, period, content }) => {
           <div className="flex-1 mt-2">
             {/* 일정 제목 */}
             <Input
-              variant="setValue"
               inputId="schedule-title"
               value={titleValue}
               setValue={setTitleValue}
-              placeholder={period || "일정 제목을 입력하세요"}
+              placeholder={"일정 제목을 입력하세요"}
               className="text-[22px] font-bold text-gray-700 placeholder-gray-300 border-none outline-none focus:ring-0"
               maxLength={50}
             />
@@ -55,14 +80,12 @@ const AddScheduleModal = ({ title, period, content }) => {
           {/* 삭제 & 닫기 */}
           <div className="flex items-center gap-3 text-gray-500 pt-1">
             <button
-              aria-label="삭제"
               className="hover:text-gray-700 cursor-pointer"
               type="button"
             >
               <FaTrash />
             </button>
             <button
-              aria-label="닫기"
               className="hover:text-gray-700 cursor-pointer"
               type="button"
             >
@@ -91,28 +114,31 @@ const AddScheduleModal = ({ title, period, content }) => {
         </div>
 
         {/* 필터링 버튼 */}
-        <div className="mt-2 mb-4">
-          <FilterButtons keys={["category", "priority", "share", "repeat"]} />
+        <div className="mt-2 mb-4 relative">
+          <FilterButtons
+            keys={["category", "priority", "share", "repeat"]}
+            onFilterToggle={handleFilterToggle}
+          />
+          <FilterOptionList
+            openFilter={openFilter}
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            onClose={() => setOpenFilter(null)}
+          />
         </div>
 
         {/* 일정 내용 라벨 */}
         <Input
-          variant="setValue"
-          inputId="schedule-title"
-          value={titleValue}
-          setValue={setTitleValue}
-          placeholder={period || "일정 내용"}
-          className="text-[22px] font-bold text-gray-700 placeholder-gray-300 border-none outline-none focus:ring-0"
+          inputId="schedule-content"
+          value={contentValue}
+          setValue={setContentValue}
+          placeholder={"일정 내용"}
+          className="text-[18px] font-bold text-gray-700 placeholder-gray-300 border-none outline-none focus:ring-0"
           maxLength={100}
         />
 
-        {/* 항목 추가 구분선 */}
-        <div className="h-[0.5px] w-full bg-gray-300 rounded-full my-3" />
-        <p className="text-sm text-gray-700 whitespace-pre-line mb-6">
-          {content}
-        </p>
-
-        {/* 항목 추가 */}
+        {/* 구분선 + 항목 추가 */}
+        <div className="h-px w-full bg-gray-300 rounded-full my-4" />
         <button
           type="button"
           className="flex items-center gap-1 text-gray-400 hover:text-gray-600 text-sm mb-10 cursor-pointer select-none"
@@ -132,13 +158,11 @@ const AddScheduleModal = ({ title, period, content }) => {
           </Button>
         </div>
       </div>
+
       {calendarModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50 shadow-[0_10px_30px_rgba(0,0,0,0.15)]">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">
-                {activeDate === "start" ? "시작 날짜 선택" : "종료 날짜 선택"}
-              </h3>
               <button
                 onClick={closeCalendar}
                 className="text-gray-400 hover:text-gray-600"
@@ -146,29 +170,11 @@ const AddScheduleModal = ({ title, period, content }) => {
                 <FaTimes />
               </button>
             </div>
-
-            {/* 여기에 실제 달력 컴포넌트를 넣으세요 */}
-            <div className="text-center py-8 text-gray-500">
-              달력 컴포넌트 영역
-              <br />
-              <small>실제 CommonCalendar 컴포넌트로 교체하세요</small>
-            </div>
-
-            {/* 임시 날짜 선택 버튼들 */}
-            <div className="flex gap-2 mt-4">
-              <button
-                onClick={() => handleDateSelect(new Date())}
-                className="flex-1 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                오늘 선택
-              </button>
-              <button
-                onClick={closeCalendar}
-                className="flex-1 py-2 px-4 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
-              >
-                취소
-              </button>
-            </div>
+            <CalendarModal
+              variant="single"
+              onDateChange={handleDateSelect}
+              showTodayButton
+            />
           </div>
         </div>
       )}

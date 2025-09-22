@@ -28,8 +28,8 @@ const FilterOptionList = ({ filters, openFilter, onFilterChange, onClose }) => {
                     : "hover:bg-gray-100 text-gray-800"
                 }`}
             >
-              {opt.icon && <span className="text-[#223F43]">{opt.icon}</span>}
-              {opt.name}
+              {opt.Icon && <opt.Icon className={opt.iconClass} size={14} />}
+              <span>{opt.name}</span>
             </button>
           ))}
         </div>
