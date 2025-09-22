@@ -1,5 +1,5 @@
 export const posts = {
-  post_count: 4,
+  schedule_count: 4,
   data: [
     {
       id: 1,

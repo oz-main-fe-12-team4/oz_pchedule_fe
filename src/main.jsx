@@ -12,6 +12,7 @@ import Main from "./pages/Main";
 import DailyPage from "./pages/DailyPage";
 import Search from "./pages/Search";
 import Routine from "./pages/Routine";
+import ScheduleStory from "./pages/ScheduleStory";
 
 let router = createBrowserRouter([
   {
@@ -34,7 +35,8 @@ let router = createBrowserRouter([
         path: "/someday",
       },
       {
-        path: "/share_schedule",
+        path: "/schedule_story",
+        Component: ScheduleStory,
       },
       {
         path: "/search",
