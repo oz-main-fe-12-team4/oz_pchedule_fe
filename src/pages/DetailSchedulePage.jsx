@@ -1,8 +1,7 @@
 import React from "react";
 import DetailScheduleCard from "../components/DetailScheduleCard";
 import TimeCard from "../components/TimeCard";
-// import { CiCirclePlus } from "react-icons/ci"; // 더 이상 CiCirclePlus는 안 쓸 거야!
-import { FaRegPlusSquare } from "react-icons/fa"; // <--- 모서리 각진 플러스 아이콘으로 변경!
+import PlusButton from "../components/PlusButton";
 
 // scheduleList는 이제 props로 받을 거야!
 function DetailSchedulePage({ scheduleList }) {
@@ -38,15 +37,8 @@ function DetailSchedulePage({ scheduleList }) {
           </div>
         ))}
 
-        {/* 오른쪽 하단 추가하기 버튼 (FaRegPlusSquare 아이콘으로 변경) */}
-        <button
-          type="button"
-          onClick={handleAddClick}
-          className="absolute bottom-5 right-1 flex items-center gap-1 text-gray-500 hover:text-gray-800 cursor-pointer"
-        >
-          <FaRegPlusSquare size={20} />
-          {/* <--- FaRegPlusSquare 아이콘으로 변경! */}
-        </button>
+        {/* 기존 하단 추가하기 버튼 대신 PlusButton 쓰기 */}
+        <PlusButton onClick={handleAddClick} />
       </div>
     </div>
   );
