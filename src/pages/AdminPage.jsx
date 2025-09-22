@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import UserCard from "../components/UserCard.jsx";
 import { userList } from "../assets/data/dummyUser.js";
 
-function TestL() {
+function AdminPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isReportedOnly, setIsReportedOnly] = useState(false);
 
+  // 검색어와 필터링 상태에 따라 유저 목록을 동적으로 필터링
   const filteredUsers = userList.filter((user) => {
     const matchesSearch =
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -63,4 +64,4 @@ function TestL() {
   );
 }
 
-export default TestL;
+export default AdminPage;

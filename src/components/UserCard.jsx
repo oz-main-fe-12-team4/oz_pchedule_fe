@@ -4,9 +4,12 @@ import { FaUserCircle, FaLock, FaTrash } from "react-icons/fa";
 export default function UserCard({ user }) {
   const { name, email, is_active, is_reported, report_reason } = user;
 
+  const handleLockAccount = () => {
+    console.log("계정 잠금/해제 API 호출");
+  };
+
   const handleDeleteAccount = () => {
-    // 이 부분은 API 호출 로직이 들어갈 곳입니다.
-    console.log("계정 삭제 버튼이 클릭되었습니다.");
+    console.log("계정 삭제 API 호출");
   };
 
   return (
@@ -34,7 +37,7 @@ export default function UserCard({ user }) {
       )}
 
       <div className="flex space-x-2">
-        <button title="계정 잠금/해제">
+        <button onClick={handleLockAccount} title="계정 잠금/해제">
           <FaLock
             className={`w-6 h-6 transition-colors duration-200 ${
               is_active ? "text-gray-500" : "text-yellow-500"
