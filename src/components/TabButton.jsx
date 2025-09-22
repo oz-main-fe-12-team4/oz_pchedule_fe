@@ -15,7 +15,8 @@ const TabButton = ({
   };
 
   return (
-    <div className="w-full">
+
+    <div className="w-full min-h-screen bg-gray-50">
       <div className={`bg-white border-b border-gray-200`}>
         <div className="flex">
           {tabs.map((tab, index) => (
