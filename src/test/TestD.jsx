@@ -8,9 +8,9 @@ function TestD() {
       <Header />
       <div className="flex">
         <MenuBar />
-        <CalenderModal />
       </div>
     </div>
   );
 }
+
 export default TestD;
