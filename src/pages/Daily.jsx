@@ -1,7 +1,7 @@
 import ScheduleCard from "../components/ScheduleCard";
 import FilterButtons from "../components/FilterButtons";
 
-const DailyPage = ({ posts }) => {
+const Daily = ({ posts }) => {
   const list = posts?.data ?? [];
   return (
     <div className="w-full px-4 md:px-6 lg:px-8 py-4 text-left">
@@ -29,4 +29,4 @@ const DailyPage = ({ posts }) => {
   );
 };
 
-export default DailyPage;
+export default Daily;
