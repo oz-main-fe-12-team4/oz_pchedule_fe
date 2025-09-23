@@ -22,7 +22,6 @@ export default function BookmarkButton() {
       ) : (
         <FaRegBookmark className="text-gray-400" />
       )}
-      <span className="text-sm">{buttonText}</span>
     </button>
   );
 }
