@@ -1,6 +1,6 @@
-import { groupDatesByWeek } from "../../utils/groupDatesByWeek";
 import DisplayWeeks from "./DisplayWeeks";
 import DisplayDays from "./DisplayDays";
+import { groupDatesByWeek } from "../../utils/groupDatesByWeek";
 
 function MainCalendar({ year, month }) {
   // 매 달 1일
