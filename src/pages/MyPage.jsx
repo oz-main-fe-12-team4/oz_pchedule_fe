@@ -1,7 +1,22 @@
+import React, { useState } from "react";
+import axios from "axios";
+import {
+  FaUserCircle,
+  FaSearch,
+  FaBell,
+  FaHeart,
+  FaBookmark,
+  FaPencilAlt,
+} from "react-icons/fa";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaUserCircle, FaHeart, FaBookmark, FaPencilAlt } from "react-icons/fa";
 import Input from "../components/Input.jsx";
+
+const dummyUser = {
+  name: "서단비",
+  email: "test@naver.com",
+};
 import Button from "../components/Button.jsx";
 import {
   dummyUser,
@@ -19,6 +34,14 @@ function MyPage() {
   });
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
 
+  // 좋아요 및 북마크는 클릭해도 아무 동작도 하지 않습니다.
+  const handleLikeClick = () => {
+    // 아무 동작 없음
+  };
+
+  const handleBookmarkClick = () => {
+    // 아무 동작 없음
+  };
   const [likes, setLikes] = useState(dummyLikes);
   const [bookmarks, setBookmarks] = useState(dummyBookmarks);
   const [notifications, setNotifications] = useState([]);
@@ -48,6 +71,20 @@ function MyPage() {
     e.preventDefault();
 
     try {
+      const response = await axios.patch(
+        "/user/me/edit/password",
+        {
+          current_password: currentPassword,
+          new_password: passwords.newPassword,
+          new_password_confirm: passwords.confirmPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const requestBody = {
         current_password: currentPassword,
         new_password: passwords.newPassword,
@@ -66,6 +103,7 @@ function MyPage() {
       );
 
       if (response.status === 200) {
+      if (response.status === 200) {
         alert("비밀번호가 성공적으로 변경되었습니다.");
         setCurrentPassword("");
         setPasswords({
@@ -74,6 +112,14 @@ function MyPage() {
         });
       }
     } catch (error) {
+      if (error.response) {
+        alert(`비밀번호 변경 실패: ${error.response.data.error}`);
+      } else {
+        console.error("API 호출 중 오류 발생:", error);
+        alert(
+          "비밀번호 변경 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+        );
+      }
       if (error.response) {
         alert(`비밀번호 변경 실패: ${error.response.data.error}`);
       } else {
@@ -97,15 +143,25 @@ function MyPage() {
     if (isConfirmed) {
       try {
         const response = await axios.delete("/user/me/withdraw", {
+        const response = await axios.delete("/user/me/withdraw", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         });
 
         if (response.status === 200) {
+        if (response.status === 200) {
           alert("회원 탈퇴가 완료되었습니다.");
         }
       } catch (error) {
+        if (error.response) {
+          alert(`회원 탈퇴 실패: ${error.response.data.error}`);
+        } else {
+          console.error("API 호출 중 오류 발생:", error);
+          alert(
+            "회원 탈퇴 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+          );
+        }
         if (error.response) {
           alert(`회원 탈퇴 실패: ${error.response.data.error}`);
         } else {
@@ -132,6 +188,20 @@ function MyPage() {
             </div>
             <p className="text-sm text-gray-500 mb-4">{dummyUser.email}</p>
             <div className="flex space-x-6 text-gray-600">
+              <button
+                onClick={handleLikeClick}
+                className="flex items-center space-x-1 hover:text-red-500 transition-colors"
+              >
+                <FaHeart className="w-5 h-5" />
+                <span>0</span>
+              </button>
+              <button
+                onClick={handleBookmarkClick}
+                className="flex items-center space-x-1 hover:text-blue-500 transition-colors"
+              >
+                <FaBookmark className="w-5 h-5" />
+                <span>0</span>
+              </button>
               <div className="flex items-center space-x-1">
                 <FaHeart className="w-5 h-5 text-red-500" />
                 <span>{likes}</span>
@@ -197,6 +267,7 @@ function MyPage() {
                   label="현재 비밀번호"
                   inputId="currentPassword"
                   value={currentPassword}
+                  value={currentPassword}
                   setValue={setCurrentPassword}
                   placeholder="현재 비밀번호"
                   type="password"
@@ -205,16 +276,19 @@ function MyPage() {
                   label="새 비밀번호"
                   inputId="newPassword"
                   value={passwords.newPassword}
+                  value={passwords.newPassword}
                   setValue={(value) =>
                     setPasswords((prev) => ({ ...prev, newPassword: value }))
                   }
                   placeholder="새 비밀번호"
                   type="password"
                   errorMessage="비밀번호가 일치하지 않습니다."
+                  errorMessage="비밀번호가 일치하지 않습니다."
                 />
                 <Input
                   label="새 비밀번호 확인"
                   inputId="confirmPassword"
+                  value={passwords.confirmPassword}
                   value={passwords.confirmPassword}
                   setValue={(value) =>
                     setPasswords((prev) => ({
@@ -224,14 +298,9 @@ function MyPage() {
                   }
                   placeholder="새 비밀번호 확인"
                   type="password"
+                  errorMessage="비밀번호가 일치하지 않습니다."
+                  compareValue={passwords.newPassword}
                 />
-                {passwords.newPassword &&
-                  passwords.confirmPassword &&
-                  !isPasswordMatch && (
-                    <p className="text-red-500 text-sm">
-                      비밀번호가 일치하지 않습니다.
-                    </p>
-                  )}
               </div>
 
               <div className="flex justify-end items-center space-x-4 pt-4">
