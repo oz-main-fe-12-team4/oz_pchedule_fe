@@ -8,7 +8,6 @@ import BookmarkButton from "../components/BookmarkButton";
 import myScheduleData from "../assets/data/dummyDetailSchedule";
 import { PiSirenDuotone } from "react-icons/pi";
 import { IoChevronBackSharp } from "react-icons/io5";
-import dummyCount from "../assets/data/dummyCount";
 import dummyToday from "../assets/data/dummyDay";
 
 export default function ScheduleStoryDetailPage() {
@@ -48,7 +47,7 @@ export default function ScheduleStoryDetailPage() {
             <div className="flex flex-col items-center">
               <LikeButton />
               <span className="text-xs text-gray-600 mt-1">
-                {dummyCount.likesCount}
+                {data.like_count}
               </span>
             </div>
           </div>
@@ -56,7 +55,7 @@ export default function ScheduleStoryDetailPage() {
           <div className="bookmark-wrapper flex flex-col items-center">
             <BookmarkButton />
             <span className="text-xs text-gray-600 mt-1">
-              {dummyCount.bookmarksCount}
+              {data.bookmark_count}
             </span>
           </div>
 
@@ -73,19 +72,20 @@ export default function ScheduleStoryDetailPage() {
           </button>
         </div>
       </header>
+
+      <div className="flex items-center mb-2">
+        <strong>{dummyToday.daynumber}</strong>{" "}
+        <span className="text-gray-500 ml-2">
+          {dummyToday.timelineDate} {dummyToday.timelineDay}
+        </span>
+      </div>
+
       <div className="relative flex flex-col">
         {/* 점선 */}
         <div
           className="absolute top-5 left-12 h-[calc(100%-2rem)] border-l-4 border-dashed border-gray-400"
           style={{ zIndex: 0 }}
         />
-
-        <div className="timeline-header">
-          <strong>day1</strong>{" "}
-          <span className="date text-gray-500">
-            {dummyToday.timelineDate} {dummyToday.timelineDay}
-          </span>
-        </div>
 
         {/* 일정 카드 리스트 */}
         {scheduleList.map(({ id, time, title, description }) => (

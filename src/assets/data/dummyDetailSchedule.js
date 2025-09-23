@@ -2,6 +2,8 @@ const myScheduleData = {
   data: {
     id: 1,
     title: "일본여행",
+    start_period: "2025-10-9",
+    end_period: "2025-10-12",
     schedule: [
       {
         id: 1,
@@ -34,8 +36,8 @@ const myScheduleData = {
       },
     ],
     is_shared: true,
-    like_count: 3,
-    bookmark_count: 4,
+    like_count: 22,
+    bookmark_count: 22,
   },
 };
 
