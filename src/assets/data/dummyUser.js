@@ -24,3 +24,8 @@ export const userList = [
     report_reason: "",
   },
 ];
+
+export const dummyUser = {
+  name: "서단비",
+  email: "test@naver.com",
+};

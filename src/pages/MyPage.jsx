@@ -1,19 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  FaUserCircle,
-  FaSearch,
-  FaBell,
-  FaHeart,
-  FaBookmark,
-  FaPencilAlt,
-} from "react-icons/fa";
+import { FaUserCircle, FaHeart, FaBookmark, FaPencilAlt } from "react-icons/fa";
 import Input from "../components/Input.jsx";
-
-const dummyUser = {
-  name: "서단비",
-  email: "test@naver.com",
-};
+import Button from "../components/Button.jsx";
+import { dummyUser } from "../assets/data/dummyUser.js";
 
 const accessToken = "your_access_token_here";
 
@@ -25,26 +15,44 @@ function MyPage() {
   });
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
 
-  // 좋아요 및 북마크는 클릭해도 아무 동작도 하지 않습니다.
+  const [likes, setLikes] = useState(0);
+  const [bookmarks, setBookmarks] = useState(0);
+
+  useEffect(() => {
+    const fetchUserData = () => {
+      try {
+        const mockLikes = 123;
+        const mockBookmarks = 45;
+        setLikes(mockLikes);
+        setBookmarks(mockBookmarks);
+      } catch (error) {
+        console.error("사용자 데이터를 가져오는 중 오류 발생:", error);
+      }
+    };
+    fetchUserData();
+  }, [accessToken]);
+
   const handleLikeClick = () => {
-    // 아무 동작 없음
+    console.log("좋아요 버튼 클릭");
   };
 
   const handleBookmarkClick = () => {
-    // 아무 동작 없음
+    console.log("북마크 버튼 클릭");
   };
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
 
     try {
+      const requestBody = {
+        current_password: currentPassword,
+        new_password: passwords.newPassword,
+        new_password_confirm: passwords.confirmPassword,
+      };
+
       const response = await axios.patch(
         "/user/me/edit/password",
-        {
-          current_password: currentPassword,
-          new_password: passwords.newPassword,
-          new_password_confirm: passwords.confirmPassword,
-        },
+        requestBody,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -114,7 +122,7 @@ function MyPage() {
             <FaUserCircle className="w-24 h-24 text-gray-400 mb-4" />
             <div className="flex items-center space-x-2 mb-1">
               <p className="text-xl font-semibold">{dummyUser.name}</p>
-              <button className="text-gray-500 hover:text-gray-700">
+              <button className="text-gray-500">
                 <FaPencilAlt className="w-4 h-4" />
               </button>
             </div>
@@ -122,17 +130,17 @@ function MyPage() {
             <div className="flex space-x-6 text-gray-600">
               <button
                 onClick={handleLikeClick}
-                className="flex items-center space-x-1 hover:text-red-500 transition-colors"
+                className="flex items-center space-x-1"
               >
-                <FaHeart className="w-5 h-5" />
-                <span>0</span>
+                <FaHeart className="w-5 h-5 text-red-500" />
+                <span>{likes}</span>
               </button>
               <button
                 onClick={handleBookmarkClick}
-                className="flex items-center space-x-1 hover:text-blue-500 transition-colors"
+                className="flex items-center space-x-1"
               >
-                <FaBookmark className="w-5 h-5" />
-                <span>0</span>
+                <FaBookmark className="w-5 h-5 text-yellow-500" />
+                <span>{bookmarks}</span>
               </button>
             </div>
           </section>
@@ -207,12 +215,11 @@ function MyPage() {
                 >
                   회원 탈퇴
                 </button>
-                <button
+                <Button
                   type="submit"
+                  children={"수정 완료"}
                   className="py-2 px-6 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition-colors"
-                >
-                  수정 완료
-                </button>
+                />
               </div>
             </form>
           </section>
