@@ -1,15 +1,17 @@
-import { notificationList } from "../assets/data/dummyNotificationList";
+import { LuDot } from "react-icons/lu";
 
-const NotificationCard = () => {
-  const sortedNotificationList = notificationList.data.sort(
-    (a, b) => b.id - a.id
-  );
+const NotificationCard = ({ notification }) => {
   return (
-    <>
-      {sortedNotificationList.map((el) => (
-        <div>{el.content}</div>
-      ))}
-    </>
+    <div className="text-sm flex justify-between gap-10">
+      <div className="flex ">
+        <span className={notification.is_read ? `text-[#ff0000]` : "opacity-0"}>
+          <LuDot />
+        </span>
+
+        {notification.content}
+      </div>
+      <button>X</button>
+    </div>
   );
 };
 
