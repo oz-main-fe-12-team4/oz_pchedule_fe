@@ -2,8 +2,8 @@ const myScheduleData = {
   data: {
     id: 1,
     title: "일본여행",
-    start_period: "2025-10-9",
-    end_period: "2025-10-12",
+    start_period: "Day1",
+    end_period: "Day5",
     schedule: [
       {
         id: 1,

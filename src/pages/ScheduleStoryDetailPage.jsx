@@ -8,7 +8,6 @@ import BookmarkButton from "../components/BookmarkButton";
 import myScheduleData from "../assets/data/dummyDetailSchedule";
 import { PiSirenDuotone } from "react-icons/pi";
 import { IoChevronBackSharp } from "react-icons/io5";
-import dummyToday from "../assets/data/dummyDay";
 
 export default function ScheduleStoryDetailPage() {
   const { data } = myScheduleData;
@@ -20,6 +19,11 @@ export default function ScheduleStoryDetailPage() {
       time: `${start_time.slice(0, 5)}~${end_time.slice(0, 5)}`,
     })
   );
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const date = today.getDate();
+  const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
+  const day = dayNames[today.getDay()];
 
   return (
     <div className="p-4 min-h-screen bg-white text-gray-900">
@@ -74,10 +78,8 @@ export default function ScheduleStoryDetailPage() {
       </header>
 
       <div className="flex items-center mb-2">
-        <strong>{dummyToday.daynumber}</strong>{" "}
-        <span className="text-gray-500 ml-2">
-          {dummyToday.timelineDate} {dummyToday.timelineDay}
-        </span>
+        <strong>{data.start_period}</strong>{" "}
+        <span className="text-gray-500 ml-2">{`${month}.${date} ${day}`}</span>
       </div>
 
       <div className="relative flex flex-col">
