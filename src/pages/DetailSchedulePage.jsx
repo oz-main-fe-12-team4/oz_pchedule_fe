@@ -1,7 +1,7 @@
 import React from "react";
 import DetailScheduleCard from "../components/DetailScheduleCard";
-import TimeCard from "../components/TimeCard";
-import PlusButton from "../components/PlusButton";
+import TimeCard from "../components/common/TimeCard";
+import PlusButton from "../components/common/PlusButton";
 import myScheduleData from "../assets/data/dummyDetailSchedule";
 
 function DetailSchedulePage() {

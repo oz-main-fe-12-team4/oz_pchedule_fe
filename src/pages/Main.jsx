@@ -1,7 +1,7 @@
 import MainCalendar from "../components/calendar/MainCalendar";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import { MdOutlineNavigateBefore } from "react-icons/md";
-import Button from "../components/Button";
+import Button from "../components/common/Button";
 import { useState } from "react";
 
 const Main = () => {

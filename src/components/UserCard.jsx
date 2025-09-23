@@ -1,7 +1,7 @@
 import React from "react";
 import { FaUserCircle, FaLock } from "react-icons/fa";
-import DeleteButton from "./DeleteButton";
-import ConfirmModal from "./ConfirmModal";
+import DeleteButton from "./common/DeleteButton";
+import ConfirmModal from "./common/ConfirmModal";
 import { useState } from "react";
 
 export default function UserCard({ user }) {

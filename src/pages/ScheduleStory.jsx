@@ -1,5 +1,5 @@
 import { posts } from "../assets/data/dummyPostList";
-import FilterButtons from "../components/FilterButtons";
+import FilterButtons from "../components/common/FilterButtons";
 import ScheduleStoryCard from "../components/ScheduleStoryCard";
 
 const ScheduleStory = () => {
