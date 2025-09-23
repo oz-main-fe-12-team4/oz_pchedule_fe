@@ -24,7 +24,7 @@ export const userList = [
     report_reason: "",
   },
 ];
-
+  
 export const dummyUser = {
   user_id: 4,
   email: "test@naver.com",
