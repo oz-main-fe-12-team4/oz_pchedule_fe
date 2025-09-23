@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   FaUserCircle,
@@ -34,9 +34,25 @@ function MyPage() {
   });
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
 
-  // 좋아요 및 북마크는 클릭해도 아무 동작도 하지 않습니다.
+  const [likes, setLikes] = useState(0);
+  const [bookmarks, setBookmarks] = useState(0);
+
+  useEffect(() => {
+    const fetchUserData = () => {
+      try {
+        const mockLikes = 123;
+        const mockBookmarks = 45;
+        setLikes(mockLikes);
+        setBookmarks(mockBookmarks);
+      } catch (error) {
+        console.error("사용자 데이터를 가져오는 중 오류 발생:", error);
+      }
+    };
+    fetchUserData();
+  }, [accessToken]);
+
   const handleLikeClick = () => {
-    // 아무 동작 없음
+    console.log("좋아요 버튼 클릭");
   };
 
   const handleBookmarkClick = () => {
@@ -71,6 +87,12 @@ function MyPage() {
     e.preventDefault();
 
     try {
+      const requestBody = {
+        current_password: currentPassword,
+        new_password: passwords.newPassword,
+        new_password_confirm: passwords.confirmPassword,
+      };
+
       const response = await axios.patch(
         "/user/me/edit/password",
         {
@@ -190,17 +212,17 @@ function MyPage() {
             <div className="flex space-x-6 text-gray-600">
               <button
                 onClick={handleLikeClick}
-                className="flex items-center space-x-1 hover:text-red-500 transition-colors"
+                className="flex items-center space-x-1"
               >
-                <FaHeart className="w-5 h-5" />
-                <span>0</span>
+                <FaHeart className="w-5 h-5 text-red-500" />
+                <span>{likes}</span>
               </button>
               <button
                 onClick={handleBookmarkClick}
-                className="flex items-center space-x-1 hover:text-blue-500 transition-colors"
+                className="flex items-center space-x-1"
               >
-                <FaBookmark className="w-5 h-5" />
-                <span>0</span>
+                <FaBookmark className="w-5 h-5 text-yellow-500" />
+                <span>{bookmarks}</span>
               </button>
               <div className="flex items-center space-x-1">
                 <FaHeart className="w-5 h-5 text-red-500" />
