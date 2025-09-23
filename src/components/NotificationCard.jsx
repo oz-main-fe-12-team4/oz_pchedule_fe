@@ -4,7 +4,7 @@ const NotificationCard = ({ notification }) => {
   return (
     <div className="text-sm flex justify-between gap-10">
       <div className="flex ">
-        <span className={notification.is_read ? `text-[#ff0000]` : "opacity-0"}>
+        <span className={notification.is_read ? "opacity-0" : "text-[#ff0000]"}>
           <LuDot />
         </span>
 
