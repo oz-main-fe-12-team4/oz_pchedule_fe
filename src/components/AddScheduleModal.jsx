@@ -1,10 +1,10 @@
 import { FaTrash, FaTimes, FaPlusCircle } from "react-icons/fa";
-import Button from "./Button";
-import FilterButtons from "./FilterButtons";
-import Input from "./Input";
 import { useState } from "react";
-import CalendarModal from "./CalendarModal";
-import FilterOptionList from "./FilterOptionList";
+import Button from "./common/Button";
+import FilterButtons from "./common/FilterButtons";
+import Input from "./common/Input";
+import CalendarModal from "./common/CalendarModal";
+import FilterOptionList from "./common/FilterOptionList";
 import TimePicker from "./TimePicker";
 
 const formatDate = (date) =>
@@ -22,7 +22,7 @@ const AddScheduleModal = ({ title, content }) => {
   const [contentValue, setContentValue] = useState(content);
 
   const [calendarModal, setCalendarModal] = useState(false);
-  const [activeDate, setActiveDate] = useState(null); // 'start' | 'end'
+  const [activeDate, setActiveDate] = useState(null);
 
   const [openFilter, setOpenFilter] = useState(null);
   const [filters, setFilters] = useState({
@@ -32,6 +32,8 @@ const AddScheduleModal = ({ title, content }) => {
     repeat: null,
     repeatSub: null,
   });
+
+  const [schedules, setSchedules] = useState([]);
 
   const openCalendar = (dateType) => {
     setActiveDate(dateType);
@@ -49,6 +51,7 @@ const AddScheduleModal = ({ title, content }) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
+  // 기간이 반대로 넘어가는 거 방지
   const handleDateSelect = (date) => {
     const selected = Array.isArray(date) ? date[0] : date;
     if (!selected) return;
@@ -75,6 +78,23 @@ const AddScheduleModal = ({ title, content }) => {
     return { nextStart, nextEnd };
   };
 
+  const handleSave = () => {
+    const newSchedule = {
+      title: titleValue,
+      content: contentValue,
+      startDate,
+      endDate,
+      startTime,
+      endTime,
+      filters,
+    };
+    setSchedules((prev) => [...prev, newSchedule]);
+  };
+
+  const handleDelete = (index) => {
+    setSchedules((prev) => prev.filter((_, i) => i !== index));
+  };
+
   return (
     <div className="flex w-full justify-center min-h-screen bg-gray-50">
       <div className="bg-white rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.15)] relative text-gray-800 w-full max-w-md mt-24">
@@ -87,7 +107,7 @@ const AddScheduleModal = ({ title, content }) => {
               setValue={setTitleValue}
               placeholder="일정 제목을 입력하세요"
               className="text-[22px] font-bold text-gray-700 placeholder-gray-300 border-none outline-none focus:ring-0"
-              maxLength={50}
+              maxLength={70}
             />
           </div>
           <div className="flex items-center gap-3 text-gray-500 pt-1">
@@ -205,9 +225,36 @@ const AddScheduleModal = ({ title, content }) => {
           <Button variant="cancel" type="button">
             취소
           </Button>
-          <Button variant="confirm" type="button">
+          <Button variant="confirm" type="button" onClick={handleSave}>
             저장
           </Button>
+        </div>
+
+        {/* --- 저장된 일정 카드 --- */}
+        <div className="mt-6">
+          {schedules.map((sch, index) => (
+            <div
+              key={index}
+              className="border rounded-xl p-3 mb-2 relative shadow-sm bg-gray-50"
+            >
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="font-bold text-gray-700">{sch.title}</div>
+                  <div className="text-gray-500 text-sm">{sch.content}</div>
+                  <div className="text-gray-400 text-xs">
+                    {formatDate(sch.startDate)} ~ {formatDate(sch.endDate)} |{" "}
+                    {sch.startTime}~{sch.endTime}
+                  </div>
+                </div>
+                <button
+                  className="text-gray-400 hover:text-red-500"
+                  onClick={() => handleDelete(index)}
+                >
+                  <FaTrash />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -236,7 +283,3 @@ const AddScheduleModal = ({ title, content }) => {
 };
 
 export default AddScheduleModal;
-
-/**
- *  Timepicker를 컴포넌트로 분리
- */

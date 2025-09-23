@@ -1,10 +1,15 @@
 import { useState } from "react";
-import { FILTERS } from "../constants/filterList";
-import Button from "../components/Button"; // 공통 Button 컴포넌트
+import { FILTERS } from "../../constants/filterList";
+import Button from "../common/Button";
 
 const FilterOptionList = ({ filters, openFilter, onFilterChange, onClose }) => {
   const [activeSubOptionKey, setActiveSubOptionKey] = useState(null);
   const [pendingSubSelect, setPendingSubSelect] = useState(null);
+  const [selectedYearly, setSelectedYearly] = useState([]);
+  const [currentYearly, setCurrentYearly] = useState({
+    month: null,
+    day: null,
+  });
 
   if (!openFilter) return null;
 
@@ -41,18 +46,36 @@ const FilterOptionList = ({ filters, openFilter, onFilterChange, onClose }) => {
         return [...prev, subValue];
       });
     } else {
-      // 매년 일때 처리(월 선택하나/일 선택하나)
       setPendingSubSelect((prev) => ({
-        // subOptions ({ months: [], days: [] })
         ...prev,
         [repeatName]: subValue,
       }));
     }
   };
 
+  const handleYearlyMonthSelect = (month) => {
+    setCurrentYearly({ month, day: null });
+  };
+
+  const handleYearlyDaySelect = (day) => {
+    if (!currentYearly.month) return;
+    const newSet = { month: currentYearly.month, day };
+    setSelectedYearly((prev) => [...prev, newSet]);
+    setCurrentYearly({ month: null, day: null });
+  };
+
+  // 연간 반복 세트 삭제
+  const handleRemoveYearlySet = (index) => {
+    setSelectedYearly((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSave = () => {
     onFilterChange(openFilter, activeSubOptionKey);
-    onFilterChange(`${openFilter}Sub`, pendingSubSelect);
+    if (activeSubOptionKey === "yearly") {
+      onFilterChange(`${openFilter}Sub`, selectedYearly);
+    } else {
+      onFilterChange(`${openFilter}Sub`, pendingSubSelect);
+    }
     setActiveSubOptionKey(null);
     setPendingSubSelect(null);
     onClose();
@@ -61,6 +84,7 @@ const FilterOptionList = ({ filters, openFilter, onFilterChange, onClose }) => {
   const handleCancel = () => {
     setActiveSubOptionKey(null);
     setPendingSubSelect(null);
+    setCurrentYearly({ month: null, day: null });
     onClose();
   };
 
@@ -68,7 +92,7 @@ const FilterOptionList = ({ filters, openFilter, onFilterChange, onClose }) => {
     <div>
       <div className="absolute z-10 mt-2 w-[360px] rounded-2xl bg-white p-5 shadow-md animate-[slide-up_160ms_ease-out] max-h-[70vh] overflow-auto">
         {!activeSubOptionKey ? (
-          // mainOption 리스트
+          // 메인 옵션 리스트
           <div className="grid grid-cols-2 gap-y-6 gap-x-10">
             {activeFilter.options.map((option) => {
               const isSelected = filters[openFilter] === option.value;
@@ -92,78 +116,124 @@ const FilterOptionList = ({ filters, openFilter, onFilterChange, onClose }) => {
               );
             })}
           </div>
-        ) : (
-          // subOptions 리스트
+        ) : activeSubOptionKey === "yearly" ? (
+          // 연간 반복: 월/일 선택
           <div>
-            {Array.isArray(activeOption?.subOptions) ? (
-              <div className="grid grid-cols-7 gap-2">
-                {activeOption.subOptions.map((sub) => {
-                  const isSelected =
-                    Array.isArray(pendingSubSelect) &&
-                    pendingSubSelect.includes(sub);
-                  return (
-                    <button
-                      key={sub}
-                      type="button"
-                      className={`px-2 py-1 border rounded text-center transition-colors ${
-                        isSelected
-                          ? "bg-[#CAE8F2] text-[#223F43]"
-                          : "hover:bg-gray-100 text-gray-800"
-                      }`}
-                      onClick={() => handlePendingSubSelect(sub)}
-                    >
-                      {sub}
-                    </button>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {Object.entries(activeOption?.subOptions || {}).map(
-                  ([repeatName, values]) => (
-                    <div key={repeatName}>
-                      <div className="font-semibold mb-1">{repeatName}</div>
-                      <div className="grid grid-cols-7 gap-1">
-                        {values.map((value) => {
-                          const isSelected =
-                            pendingSubSelect?.[repeatName] === value;
-                          return (
-                            <button
-                              key={value}
-                              type="button"
-                              className={`px-2 py-1 border rounded text-center transition-colors ${
-                                isSelected
-                                  ? "bg-[#CAE8F2] text-[#223F43]"
-                                  : "hover:bg-gray-100 text-gray-800"
-                              }`}
-                              onClick={() =>
-                                handlePendingSubSelect({
-                                  group: repeatName,
-                                  value,
-                                })
-                              }
-                            >
-                              {value}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )
-                )}
-              </div>
-            )}
+            <div className="mb-2 font-semibold">월 선택</div>
+            <div className="grid grid-cols-6 gap-2 mb-3">
+              {activeOption.subOptions.months.map((month) => (
+                <button
+                  key={month}
+                  className={`px-2 py-1 border rounded text-center ${
+                    currentYearly.month === month
+                      ? "bg-[#CAE8F2] text-[#223F43]"
+                      : "hover:bg-gray-100 text-gray-800"
+                  }`}
+                  onClick={() => handleYearlyMonthSelect(month)}
+                >
+                  {month}
+                </button>
+              ))}
+            </div>
 
-            <div className="mt-4 flex justify-end gap-2">
-              <Button onClick={handleCancel} variant="cancel">
-                취소
-              </Button>
-              <Button onClick={handleSave} variant="confirm">
-                저장
-              </Button>
+            <div className="mb-2 font-semibold">일 선택</div>
+            <div className="grid grid-cols-7 gap-2 mb-3">
+              {activeOption.subOptions.days.map((day) => (
+                <button
+                  key={day}
+                  className={`px-2 py-1 border rounded text-center ${
+                    selectedYearly.some(
+                      (set) =>
+                        set.month === currentYearly.month && set.day === day
+                    )
+                      ? "bg-[#CAE8F2] text-[#223F43]"
+                      : "hover:bg-gray-100 text-gray-800"
+                  }`}
+                  onClick={() => handleYearlyDaySelect(day)}
+                >
+                  {day}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap gap-2 mt-4">
+              {selectedYearly.map((set, idx) => (
+                <div
+                  key={`${set.month}-${set.day}-${idx}`}
+                  className="flex items-center gap-1 px-2 py-1 bg-[#CAE8F2] text-[#223F43] rounded"
+                >
+                  <span>{`${set.month}월 ${set.day}일`}</span>
+                  <button onClick={() => handleRemoveYearlySet(idx)}>x</button>
+                </div>
+              ))}
             </div>
           </div>
+        ) : Array.isArray(activeOption?.subOptions) ? (
+          // 기존 배열 subOptions
+          <div className="grid grid-cols-7 gap-2">
+            {activeOption.subOptions.map((sub) => {
+              const isSelected =
+                Array.isArray(pendingSubSelect) &&
+                pendingSubSelect.includes(sub);
+              return (
+                <button
+                  key={sub}
+                  type="button"
+                  className={`px-2 py-1 border rounded text-center transition-colors ${
+                    isSelected
+                      ? "bg-[#CAE8F2] text-[#223F43]"
+                      : "hover:bg-gray-100 text-gray-800"
+                  }`}
+                  onClick={() => handlePendingSubSelect(sub)}
+                >
+                  {sub}
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          // subOptions
+          <div className="space-y-3">
+            {Object.entries(activeOption?.subOptions || {}).map(
+              ([repeatName, values]) => (
+                <div key={repeatName}>
+                  <div className="font-semibold mb-1">{repeatName}</div>
+                  <div className="grid grid-cols-7 gap-1">
+                    {values.map((value) => {
+                      const isSelected =
+                        pendingSubSelect?.[repeatName] === value;
+                      return (
+                        <button
+                          key={value}
+                          type="button"
+                          className={`px-2 py-1 border rounded text-center transition-colors ${
+                            isSelected
+                              ? "bg-[#CAE8F2] text-[#223F43]"
+                              : "hover:bg-gray-100 text-gray-800"
+                          }`}
+                          onClick={() =>
+                            handlePendingSubSelect({ group: repeatName, value })
+                          }
+                        >
+                          {value}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )
+            )}
+          </div>
         )}
+
+        <div className="mt-4 flex justify-end gap-2">
+          <Button onClick={handleCancel} variant="cancel">
+            취소
+          </Button>
+          <Button onClick={handleSave} variant="confirm">
+            저장
+          </Button>
+        </div>
       </div>
 
       <style>{`

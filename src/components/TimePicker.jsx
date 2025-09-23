@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import timeUtils from "../utils/timeUtils";
-import Button from "./Button";
+import Button from "./common/Button";
 const { clamp, toMinutes, fromMinutes, parseInput, formatTime, snapToStep } =
   timeUtils;
 
