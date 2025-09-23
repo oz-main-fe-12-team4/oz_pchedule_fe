@@ -12,14 +12,12 @@ export default function UserCard({ user }) {
     console.log("계정 잠금/해제 API 호출");
   };
 
-  const handleDeleteAccount = () => {
-    console.log("계정 삭제 API 호출");
   const handleClickDeleteButton = () => {
     setIsConfirmModalOpen(true);
   };
 
   return (
-    <div className="flex items-center space-x-4 p-4 border rounded-lg shadow-sm">
+    <div className="w-[100%] flex items-center gap-4 p-4 border-b">
       <FaUserCircle
         className={`w-12 h-12 ${
           is_reported ? "text-red-500" : "text-gray-500"
@@ -31,9 +29,9 @@ export default function UserCard({ user }) {
             is_reported ? "text-red-500" : "text-gray-800"
           }`}
         >
-          이름: {name}
+          {name}
         </h2>
-        <p className="text-gray-500 text-sm">이메일: {email}</p>
+        <p className="text-gray-500 text-sm">{email}</p>
       </div>
 
       {is_reported && (

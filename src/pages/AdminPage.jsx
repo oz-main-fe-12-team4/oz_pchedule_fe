@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import UserCard from "../components/UserCard.jsx";
 import Input from "../components/Input.jsx";
-import FilterButton from "../components/FilterButton.jsx";
 import { userList } from "../assets/data/dummyUser.js";
+import Button from "../components/Button.jsx";
 
 function AdminPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,16 +25,15 @@ function AdminPage() {
     setIsReportedOnly(!isReportedOnly);
   };
 
-  const buttonClass = isReportedOnly
-    ? "bg-red-500 text-white"
-    : "bg-gray-200 text-gray-800";
-
   return (
-    <div className="p-5">
-      <h1 className="text-2xl font-bold mb-4">관리자 페이지</h1>
-      <div className="mb-6">
-        <p>유저 목록을 확인하고 관리할 수 있습니다.</p>
-
+    <div className="w-[calc(100vw-200px)] p-5">
+      <div className="flex flex-col gap-2 pb-5 border-b">
+        <h1 className="text-2xl font-bold mb-4">유저 목록</h1>
+        <p className="text-gray-300">
+          전체 {}명 신고된 유저 {}명
+        </p>
+      </div>
+      <div className="flex flex-col gap-3 pb-3 border-b">
         {/* Input 컴포넌트 사용 */}
         <Input
           placeholder="이름 또는 이메일로 검색"
@@ -43,19 +42,14 @@ function AdminPage() {
         />
 
         {/* FilterButton 컴포넌트 사용 */}
-        <FilterButton
-          onClick={handleFilterToggle}
-          className={`mt-2 ${buttonClass}`}
-        >
-          {isReportedOnly ? "전체 유저 보기" : "신고 유저만 보기"}
-        </FilterButton>
+        <Button onClick={handleFilterToggle}>
+          {isReportedOnly ? "전체 유저" : "신고 유저"}
+        </Button>
       </div>
 
-      <div className="space-y-4">
+      <div className="">
         {filteredUsers.length > 0 ? (
-          filteredUsers.map((user) => (
-            <UserCard key={user.user_id} user={user} />
-          ))
+          filteredUsers.map((user) => <UserCard key={user.id} user={user} />)
         ) : (
           <div className="text-gray-500 text-center">검색 결과가 없습니다.</div>
         )}
