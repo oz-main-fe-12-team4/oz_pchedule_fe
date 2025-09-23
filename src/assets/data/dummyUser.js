@@ -26,6 +26,10 @@ export const userList = [
 ];
 
 export const dummyUser = {
-  name: "서단비",
+  user_id: 4,
   email: "test@naver.com",
+  name: "서단비",
+  is_active: false,
+  is_reported: false,
+  report_reason: "",
 };

@@ -17,19 +17,38 @@ function MyPage() {
 
   const [likes, setLikes] = useState(0);
   const [bookmarks, setBookmarks] = useState(0);
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    const fetchUserData = () => {
+    // 사용자 데이터와 알림 데이터를 동시에 불러오는 함수
+    const fetchData = async () => {
       try {
+        // 더미 좋아요/북마크 데이터 설정
         const mockLikes = 123;
         const mockBookmarks = 45;
         setLikes(mockLikes);
         setBookmarks(mockBookmarks);
+
+        // 알림 API 호출
+        // 실제 API URL과 명세를 확인하여 수정해야 합니다.
+        const notificationsResponse = await axios.get(
+          "/notification/notifications",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        // API 응답에서 알림 목록을 가져와 상태에 저장
+        if (notificationsResponse.data && notificationsResponse.data.data) {
+          setNotifications(notificationsResponse.data.data);
+        }
       } catch (error) {
-        console.error("사용자 데이터를 가져오는 중 오류 발생:", error);
+        console.error("데이터를 가져오는 중 오류 발생:", error);
       }
     };
-    fetchUserData();
+    fetchData();
   }, [accessToken]);
 
   const handleLikeClick = () => {
@@ -164,6 +183,30 @@ function MyPage() {
                 />
               </label>
             </div>
+          </section>
+
+          {/* 알림 목록 섹션 추가 */}
+          <hr className="my-6 border-gray-200" />
+          <section>
+            <h2 className="text-lg font-semibold mb-4">알림</h2>
+            {notifications.length > 0 ? (
+              <ul className="space-y-2">
+                {notifications.map((notification) => (
+                  <li
+                    key={notification.id}
+                    className={`p-4 rounded-lg border ${
+                      notification.is_read
+                        ? "bg-gray-100 border-gray-300"
+                        : "bg-blue-50 border-blue-200"
+                    }`}
+                  >
+                    <p className="text-sm">{notification.content}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-gray-500">새로운 알림이 없습니다.</p>
+            )}
           </section>
         </aside>
 
