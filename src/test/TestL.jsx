@@ -1,7 +1,5 @@
-// src/test/TestL.jsx
-
 import React from "react";
-import MyPage from "../pages/MyPage.jsx"; // MyPage 컴포넌트 임포트
+import MyPage from "../pages/MyPage.jsx";
 
 function TestL() {
   return (
