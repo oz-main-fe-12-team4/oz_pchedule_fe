@@ -26,30 +26,12 @@ const Signin = () => {
     setSigninError(res);
   };
 
-  const isPasswordMatch = passwordInputValue === checkPasswordInputValue;
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!isPasswordMatch) {
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-    // 여기에 회원가입 로직을 추가하세요. (예: API 호출)
-    console.log("회원가입 정보:", {
-      name: nameInputValue,
-      email: emailInputValue,
-      password: passwordInputValue,
-    });
-    alert("회원가입이 완료되었습니다.");
-  };
-
   return (
     <div className="flex flex-col justify-center items-center gap-5 m-10">
       <form
         name="login"
         onSubmit={handleSubmit}
         className="flex flex-col justify-center items-center gap-5"
-        onSubmit={handleSubmit}
       >
         <img src={logo} alt="pchedule logo" className="w-[300px] scale-70" />
         <div className="w-[300px] flex flex-col gap-1 justify-center items-start">
@@ -103,7 +85,6 @@ const Signin = () => {
             setValue={setCheckPasswordInputValue}
             required={true}
             compareValue={passwordInputValue}
-            errorMessage="비밀번호가 일치하지 않습니다." // 오류 메시지 추가
           />
         </div>
         {
