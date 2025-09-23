@@ -18,10 +18,10 @@ const scheduleStoryIcon = <IoMdShare />;
 const userListIcon = <BiSolidUserRectangle />;
 
 export const UserMenus = [
-  { id: 1, icon: calendarIcon, name: "캘린더", params: "" },
-  { id: 2, icon: scheduleIcon, name: "할 일", params: "daily" },
-  { id: 3, icon: routineIcon, name: "루틴", params: "routine" },
-  { id: 4, icon: somedayIcon, name: "언젠가", params: "someday" },
+  { id: 1, icon: calendarIcon, name: "캘린더", params: "/" },
+  { id: 2, icon: scheduleIcon, name: "할 일", params: "/daily" },
+  { id: 3, icon: routineIcon, name: "루틴", params: "/routine" },
+  { id: 4, icon: somedayIcon, name: "언젠가", params: "/someday" },
   {
     id: 5,
     icon: scheduleStoryIcon,
