@@ -1,16 +1,23 @@
 import { FaUser } from "react-icons/fa6";
 import { IoShare } from "react-icons/io5";
 import { FaCheckSquare, FaRegSquare } from "react-icons/fa";
-import { TbTrash } from "react-icons/tb";
 import { getRecurrenceType } from "../utils/getRecurrenceType";
 import RenderRecurrenceByType from "./RenderRecurrenceByType";
 import { getColorOfPriority } from "../utils/getColorOfPriority.js";
+import DeleteButton from "./DeleteButton.jsx";
+import { useState } from "react";
+import ConfirmModal from "./ConfirmModal.jsx";
 
 const RoutineCard = ({ post }) => {
   const { priority, recurrence, start_period, is_shared, title, is_completed } =
     post;
   const priorityColor = getColorOfPriority(priority);
   const recurrenceType = getRecurrenceType(recurrence.type);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+
+  const handleClickDeleteButton = () => {
+    setIsConfirmModalOpen(true);
+  };
 
   return (
     <div
@@ -43,11 +50,18 @@ const RoutineCard = ({ post }) => {
           </div>
         </div>
 
-        <TbTrash
-          size={30}
-          className="cursor-pointer text-[#d9d9d9] hover:text-[#5C5C5C]"
-        />
+        <DeleteButton onClick={handleClickDeleteButton} />
       </div>
+      {isConfirmModalOpen && (
+        <ConfirmModal
+          message={"삭제 하시겠습니까?"}
+          leftBtnText={"예"}
+          rightBtnText={"아니요"}
+          onLeftClick={() => {}}
+          onRightClick={() => setIsConfirmModalOpen(false)}
+          onClose={() => setIsConfirmModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

@@ -2,34 +2,24 @@ import React from "react";
 import { FaUser } from "react-icons/fa6";
 import { IoShare } from "react-icons/io5";
 import { FaCheckSquare, FaRegSquare } from "react-icons/fa";
-import { TbTrash } from "react-icons/tb";
-
-const getColor = (priority) => {
-  switch (priority) {
-    case "긴급":
-      return "border-red-500";
-    case "상":
-      return "border-orange-400";
-    case "중":
-      return "border-yellow-400";
-    case "하":
-      return "border-green-400";
-    case "보류":
-      return "border-blue-300";
-    default:
-      return "border-gray-200";
-  }
-};
+import DeleteButton from "./DeleteButton";
+import ConfirmModal from "./ConfirmModal";
+import { useState } from "react";
+import { getColorOfPriority } from "../utils/getColorOfPriority";
 
 const ScheduleCard = ({ post }) => {
   const { priority, start_time, is_shared, title, is_completed, schedule } =
     post;
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const priorityColor = getColorOfPriority(priority);
+
+  const handleClickDeleteButton = () => {
+    setIsConfirmModalOpen(true);
+  };
 
   return (
     <div
-      className={`flex items-center gap-4 border-l-4 ${getColor(
-        priority
-      )} pl-3 py-2`}
+      className={`flex items-center gap-4 border-l-4 ${priorityColor} pl-3 py-2`}
     >
       {/* 왼쪽: 날짜 + 아이콘 */}
       <div className="flex flex-col items-start min-w-[140px]">
@@ -53,11 +43,18 @@ const ScheduleCard = ({ post }) => {
           </div>
         </div>
 
-        <TbTrash
-          size={30}
-          className="cursor-pointer text-[#d9d9d9] hover:text-[#5C5C5C]"
-        />
+        <DeleteButton onClick={handleClickDeleteButton} />
       </div>
+      {isConfirmModalOpen && (
+        <ConfirmModal
+          message={"삭제 하시겠습니까?"}
+          leftBtnText={"예"}
+          rightBtnText={"아니요"}
+          onLeftClick={() => {}}
+          onRightClick={() => setIsConfirmModalOpen(false)}
+          onClose={() => setIsConfirmModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

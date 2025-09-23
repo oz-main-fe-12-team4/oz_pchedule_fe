@@ -1,8 +1,12 @@
 import React from "react";
-import { FaUserCircle, FaLock, FaTrash } from "react-icons/fa";
+import { FaUserCircle, FaLock } from "react-icons/fa";
+import DeleteButton from "./DeleteButton";
+import ConfirmModal from "./ConfirmModal";
+import { useState } from "react";
 
 export default function UserCard({ user }) {
   const { name, email, is_active, is_reported, report_reason } = user;
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const handleLockAccount = () => {
     console.log("계정 잠금/해제 API 호출");
@@ -10,6 +14,8 @@ export default function UserCard({ user }) {
 
   const handleDeleteAccount = () => {
     console.log("계정 삭제 API 호출");
+  const handleClickDeleteButton = () => {
+    setIsConfirmModalOpen(true);
   };
 
   return (
@@ -44,10 +50,18 @@ export default function UserCard({ user }) {
             }`}
           />
         </button>
-        <button onClick={handleDeleteAccount} title="계정 삭제">
-          <FaTrash className="w-6 h-6 text-gray-500 transition-colors duration-200 hover:text-red-500" />
-        </button>
+        <DeleteButton onClick={handleClickDeleteButton} />
       </div>
+      {isConfirmModalOpen && (
+        <ConfirmModal
+          message={"삭제 하시겠습니까?"}
+          leftBtnText={"예"}
+          rightBtnText={"아니요"}
+          onLeftClick={() => {}}
+          onRightClick={() => setIsConfirmModalOpen(false)}
+          onClose={() => setIsConfirmModalOpen(false)}
+        />
+      )}
     </div>
   );
 }
