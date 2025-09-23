@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/Logo.svg";
+import logo from "../../assets/Logo.svg";
 import { IoSearch } from "react-icons/io5";
 import { IoMdNotifications } from "react-icons/io";
 import { FaCircleUser } from "react-icons/fa6";

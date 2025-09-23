@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import UserCard from "../components/UserCard.jsx";
-import Input from "../components/Input.jsx";
+import Input from "../components/common/Input.jsx";
 import { userList } from "../assets/data/dummyUser.js";
-import Button from "../components/Button.jsx";
+import Button from "../components/common/Button.jsx";
 
 function AdminPage() {
   const [searchQuery, setSearchQuery] = useState("");

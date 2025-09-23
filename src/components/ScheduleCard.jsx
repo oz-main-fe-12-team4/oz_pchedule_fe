@@ -2,8 +2,8 @@ import React from "react";
 import { FaUser } from "react-icons/fa6";
 import { IoShare } from "react-icons/io5";
 import { FaCheckSquare, FaRegSquare } from "react-icons/fa";
-import DeleteButton from "./DeleteButton";
-import ConfirmModal from "./ConfirmModal";
+import DeleteButton from "./common/DeleteButton";
+import ConfirmModal from "./common/ConfirmModal";
 import { useState } from "react";
 import { getColorOfPriority } from "../utils/getColorOfPriority";
 

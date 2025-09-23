@@ -4,9 +4,9 @@ import { FaCheckSquare, FaRegSquare } from "react-icons/fa";
 import { getRecurrenceType } from "../utils/getRecurrenceType";
 import RenderRecurrenceByType from "./RenderRecurrenceByType";
 import { getColorOfPriority } from "../utils/getColorOfPriority.js";
-import DeleteButton from "./DeleteButton.jsx";
+import DeleteButton from "./common/DeleteButton.jsx";
 import { useState } from "react";
-import ConfirmModal from "./ConfirmModal.jsx";
+import ConfirmModal from "./common/ConfirmModal.jsx";
 
 const RoutineCard = ({ post }) => {
   const { priority, recurrence, start_period, is_shared, title, is_completed } =

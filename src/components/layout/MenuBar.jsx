@@ -1,5 +1,5 @@
 import MenuCard from "./MenuCard";
-import { AdminMenus, UserMenus } from "../constants/menuList";
+import { AdminMenus, UserMenus } from "../../constants/menuList";
 import { useState } from "react";
 
 const MenuBar = () => {

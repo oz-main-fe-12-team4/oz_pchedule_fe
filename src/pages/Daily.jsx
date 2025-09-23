@@ -1,5 +1,5 @@
 import ScheduleCard from "../components/ScheduleCard";
-import FilterButtons from "../components/FilterButtons";
+import FilterButtons from "../components/common/FilterButtons";
 
 const Daily = ({ posts }) => {
   const list = posts?.data ?? [];

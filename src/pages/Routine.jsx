@@ -1,4 +1,4 @@
-import Button from "../components/Button";
+import Button from "../components/common/Button";
 import DisplayDays from "../components/calendar/DisplayDays";
 import Weekly from "../components/Weekly";
 import { MdOutlineNavigateNext } from "react-icons/md";
@@ -6,10 +6,10 @@ import { MdOutlineNavigateBefore } from "react-icons/md";
 import { BsList } from "react-icons/bs";
 import { CiCalendar } from "react-icons/ci";
 import { useState } from "react";
-import FilterButtons from "../components/FilterButtons";
+import FilterButtons from "../components/common/FilterButtons";
 import { posts } from "../assets/data/dummyPostList";
 import RoutineCard from "../components/RoutineCard";
-import TabButton from "../components/TabButton";
+import TabButton from "../components/common/TabButton";
 
 const Routine = () => {
   const [isWeekly, setIsWeekly] = useState(true);

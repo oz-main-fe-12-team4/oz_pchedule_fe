@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "./Button";
-import { FILTER_LABELS } from "../constants/filterList";
+import { FILTER_LABELS } from "../../constants/filterList";
 
 const FilterButtons = ({ keys, onFilterToggle }) => {
   return (

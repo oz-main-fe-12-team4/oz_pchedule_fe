@@ -1,5 +1,5 @@
-import Header from "../components/Header";
-import MenuBar from "../components/MenuBar";
+import Header from "../components/layout/Header";
+import MenuBar from "../components/layout/MenuBar";
 
 function TestD() {
   return (

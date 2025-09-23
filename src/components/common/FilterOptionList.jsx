@@ -1,7 +1,7 @@
 import React from "react";
 import { FaShareAlt, FaUser } from "react-icons/fa";
 import { FaCircle } from "react-icons/fa6";
-import { FILTERS } from "../constants/filterList";
+import { FILTERS } from "../../constants/filterList";
 
 const FilterOptionList = ({ filters, openFilter, onFilterChange, onClose }) => {
   if (!openFilter) return null;

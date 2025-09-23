@@ -1,4 +1,4 @@
-import TabButton from "../components/TabButton";
+import TabButton from "../components/common/TabButton";
 
 const Someday = () => {
   return (

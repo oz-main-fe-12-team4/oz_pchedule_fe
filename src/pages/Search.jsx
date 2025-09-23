@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Input from "../components/Input";
+import Input from "../components/common/Input";
 import { RiFileSearchFill } from "react-icons/ri";
-import TabButton from "../components/TabButton";
+import TabButton from "../components/common/TabButton";
 
 function Search() {
   const [searchString, setSearchString] = useState("");
