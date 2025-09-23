@@ -3,7 +3,8 @@ import { AdminMenus, UserMenus } from "../constants/menuList";
 import { useState } from "react";
 
 const MenuBar = () => {
-  const [activeMenu, setActiveMenu] = useState("");
+  const url = new URL(window.location.href);
+  const [activeMenu, setActiveMenu] = useState(url.pathname);
 
   const handleClickMenu = (params) => {
     setActiveMenu(params);
@@ -17,7 +18,7 @@ const MenuBar = () => {
             key={menu.id}
             icon={menu.icon}
             menu={menu.name}
-            to={`/${menu.params}`}
+            to={menu.params}
             onClick={() => handleClickMenu(menu.params)}
             activeClassName={activeMenu === menu.params ? "bg-gray-200" : ""}
           />
@@ -29,7 +30,7 @@ const MenuBar = () => {
             key={menu.id}
             icon={menu.icon}
             menu={menu.name}
-            to={`/${menu.params}`}
+            to={menu.params}
             onClick={() => handleClickMenu(menu.params)}
             activeClassName={activeMenu === menu.params ? "bg-gray-200" : ""}
           />

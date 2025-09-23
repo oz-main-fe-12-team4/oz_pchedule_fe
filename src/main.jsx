@@ -48,7 +48,7 @@ let router = createBrowserRouter([
         path: "/admin/user_list",
       },
       {
-        path: "/admin/share_schedule",
+        path: "/admin/schedule_story",
       },
     ],
   },
