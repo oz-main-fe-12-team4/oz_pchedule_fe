@@ -9,10 +9,11 @@ import TestD from "./test/TestD";
 import TestJ from "./test/TestJ";
 import TestL from "./test/TestL";
 import Main from "./pages/Main";
-import DailyPage from "./pages/DailyPage";
 import Search from "./pages/Search";
 import Routine from "./pages/Routine";
 import ScheduleStory from "./pages/ScheduleStory";
+import Someday from "./pages/Someday";
+import Daily from "./pages/Daily";
 
 let router = createBrowserRouter([
   {
@@ -25,7 +26,7 @@ let router = createBrowserRouter([
       },
       {
         path: "/daily",
-        Component: DailyPage,
+        Component: Daily,
       },
       {
         path: "/routine",
@@ -33,6 +34,7 @@ let router = createBrowserRouter([
       },
       {
         path: "/someday",
+        Component: Someday,
       },
       {
         path: "/schedule_story",

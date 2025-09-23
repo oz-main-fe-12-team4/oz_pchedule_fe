@@ -3,12 +3,15 @@ import logo from "../assets/Logo.svg";
 import { IoSearch } from "react-icons/io5";
 import { IoMdNotifications } from "react-icons/io";
 import { FaCircleUser } from "react-icons/fa6";
+import { Link } from "react-router";
 
 const Header = () => {
   return (
     <div>
       <header className="flex items-center justify-between flex-row mx-10 my-3">
-        <img src={logo} alt="pchedule logo" className="w-[90px]" />
+        <Link to={"/"}>
+          <img src={logo} alt="pchedule logo" className="w-[90px]" />
+        </Link>
         <div className="flex justify-evenly gap-7 text-[#192A2D]">
           <IoSearch size={34} />
           <IoMdNotifications size={34} />
