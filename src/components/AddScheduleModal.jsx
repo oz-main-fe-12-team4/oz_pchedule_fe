@@ -26,6 +26,7 @@ const AddScheduleModal = ({ title, content }) => {
     priority: null,
     share: null,
     repeat: null,
+    repeatSub: null,
   });
 
   const openCalendar = (dateType) => {
