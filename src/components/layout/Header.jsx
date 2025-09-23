@@ -34,7 +34,7 @@ const Header = () => {
             {isDropdownNotification && (
               <div className="p-5 rounded-2xl bg-white shadow-[0_0_40px_-10px_#0000003f] absolute top-20 right-5 flex flex-col justify-center items-center gap-3 z-50 text-gray-400">
                 {sortedNotificationList.map((el) => (
-                  <NotificationCard notification={el} />
+                  <NotificationCard key={el.id} notification={el} />
                 ))}
               </div>
             )}
