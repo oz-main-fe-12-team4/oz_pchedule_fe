@@ -31,6 +31,11 @@ export const UserMenus = [
 ];
 
 export const AdminMenus = [
-  { id: 1, icon: userListIcon, name: "유저 목록" },
-  { id: 2, icon: scheduleStoryIcon, name: "일정 스토리" },
+  { id: 1, icon: userListIcon, name: "유저 목록", params: "/admin/user_list" },
+  {
+    id: 2,
+    icon: scheduleStoryIcon,
+    name: "일정 스토리",
+    params: "/admin/schedule_story",
+  },
 ];

@@ -30,7 +30,7 @@ const MenuBar = () => {
             key={menu.id}
             icon={menu.icon}
             menu={menu.name}
-            to={`/${menu.params}`}
+            to={menu.params}
             onClick={() => handleClickMenu(menu.params)}
             activeClassName={activeMenu === menu.params ? "bg-gray-200" : ""}
           />
