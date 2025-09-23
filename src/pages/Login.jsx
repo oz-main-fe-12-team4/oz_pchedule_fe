@@ -72,14 +72,8 @@ const Login = () => {
           className="w-12 h-12 rounded-full"
         />
       </div>
-      <p>
-        계정이 없으신가요?{" "}
-        <Link to={"/signin"}>
-          <span className="text-[#2F7884] font-bold">회원가입</span>
-        </Link>
-      </p>
     </div>
   );
 };
 
-export default Login;
+export default MyPage;
