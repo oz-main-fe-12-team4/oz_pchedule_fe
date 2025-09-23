@@ -1,4 +1,4 @@
-import { Button } from "./Button";
+import Button from "./Button";
 
 function ConfirmModal({
   message,
@@ -9,7 +9,7 @@ function ConfirmModal({
   onClose,
 }) {
   return (
-    <div className="fixed inset-0 bg-gray-300 bg-opacity-40 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-[#c2c2c2b1] flex items-center justify-center z-50">
       <div
         className="relative bg-gray-700 rounded-lg p-6 w-[320px] shadow-lg 
       flex flex-col items-center justify-center text-center"
@@ -27,16 +27,12 @@ function ConfirmModal({
 
         <p className="mb-3 text-white">{message}</p>
         <div className="flex justify-center space-x-4">
-          <Button
-            children={leftBtnText}
-            variant="cancel"
-            onClick={onLeftClick}
-          />
-          <Button
-            children={rightBtnText}
-            variant="confirm"
-            onClick={onRightClick}
-          />
+          <Button variant="cancel" onClick={onLeftClick}>
+            {leftBtnText}
+          </Button>
+          <Button variant="confirm" onClick={onRightClick}>
+            {rightBtnText}
+          </Button>
         </div>
       </div>
     </div>

@@ -14,6 +14,7 @@ import Routine from "./pages/Routine";
 import ScheduleStory from "./pages/ScheduleStory";
 import Someday from "./pages/Someday";
 import Daily from "./pages/Daily";
+import AdminPage from "./pages/AdminPage";
 
 let router = createBrowserRouter([
   {
@@ -46,6 +47,7 @@ let router = createBrowserRouter([
       },
       {
         path: "/admin/user_list",
+        Component: AdminPage,
       },
       {
         path: "/admin/schedule_story",
