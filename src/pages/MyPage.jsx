@@ -25,24 +25,33 @@ function MyPage() {
   });
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
 
-  // 좋아요, 북마크 상태 (토글 기능)
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
-  // 좋아요 버튼 클릭 핸들러
+  const isPasswordMatch = passwords.newPassword === passwords.confirmPassword;
+
+  // 좋아요 버튼 클릭 핸들러 (토글 기능)
   const handleLikeClick = () => {
     setIsLiked((prev) => !prev);
+    if (!isLiked) {
+      alert("좋아요가 추가되었습니다.");
+    } else {
+      alert("좋아요가 취소되었습니다.");
+    }
   };
 
-  // 북마크 버튼 클릭 핸들러
+  // 북마크 버튼 클릭 핸들러 (취소 불가)
   const handleBookmarkClick = () => {
-    setIsBookmarked((prev) => !prev);
+    if (!isBookmarked) {
+      setIsBookmarked(true);
+      alert("찜하기가 추가되었습니다.");
+    }
   };
 
-  // 비밀번호 변경 로직
   const handlePasswordChange = async (e) => {
     e.preventDefault();
-    if (passwords.newPassword !== passwords.confirmPassword) {
+
+    if (!isPasswordMatch) {
       alert("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
       return;
     }
@@ -81,12 +90,10 @@ function MyPage() {
     }
   };
 
-  // 알림 설정 토글 로직
   const handleNotificationToggle = () => {
     setIsNotificationEnabled(!isNotificationEnabled);
   };
 
-  // 회원 탈퇴 로직
   const handleWithdrawal = async () => {
     const isConfirmed = window.confirm(
       "정말로 회원 탈퇴를 하시겠습니까? 모든 정보가 영구적으로 삭제됩니다."
@@ -117,7 +124,6 @@ function MyPage() {
 
   return (
     <div className="p-5 max-w-2xl mx-auto font-sans">
-      {/* 상단 메뉴바 */}
       <nav className="flex items-center justify-between py-4 mb-6">
         <img src={logo} alt="로고" className="h-12" />
         <div className="flex items-center space-x-4">
@@ -134,7 +140,6 @@ function MyPage() {
       </nav>
 
       <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
-        {/* 왼쪽 사이드 패널 */}
         <aside className="w-full md:w-1/3 p-6 bg-white rounded-xl shadow-md border border-gray-200">
           <section className="flex flex-col items-center text-center">
             <FaUserCircle className="w-24 h-24 text-gray-400 mb-4" />
@@ -158,6 +163,7 @@ function MyPage() {
               <button
                 onClick={handleBookmarkClick}
                 className="flex items-center space-x-1 hover:text-blue-500 transition-colors"
+                disabled={isBookmarked}
               >
                 <FaBookmark
                   className={isBookmarked ? "w-5 h-5 text-blue-500" : "w-5 h-5"}
@@ -189,7 +195,6 @@ function MyPage() {
           </section>
         </aside>
 
-        {/* 오른쪽 메인 콘텐츠 영역 */}
         <main className="w-full md:w-2/3 p-6 bg-white rounded-xl shadow-md border border-gray-200">
           <section className="space-y-4">
             <h2 className="text-lg font-semibold">비밀번호 변경</h2>
@@ -201,7 +206,6 @@ function MyPage() {
                   setValue={setCurrentPassword}
                   placeholder="현재 비밀번호"
                   type="password"
-                  errorMessage="유효하지 않은 비밀번호입니다."
                 />
                 <Input
                   label="새 비밀번호"
@@ -211,8 +215,6 @@ function MyPage() {
                   }
                   placeholder="새 비밀번호"
                   type="password"
-                  errorMessage="비밀번호가 일치하지 않습니다."
-                  compareValue={passwords.confirmPassword}
                 />
                 <Input
                   label="새 비밀번호 확인"
@@ -225,9 +227,14 @@ function MyPage() {
                   }
                   placeholder="새 비밀번호 확인"
                   type="password"
-                  errorMessage="비밀번호가 일치하지 않습니다."
-                  compareValue={passwords.newPassword}
                 />
+                {passwords.newPassword &&
+                  passwords.confirmPassword &&
+                  !isPasswordMatch && (
+                    <p className="text-red-500 text-sm">
+                      비밀번호가 일치하지 않습니다.
+                    </p>
+                  )}
               </div>
 
               <div className="flex justify-end items-center space-x-4 pt-4">
