@@ -1,3 +1,5 @@
+// src/assets/data/dummyUser.js
+
 export const userList = [
   {
     id: 1,
@@ -24,7 +26,7 @@ export const userList = [
     report_reason: "",
   },
 ];
-  
+
 export const dummyUser = {
   user_id: 4,
   email: "test@naver.com",
