@@ -117,8 +117,12 @@ const AddScheduleModal = ({ title, content }) => {
   };
 
   const subDateOptions = [];
-  for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-    subDateOptions.push(new Date(d));
+  for (
+    let date = new Date(startDate);
+    date <= endDate;
+    date.setDate(date.getDate() + 1)
+  ) {
+    subDateOptions.push(new Date(date));
   }
 
   return (
@@ -181,6 +185,79 @@ const AddScheduleModal = ({ title, content }) => {
             onFilterChange={handleFilterChange}
             onClose={() => setOpenFilter(null)}
           />
+          {/* 선택된 필터 표시 */}
+          <div className="mt-2 flex flex-wrap gap-2">
+            {filters.category && (
+              <span className="px-2 py-1 bg-gray-200 rounded text-sm">
+                {
+                  FILTERS.category.options.find(
+                    (opt) => opt.value === filters.category
+                  )?.name
+                }
+              </span>
+            )}
+            {filters.priority && (
+              <span className="px-2 py-1 bg-gray-200 rounded text-sm flex items-center gap-1">
+                {React.createElement(
+                  FILTERS.priority.options.find(
+                    (opt) => opt.value === filters.priority
+                  )?.Icon,
+                  {
+                    className: FILTERS.priority.options.find(
+                      (opt) => opt.value === filters.priority
+                    )?.iconClass,
+                    size: 12,
+                  }
+                )}
+                {
+                  FILTERS.priority.options.find(
+                    (opt) => opt.value === filters.priority
+                  )?.name
+                }
+              </span>
+            )}
+            {filters.share && (
+              <span className="px-2 py-1 bg-gray-200 rounded text-sm flex items-center gap-1">
+                {React.createElement(
+                  FILTERS.share.options.find(
+                    (opt) => opt.value === filters.share
+                  )?.Icon,
+                  { size: 12 }
+                )}
+                {
+                  FILTERS.share.options.find(
+                    (opt) => opt.value === filters.share
+                  )?.name
+                }
+              </span>
+            )}
+            {filters.repeat && (
+              <span className="px-2 py-1 bg-gray-200 rounded text-sm">
+                {(() => {
+                  const repeatOption = FILTERS.repeat.options.find(
+                    (opt) => opt.value === filters.repeat
+                  );
+                  if (!repeatOption) return "";
+                  if (repeatOption.value === "none") return repeatOption.name;
+                  const sub = filters.repeatSub;
+                  let subText = "";
+                  if (
+                    (repeatOption.value === "weekly" ||
+                      repeatOption.value === "monthly") &&
+                    Array.isArray(sub)
+                  )
+                    subText = sub.join(",");
+                  if (repeatOption.value === "yearly" && Array.isArray(sub))
+                    subText = sub
+                      .map((s) => `${s.month}월${s.day}일`)
+                      .join(", ");
+                  return `${repeatOption.name}${
+                    subText ? ` (${subText})` : ""
+                  }`;
+                })()}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* 시간 선택 */}
@@ -309,7 +386,7 @@ const AddScheduleModal = ({ title, content }) => {
               </div>
             ))}
 
-            <div className="flex justify-end gap-4 my-4">
+            <div className="flex justify-end gap-2 my-4">
               <Button variant="cancel">취소</Button>
               <Button variant="confirm">저장</Button>
             </div>
