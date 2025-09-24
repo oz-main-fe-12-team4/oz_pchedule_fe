@@ -1,12 +1,19 @@
+import { useState } from "react";
 import { posts } from "../assets/data/dummyPostList";
 import FilterButtons from "../components/common/FilterButtons";
 import ScheduleStoryCard from "../components/ScheduleStoryCard";
 
 const ScheduleStory = () => {
+  const [isAdmin] = useState(false);
+  const userFilterButtons = ["category", "latest", "period"];
+  const adminFilterButtons = ["category", "latest", "period", "reported"];
+
   return (
     <div className="w-full flex flex-col p-4">
       <div className="flex flex-row gap-3 mb-4">
-        <FilterButtons keys={["category", "latest", "priority"]} />
+        <FilterButtons
+          keys={isAdmin ? adminFilterButtons : userFilterButtons}
+        />
       </div>
 
       <div className="text-sm p-4 border-t border-gray-200 pb-2">

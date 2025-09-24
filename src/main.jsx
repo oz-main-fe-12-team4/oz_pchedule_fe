@@ -51,6 +51,7 @@ let router = createBrowserRouter([
       },
       {
         path: "/admin/schedule_story",
+        Component: ScheduleStory,
       },
     ],
   },
