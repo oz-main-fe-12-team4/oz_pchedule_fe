@@ -26,7 +26,7 @@ export const UserMenus = [
     id: 5,
     icon: scheduleStoryIcon,
     name: "일정 스토리",
-    params: "schedule_story",
+    params: "/schedule_story",
   },
 ];
 

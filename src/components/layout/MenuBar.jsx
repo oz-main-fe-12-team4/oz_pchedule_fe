@@ -1,14 +1,11 @@
 import MenuCard from "./MenuCard";
 import { AdminMenus, UserMenus } from "../../constants/menuList";
-import { useState } from "react";
+import { useLocation } from "react-router";
+import { useNavigate } from "react-router";
 
 const MenuBar = () => {
-  const url = new URL(window.location.href);
-  const [activeMenu, setActiveMenu] = useState(url.pathname);
-
-  const handleClickMenu = (params) => {
-    setActiveMenu(params);
-  };
+  const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -19,8 +16,10 @@ const MenuBar = () => {
             icon={menu.icon}
             menu={menu.name}
             to={menu.params}
-            onClick={() => handleClickMenu(menu.params)}
-            activeClassName={activeMenu === menu.params ? "bg-gray-200" : ""}
+            onClick={() => navigate(menu.params)}
+            activeClassName={
+              location.pathname === menu.params ? "bg-gray-200" : ""
+            }
           />
         ))}
       </nav>
@@ -31,8 +30,10 @@ const MenuBar = () => {
             icon={menu.icon}
             menu={menu.name}
             to={menu.params}
-            onClick={() => handleClickMenu(menu.params)}
-            activeClassName={activeMenu === menu.params ? "bg-gray-200" : ""}
+            onClick={() => navigate(menu.params)}
+            activeClassName={
+              location.pathname === menu.params ? "bg-gray-200" : ""
+            }
           />
         ))}
       </nav> */}
