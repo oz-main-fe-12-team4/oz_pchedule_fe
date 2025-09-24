@@ -3,11 +3,7 @@ import axios from "axios";
 import { FaUserCircle, FaHeart, FaBookmark, FaPencilAlt } from "react-icons/fa";
 import Input from "../components/common/Input.jsx";
 import Button from "../components/common/Button.jsx";
-import {
-  dummyUser,
-  dummyLikes,
-  dummyBookmarks,
-} from "../assets/data/dummyUser.js";
+import { user1 } from "../assets/data/dummyUser.js"; // user1 객체만 가져옵니다.
 
 const accessToken = "your_access_token_here";
 
@@ -17,10 +13,10 @@ function MyPage() {
     newPassword: "",
     confirmPassword: "",
   });
-  const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
+  const [isNotificationEnabled, setIsNotificationEnabled] = useState(
+    user1.data.allow_notification
+  );
 
-  const [likes, setLikes] = useState(dummyLikes);
-  const [bookmarks, setBookmarks] = useState(dummyBookmarks);
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -125,20 +121,24 @@ function MyPage() {
           <section className="flex flex-col items-center text-center">
             <FaUserCircle className="w-24 h-24 text-gray-400 mb-4" />
             <div className="flex items-center space-x-2 mb-1">
-              <p className="text-xl font-semibold">{dummyUser.name}</p>
+              {/* user1 객체의 name 속성을 사용합니다. */}
+              <p className="text-xl font-semibold">{user1.data.name}</p>
               <button className="text-gray-500">
                 <FaPencilAlt className="w-4 h-4" />
               </button>
             </div>
-            <p className="text-sm text-gray-500 mb-4">{dummyUser.email}</p>
+            {/* user1 객체의 email 속성을 사용합니다. */}
+            <p className="text-sm text-gray-500 mb-4">{user1.data.email}</p>
             <div className="flex space-x-6 text-gray-600">
               <div className="flex items-center space-x-1">
                 <FaHeart className="w-5 h-5 text-red-500" />
-                <span>{likes}</span>
+                {/* user1 객체의 total_like 속성을 사용합니다. */}
+                <span>{user1.data.total_like}</span>
               </div>
               <div className="flex items-center space-x-1">
                 <FaBookmark className="w-5 h-5 text-yellow-500" />
-                <span>{bookmarks}</span>
+                {/* user1 객체의 total_bookmark 속성을 사용합니다. */}
+                <span>{user1.data.total_bookmark}</span>
               </div>
             </div>
           </section>
