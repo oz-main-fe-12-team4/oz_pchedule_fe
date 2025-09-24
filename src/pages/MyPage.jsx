@@ -3,7 +3,11 @@ import axios from "axios";
 import { FaUserCircle, FaHeart, FaBookmark, FaPencilAlt } from "react-icons/fa";
 import Input from "../components/Input.jsx";
 import Button from "../components/Button.jsx";
-import { dummyUser } from "../assets/data/dummyUser.js";
+import {
+  dummyUser,
+  dummyLikes,
+  dummyBookmarks,
+} from "../assets/data/dummyUser.js";
 
 const accessToken = "your_access_token_here";
 
@@ -15,22 +19,13 @@ function MyPage() {
   });
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
 
-  const [likes, setLikes] = useState(0);
-  const [bookmarks, setBookmarks] = useState(0);
+  const [likes, setLikes] = useState(dummyLikes);
+  const [bookmarks, setBookmarks] = useState(dummyBookmarks);
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    // 사용자 데이터와 알림 데이터를 동시에 불러오는 함수
-    const fetchData = async () => {
+    const fetchNotifications = async () => {
       try {
-        // 더미 좋아요/북마크 데이터 설정
-        const mockLikes = 123;
-        const mockBookmarks = 45;
-        setLikes(mockLikes);
-        setBookmarks(mockBookmarks);
-
-        // 알림 API 호출
-        // 실제 API URL과 명세를 확인하여 수정해야 합니다.
         const notificationsResponse = await axios.get(
           "/notification/notifications",
           {
@@ -39,25 +34,15 @@ function MyPage() {
             },
           }
         );
-
-        // API 응답에서 알림 목록을 가져와 상태에 저장
         if (notificationsResponse.data && notificationsResponse.data.data) {
           setNotifications(notificationsResponse.data.data);
         }
       } catch (error) {
-        console.error("데이터를 가져오는 중 오류 발생:", error);
+        console.error("알림 데이터를 가져오는 중 오류 발생:", error);
       }
     };
-    fetchData();
+    fetchNotifications();
   }, [accessToken]);
-
-  const handleLikeClick = () => {
-    console.log("좋아요 버튼 클릭");
-  };
-
-  const handleBookmarkClick = () => {
-    console.log("북마크 버튼 클릭");
-  };
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
@@ -147,20 +132,14 @@ function MyPage() {
             </div>
             <p className="text-sm text-gray-500 mb-4">{dummyUser.email}</p>
             <div className="flex space-x-6 text-gray-600">
-              <button
-                onClick={handleLikeClick}
-                className="flex items-center space-x-1"
-              >
+              <div className="flex items-center space-x-1">
                 <FaHeart className="w-5 h-5 text-red-500" />
                 <span>{likes}</span>
-              </button>
-              <button
-                onClick={handleBookmarkClick}
-                className="flex items-center space-x-1"
-              >
+              </div>
+              <div className="flex items-center space-x-1">
                 <FaBookmark className="w-5 h-5 text-yellow-500" />
                 <span>{bookmarks}</span>
-              </button>
+              </div>
             </div>
           </section>
 
@@ -185,7 +164,6 @@ function MyPage() {
             </div>
           </section>
 
-          {/* 알림 목록 섹션 추가 */}
           <hr className="my-6 border-gray-200" />
           <section>
             <h2 className="text-lg font-semibold mb-4">알림</h2>
