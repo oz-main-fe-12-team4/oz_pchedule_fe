@@ -9,8 +9,21 @@ import myScheduleData from "../assets/data/dummyDetailSchedule";
 import { PiSirenDuotone } from "react-icons/pi";
 import { IoChevronBackSharp } from "react-icons/io5";
 
+// ① 날짜와 요일 포맷 함수 추가 — 위의 코드와 동일
+function formatStartPeriod(startPeriod) {
+  const date = new Date(startPeriod);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const daysKor = ["일", "월", "화", "수", "목", "금", "토"];
+  const dayName = daysKor[date.getDay()];
+  return { monthDay: `${month}.${day}`, dayName };
+}
+
 export default function ScheduleStoryDetailPage() {
   const { data } = myScheduleData;
+  // ② start_period에서 날짜와 요일 정보 추출
+  const { monthDay, dayName } = formatStartPeriod(data.start_period);
+
   const scheduleList = data.schedule.map(
     ({ id, title, description, start_time, end_time }) => ({
       id,
@@ -19,11 +32,6 @@ export default function ScheduleStoryDetailPage() {
       time: `${start_time.slice(0, 5)}~${end_time.slice(0, 5)}`,
     })
   );
-  const today = new Date();
-  const month = today.getMonth() + 1;
-  const date = today.getDate();
-  const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
-  const day = dayNames[today.getDay()];
 
   return (
     <div className="p-4 min-h-screen bg-white text-gray-900">
@@ -77,9 +85,12 @@ export default function ScheduleStoryDetailPage() {
         </div>
       </header>
 
-      <div className="flex items-center mb-2">
-        <strong>{data.start_period}</strong>{" "}
-        <span className="text-gray-500 ml-2">{`${month}.${date} ${day}`}</span>
+      {/* ④ 제목과 첫번째 타임카드 사이에 날짜, 요일, Day 텍스트 추가 */}
+      <div className="mb-4 flex items-center space-x-2 text-lg font-semibold">
+        <span>Day 1</span>
+
+        <span className="text-gray-600">{monthDay}</span>
+        <span className="text-gray-400">{dayName}</span>
       </div>
 
       <div className="relative flex flex-col">
