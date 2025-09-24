@@ -5,10 +5,16 @@ import { IoMdNotifications } from "react-icons/io";
 import { FaCircleUser } from "react-icons/fa6";
 import { Link } from "react-router";
 import { useState } from "react";
+import { notificationList } from "../../assets/data/dummyNotificationList";
+import NotificationCard from "../NotificationCard";
 
 const Header = () => {
   const [isDropdownProfile, setIsDropdownProfile] = useState(false);
   const [isDropdownNotification, setIsDropdownNotification] = useState(false);
+
+  const sortedNotificationList = notificationList.data.sort(
+    (a, b) => b.id - a.id
+  );
 
   return (
     <div>
@@ -27,7 +33,9 @@ const Header = () => {
             <IoMdNotifications size={34} />
             {isDropdownNotification && (
               <div className="p-5 rounded-2xl bg-white shadow-[0_0_40px_-10px_#0000003f] absolute top-20 right-5 flex flex-col justify-center items-center gap-3 z-50 text-gray-400">
-                notification list
+                {sortedNotificationList.map((el) => (
+                  <NotificationCard key={el.id} notification={el} />
+                ))}
               </div>
             )}
           </div>
