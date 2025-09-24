@@ -13,7 +13,7 @@ import TabButton from "../components/common/TabButton";
 
 const Routine = () => {
   const [isWeekly, setIsWeekly] = useState(true);
-  const currentDate = new Date();
+  const [currentDate, setCurrentDate] = useState(new Date());
   const thisYear = currentDate.getFullYear();
   const thisMonth = currentDate.getMonth() + 1;
   const currentDayOfThisWeek = currentDate.getDay();
@@ -28,6 +28,13 @@ const Routine = () => {
   };
   const handleClickCalendarButton = () => {
     setIsWeekly(true);
+  };
+
+  const handleClickPrev = () => {
+    setCurrentDate((prev) => new Date(prev.setDate(prev.getDate() - 7)));
+  };
+  const handleClickNext = () => {
+    setCurrentDate((prev) => new Date(prev.setDate(prev.getDate() + 7)));
   };
 
   return (
@@ -52,12 +59,14 @@ const Routine = () => {
       </div>
       {isWeekly && (
         <div className="h-[100%] flex flex-col gap-3">
-          <Button>오늘</Button>
-          <h1 className="flex items-center gap-3 text-2xl font-bold pb-3">
-            {thisYear}.{thisMonth}.{firstDateOfThisWeek} ~ {thisYear}.
-            {thisMonth}.{lastDateOfThisWeek}
-            <MdOutlineNavigateBefore />
-            <MdOutlineNavigateNext />
+          <Button onClick={() => setCurrentDate(new Date())}>오늘</Button>
+          <h1 className="flex items-center gap-1 text-2xl font-bold pb-3">
+            <div className="w-[270px]">
+              {thisYear}.{thisMonth}.{firstDateOfThisWeek} ~ {thisYear}.
+              {thisMonth}.{lastDateOfThisWeek}
+            </div>
+            <MdOutlineNavigateBefore onClick={handleClickPrev} />
+            <MdOutlineNavigateNext onClick={handleClickNext} />
           </h1>
           <DisplayDays />
           <Weekly firstDateOfThisWeek={firstDateOfThisWeek} />
