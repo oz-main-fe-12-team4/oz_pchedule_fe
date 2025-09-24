@@ -1,11 +1,12 @@
 import { FaTrash, FaTimes, FaPlusCircle } from "react-icons/fa";
-import { useState } from "react";
+import React, { useState } from "react";
 import Button from "./common/Button";
 import FilterButtons from "./common/FilterButtons";
 import Input from "./common/Input";
 import CalendarModal from "./common/CalendarModal";
 import FilterOptionList from "./common/FilterOptionList";
 import TimePicker from "./TimePicker";
+import { FILTERS } from "../constants/filterList";
 
 const formatDate = (date) =>
   `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
@@ -14,12 +15,11 @@ const AddScheduleModal = ({ title, content }) => {
   const today = new Date();
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
-
   const [startTime, setStartTime] = useState("00:00");
   const [endTime, setEndTime] = useState("23:59");
 
-  const [titleValue, setTitleValue] = useState(title);
-  const [contentValue, setContentValue] = useState(content);
+  const [titleValue, setTitleValue] = useState(title || "");
+  const [contentValue, setContentValue] = useState(content || "");
 
   const [calendarModal, setCalendarModal] = useState(false);
   const [activeDate, setActiveDate] = useState(null);
@@ -44,14 +44,11 @@ const AddScheduleModal = ({ title, content }) => {
     setActiveDate(null);
   };
 
-  const handleFilterToggle = (key) => {
+  const handleFilterToggle = (key) =>
     setOpenFilter((prev) => (prev === key ? null : key));
-  };
-  const handleFilterChange = (key, value) => {
+  const handleFilterChange = (key, value) =>
     setFilters((prev) => ({ ...prev, [key]: value }));
-  };
 
-  // 기간이 반대로 넘어가는 거 방지
   const handleDateSelect = (date) => {
     const selected = Array.isArray(date) ? date[0] : date;
     if (!selected) return;
@@ -78,7 +75,8 @@ const AddScheduleModal = ({ title, content }) => {
     return { nextStart, nextEnd };
   };
 
-  const handleSave = () => {
+  // "일정추가" 버튼 기능
+  const handleAddItem = () => {
     const newSchedule = {
       title: titleValue,
       content: contentValue,
@@ -89,11 +87,25 @@ const AddScheduleModal = ({ title, content }) => {
       filters,
     };
     setSchedules((prev) => [...prev, newSchedule]);
+
+    // 입력 초기화
+    setTitleValue("");
+    setContentValue("");
+    setStartDate(today);
+    setEndDate(today);
+    setStartTime("00:00");
+    setEndTime("23:59");
+    setFilters({
+      category: null,
+      priority: null,
+      share: null,
+      repeat: null,
+      repeatSub: null,
+    });
   };
 
-  const handleDelete = (index) => {
+  const handleDelete = (index) =>
     setSchedules((prev) => prev.filter((_, i) => i !== index));
-  };
 
   return (
     <div className="flex w-full justify-center min-h-screen bg-gray-50">
@@ -127,25 +139,23 @@ const AddScheduleModal = ({ title, content }) => {
         </div>
 
         {/* 날짜 선택 */}
-        <div className="mb-1">
-          <div className="flex items-start gap-2 py-3">
-            <button
-              onClick={() => openCalendar("start")}
-              className="text-gray-500 text-xl hover:text-gray-800 transition-colors cursor-pointer font-medium"
-            >
-              {formatDate(startDate)}
-            </button>
-            <span className="text-gray-500">~</span>
-            <button
-              onClick={() => openCalendar("end")}
-              className="text-gray-500 text-xl hover:text-gray-800 transition-colors cursor-pointer font-medium"
-            >
-              {formatDate(endDate)}
-            </button>
-          </div>
+        <div className="mb-1 flex items-start gap-2">
+          <button
+            onClick={() => openCalendar("start")}
+            className="text-gray-500 text-xl hover:text-gray-800 transition-colors cursor-pointer font-medium"
+          >
+            {formatDate(startDate)}
+          </button>
+          <span className="text-gray-500">~</span>
+          <button
+            onClick={() => openCalendar("end")}
+            className="text-gray-500 text-xl hover:text-gray-800 transition-colors cursor-pointer font-medium"
+          >
+            {formatDate(endDate)}
+          </button>
         </div>
 
-        {/* 필터링 버튼 */}
+        {/* 필터 버튼 */}
         <div className="mt-1 mb-4 relative">
           <FilterButtons
             keys={["category", "priority", "share", "repeat"]}
@@ -157,6 +167,83 @@ const AddScheduleModal = ({ title, content }) => {
             onFilterChange={handleFilterChange}
             onClose={() => setOpenFilter(null)}
           />
+
+          {/* 선택 필터 표시 */}
+          <div className="mt-2 flex flex-wrap gap-2">
+            {filters.category && (
+              <span className="px-2 py-1 bg-gray-200 rounded text-sm">
+                {
+                  FILTERS.category.options.find(
+                    (opt) => opt.value === filters.category
+                  )?.name
+                }
+              </span>
+            )}
+
+            {filters.priority && (
+              <span className="px-2 py-1 bg-gray-200 rounded text-sm flex items-center gap-1">
+                {React.createElement(
+                  FILTERS.priority.options.find(
+                    (opt) => opt.value === filters.priority
+                  )?.Icon,
+                  {
+                    className: FILTERS.priority.options.find(
+                      (opt) => opt.value === filters.priority
+                    )?.iconClass,
+                    size: 12,
+                  }
+                )}
+                {
+                  FILTERS.priority.options.find(
+                    (opt) => opt.value === filters.priority
+                  )?.name
+                }
+              </span>
+            )}
+
+            {filters.share && (
+              <span className="px-2 py-1 bg-gray-200 rounded text-sm flex items-center gap-1">
+                {React.createElement(
+                  FILTERS.share.options.find(
+                    (opt) => opt.value === filters.share
+                  )?.Icon,
+                  { size: 12 }
+                )}
+                {
+                  FILTERS.share.options.find(
+                    (opt) => opt.value === filters.share
+                  )?.name
+                }
+              </span>
+            )}
+
+            {filters.repeat && (
+              <span className="px-2 py-1 bg-gray-200 rounded text-sm">
+                {(() => {
+                  const repeatOption = FILTERS.repeat.options.find(
+                    (opt) => opt.value === filters.repeat
+                  );
+                  if (!repeatOption) return "";
+                  if (repeatOption.value === "none") return repeatOption.name;
+                  const sub = filters.repeatSub;
+                  let subText = "";
+                  if (
+                    (repeatOption.value === "weekly" ||
+                      repeatOption.value === "monthly") &&
+                    Array.isArray(sub)
+                  )
+                    subText = sub.join(",");
+                  if (repeatOption.value === "yearly" && Array.isArray(sub))
+                    subText = sub
+                      .map((set) => `${set.month}월${set.day}일`)
+                      .join(", ");
+                  return `${repeatOption.name}${
+                    subText ? ` (${subText})` : ""
+                  }`;
+                })()}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* 시간 선택 */}
@@ -206,35 +293,25 @@ const AddScheduleModal = ({ title, content }) => {
           value={contentValue}
           setValue={setContentValue}
           placeholder="일정 내용"
-          className="text-[18px] font-bold text-gray-700 placeholder-gray-300 border-none outline-none focus:ring-0"
-          maxLength={100}
+          className="w-full text-[18px] font-bold text-gray-700 placeholder-gray-300 border-none outline-none focus:ring-0"
+          maxLength={300}
         />
 
-        {/* 구분선 + 항목 추가 */}
-        <div className="h-px w-full bg-gray-300 rounded-full my-4" />
+        {/* 구분선 + 일정추가 버튼 */}
+        <div className="h-px w-full bg-gray-300 rounded-full my-2" />
         <button
           type="button"
-          className="flex items-center gap-1 text-gray-400 hover:text-gray-600 text-sm mb-10 cursor-pointer select-none"
-          aria-label="항목 추가"
+          className="flex items-center gap-1 text-gray-400 hover:text-gray-600 text-sm mb-4 cursor-pointer select-none"
+          onClick={handleAddItem}
         >
-          <FaPlusCircle size={17} /> <span>항목추가</span>
+          <FaPlusCircle size={17} /> <span>일정추가</span>
         </button>
 
-        {/* 하단 버튼 */}
-        <div className="absolute bottom-4 right-4 flex justify-end gap-2">
-          <Button variant="cancel" type="button">
-            취소
-          </Button>
-          <Button variant="confirm" type="button" onClick={handleSave}>
-            저장
-          </Button>
-        </div>
-
-        {/* --- 저장된 일정 카드 --- */}
+        {/* 저장된 일정 카드 */}
         <div className="mt-6">
-          {schedules.map((sch, index) => (
+          {schedules.map((sch, idx) => (
             <div
-              key={index}
+              key={idx}
               className="border rounded-xl p-3 mb-2 relative shadow-sm bg-gray-50"
             >
               <div className="flex justify-between items-start">
@@ -248,7 +325,7 @@ const AddScheduleModal = ({ title, content }) => {
                 </div>
                 <button
                   className="text-gray-400 hover:text-red-500"
-                  onClick={() => handleDelete(index)}
+                  onClick={() => handleDelete(idx)}
                 >
                   <FaTrash />
                 </button>
@@ -283,6 +360,3 @@ const AddScheduleModal = ({ title, content }) => {
 };
 
 export default AddScheduleModal;
-// 기간을 설정하면 아래 항목추가된 일정은 그 안에 기간에서만 선택가능하게
-// 큰 일정에서 항목추가 누르면 위에부분은 비활성화되고 아래 추가쪽부분에 활성화 들어오게
-// 아래부분은 따로 큰일정기간안에서 기간설정및 시간설정 가능하게
