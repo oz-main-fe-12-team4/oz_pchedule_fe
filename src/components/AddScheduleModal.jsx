@@ -283,3 +283,6 @@ const AddScheduleModal = ({ title, content }) => {
 };
 
 export default AddScheduleModal;
+// 기간을 설정하면 아래 항목추가된 일정은 그 안에 기간에서만 선택가능하게
+// 큰 일정에서 항목추가 누르면 위에부분은 비활성화되고 아래 추가쪽부분에 활성화 들어오게
+// 아래부분은 따로 큰일정기간안에서 기간설정및 시간설정 가능하게
