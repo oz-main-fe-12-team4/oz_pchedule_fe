@@ -9,6 +9,7 @@ export const FILTER_LABELS = {
   latest: "최신순",
   period: "기간별",
   date: "날짜별",
+  reported: "신고된 글",
 };
 
 export const CATEGORY_OPTION_LIST = [
