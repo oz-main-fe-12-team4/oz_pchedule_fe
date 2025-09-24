@@ -1,22 +1,59 @@
+import { FaBookmark, FaRegBookmark } from "react-icons/fa";
+// import { RiAlarmWarningFill } from "react-icons/ri";
+// import DeleteButton from "./common/DeleteButton";
+// import { useState } from "react";
+// import ConfirmModal from "./common/ConfirmModal";
+
 function ScheduleStoryCard({ schedule }) {
+  // const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+
+  // const handleClickDeleteButton = () => {
+  //   setIsConfirmModalOpen(true);
+  // };
+
   return (
     <div
-      className="w-[350px] bg-white rounded-lg shadow p-5 mb-4 cursor-pointer hover:shadow-lg transition 
-    flex flex-col items-center justify-center text-center"
+      className="bg-white px-3 rounded-md cursor-pointer hover:scale-110 hover:shadow
+    flex flex-col items-center justify-center gap-1 text-center"
     >
       {/* 회색 박스 */}
-      <div className="bg-gray-300 rounded-md h-32 mb-4 w-[300px]"></div>
+      <div className="bg-gray-300 rounded-md h-32 w-[200px] relative">
+        <div className="absolute bottom-2 right-2">
+          {schedule.bookmark_count > 0 ? ( // 조건식 바꾸기. user 데이터에 있는 my_bookmarks에 일정의 아이디가 있는지 확인
+            <FaBookmark size={25} className="text-amber-500" />
+          ) : (
+            <FaRegBookmark size={25} className="text-gray-400" />
+          )}
+        </div>
+        {/* <div className="text-[#ff0000] absolute top-2 left-2">
+          {schedule.is_reported ? <RiAlarmWarningFill /> : ""}
+        </div>
+        <div className="absolute bottom-2 right-2">
+          <DeleteButton
+            size={30}
+            className={"bg-white rounded-full"}
+            onClick={handleClickDeleteButton}
+          />
+        </div>
+        {isConfirmModalOpen && (
+          <ConfirmModal
+            message={"삭제 하시겠습니까?"}
+            leftBtnText={"예"}
+            rightBtnText={"아니요"}
+            onLeftClick={() => {}}
+            onRightClick={() => setIsConfirmModalOpen(false)}
+            onClose={() => setIsConfirmModalOpen(false)}
+          />
+        )} */}
+      </div>
 
       {/* 제목 */}
-      <h2
-        className="text-xl font-semibold mb-3 truncate"
-        title={schedule.title}
-      >
+      <h2 className="text-lg font-semibold truncate" title={schedule.title}>
         {schedule.title}
       </h2>
 
       {/* 좋아요 & 찜하기 */}
-      <div className="flex space-x-6 text-gray-600 text-sm font-medium justify-center">
+      <div className="flex gap-3 text-gray-600 text-sm font-medium justify-center">
         <div> 좋아요: {schedule.like_count ?? 0}</div>
         <div> 찜하기: {schedule.bookmark_count ?? 0}</div>
       </div>
