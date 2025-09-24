@@ -16,7 +16,7 @@ function AdminPage() {
   const { isAdmin } = useUserStore();
 
   // 검색어와 필터링 상태에 따라 유저 목록을 동적으로 필터링
-  const filteredUsers = userList.filter((user) => {
+  const filteredUsers = userList.data.filter((user) => {
     const matchesSearch =
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase());
