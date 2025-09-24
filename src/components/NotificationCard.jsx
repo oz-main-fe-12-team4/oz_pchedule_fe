@@ -1,4 +1,5 @@
 import { LuDot } from "react-icons/lu";
+import { FaTimes } from "react-icons/fa";
 
 const NotificationCard = ({ notification }) => {
   return (
@@ -10,7 +11,9 @@ const NotificationCard = ({ notification }) => {
 
         {notification.content}
       </div>
-      <button>X</button>
+      <button>
+        <FaTimes />
+      </button>
     </div>
   );
 };
