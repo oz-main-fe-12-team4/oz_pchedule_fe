@@ -16,14 +16,29 @@ function formatStartPeriod(startPeriod) {
   const day = date.getDate();
   const daysKor = ["일", "월", "화", "수", "목", "금", "토"];
   const dayName = daysKor[date.getDay()];
-  return { monthDay: `${month}.${day}`, dayName };
+  return `${month}.${day} ${dayName}`;
 }
+const getDayN = (start, end) => {
+  // 1. 처음 날짜랑 끝나는 날짜 가져옴( new Date로 가져오는건 하루가 지나는걸 체크하기 위함)
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  const result = []; // 실제 Day1, Day2... 들어갈 배열
+  let dayCount = 1; // 하루가 지날때마다 증가하는 변수
+
+  // 하루가 증가할때마다 dayCount 증가하면서 result 배열에 Day1, Day2가 들어가는 반복문
+  for (let d = startDate; d < endDate; d.setDate(d.getDate() + 1)) {
+    result.push(`Day ${dayCount}`);
+    dayCount++;
+  }
+  return result;
+};
 
 export default function ScheduleStoryDetailPage() {
   const { data } = myScheduleData;
   // ② start_period에서 날짜와 요일 정보 추출
-  const { monthDay, dayName } = formatStartPeriod(data.start_period);
-
+  const formattedStartPeriod = formatStartPeriod(data.start_period);
+  const formattedDayN = getDayN(data.start_period, data.end_period);
   const scheduleList = data.schedule.map(
     ({ id, title, description, start_time, end_time }) => ({
       id,
@@ -87,10 +102,9 @@ export default function ScheduleStoryDetailPage() {
 
       {/* ④ 제목과 첫번째 타임카드 사이에 날짜, 요일, Day 텍스트 추가 */}
       <div className="mb-4 flex items-center space-x-2 text-lg font-semibold">
-        <span>Day 1</span>
+        <span>{formattedDayN[2]}</span>
 
-        <span className="text-gray-600">{monthDay}</span>
-        <span className="text-gray-400">{dayName}</span>
+        <span className="text-gray-600">{formattedStartPeriod}</span>
       </div>
 
       <div className="relative flex flex-col">
