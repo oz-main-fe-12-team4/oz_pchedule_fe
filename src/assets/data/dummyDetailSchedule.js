@@ -9,15 +9,15 @@ const myScheduleData = {
         id: 1,
         title: "우동 먹으러 가기",
         description: "신주쿠역 유명 A우동집",
-        start_time: "2025-10-9 09:00:00",
-        end_time: "2025-10-9 10:00:00",
+        start_time: "2025-10-9  09:00:00",
+        end_time: "2025-10-9  11:00:00",
       },
       {
         id: 2,
         title: "호텔 체크인",
         description: "신주쿠역 도보 5분 B호텔",
-        start_time: "2025-10-9 13:00:00",
-        end_time: "2025-10-9 14:00:00",
+        start_time: "2025-10-9  13:00:00",
+        end_time: "2025-10-9  14:00:00",
       },
       // 네 일정 더 추가 가능
       {
