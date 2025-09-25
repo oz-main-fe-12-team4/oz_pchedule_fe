@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { FaUserCircle, FaHeart, FaBookmark, FaPencilAlt } from "react-icons/fa";
 import Input from "../components/common/Input.jsx";
 import Button from "../components/common/Button.jsx";
-import { user1 } from "../assets/data/dummyUser.js"; // user1 객체만 가져옵니다.
+// ConfirmModal import 추가
+import ConfirmModal from "../components/common/ConfirmModal.jsx";
+import { user1 } from "../assets/data/dummyUser.js";
 
 const accessToken = "your_access_token_here";
 
@@ -16,29 +18,7 @@ function MyPage() {
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(
     user1.data.allow_notification
   );
-
-  const [notifications, setNotifications] = useState([]);
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const notificationsResponse = await axios.get(
-          "/notification/notifications",
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        if (notificationsResponse.data && notificationsResponse.data.data) {
-          setNotifications(notificationsResponse.data.data);
-        }
-      } catch (error) {
-        console.error("알림 데이터를 가져오는 중 오류 발생:", error);
-      }
-    };
-    fetchNotifications();
-  }, [accessToken]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
@@ -85,31 +65,36 @@ function MyPage() {
     setIsNotificationEnabled(!isNotificationEnabled);
   };
 
-  const handleWithdrawal = async () => {
-    const isConfirmed = window.confirm(
-      "정말로 회원 탈퇴를 하시겠습니까? 모든 정보가 영구적으로 삭제됩니다."
-    );
+  // 모달을 여는 함수 (회원 탈퇴 버튼 클릭 시 호출)
+  const openWithdrawalModal = () => {
+    setIsModalOpen(true);
+  };
 
-    if (isConfirmed) {
-      try {
-        const response = await axios.delete("/user/me/withdraw", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+  // 모달을 닫는 함수 (취소 버튼 클릭 시 호출)
+  const closeWithdrawalModal = () => {
+    setIsModalOpen(false);
+  };
 
-        if (response.status === 200) {
-          alert("회원 탈퇴가 완료되었습니다.");
-        }
-      } catch (error) {
-        if (error.response) {
-          alert(`회원 탈퇴 실패: ${error.response.data.error}`);
-        } else {
-          console.error("API 호출 중 오류 발생:", error);
-          alert(
-            "회원 탈퇴 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
-          );
-        }
+  // 실제 회원 탈퇴 API를 호출하는 함수 (모달에서 '확인' 클릭 시 호출)
+  const handleWithdrawalConfirm = async () => {
+    closeWithdrawalModal(); // 모달 닫기
+
+    try {
+      const response = await axios.delete("/user/me/withdraw", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.status === 200) {
+        alert("회원 탈퇴가 완료되었습니다.");
+      }
+    } catch (error) {
+      if (error.response) {
+        alert(`회원 탈퇴 실패: ${error.response.data.error}`);
+      } else {
+        console.error("API 호출 중 오류 발생:", error);
+        alert("회원 탈퇴 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
       }
     }
   };
@@ -121,23 +106,19 @@ function MyPage() {
           <section className="flex flex-col items-center text-center">
             <FaUserCircle className="w-24 h-24 text-gray-400 mb-4" />
             <div className="flex items-center space-x-2 mb-1">
-              {/* user1 객체의 name 속성을 사용합니다. */}
               <p className="text-xl font-semibold">{user1.data.name}</p>
               <button className="text-gray-500">
                 <FaPencilAlt className="w-4 h-4" />
               </button>
             </div>
-            {/* user1 객체의 email 속성을 사용합니다. */}
             <p className="text-sm text-gray-500 mb-4">{user1.data.email}</p>
             <div className="flex space-x-6 text-gray-600">
               <div className="flex items-center space-x-1">
                 <FaHeart className="w-5 h-5 text-red-500" />
-                {/* user1 객체의 total_like 속성을 사용합니다. */}
                 <span>{user1.data.total_like}</span>
               </div>
               <div className="flex items-center space-x-1">
                 <FaBookmark className="w-5 h-5 text-yellow-500" />
-                {/* user1 객체의 total_bookmark 속성을 사용합니다. */}
                 <span>{user1.data.total_bookmark}</span>
               </div>
             </div>
@@ -165,27 +146,6 @@ function MyPage() {
           </section>
 
           <hr className="my-6 border-gray-200" />
-          <section>
-            <h2 className="text-lg font-semibold mb-4">알림</h2>
-            {notifications.length > 0 ? (
-              <ul className="space-y-2">
-                {notifications.map((notification) => (
-                  <li
-                    key={notification.id}
-                    className={`p-4 rounded-lg border ${
-                      notification.is_read
-                        ? "bg-gray-100 border-gray-300"
-                        : "bg-blue-50 border-blue-200"
-                    }`}
-                  >
-                    <p className="text-sm">{notification.content}</p>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-gray-500">새로운 알림이 없습니다.</p>
-            )}
-          </section>
         </aside>
 
         <main className="w-full md:w-2/3 p-6 bg-white rounded-xl shadow-md border border-gray-200">
@@ -231,7 +191,8 @@ function MyPage() {
 
               <div className="flex justify-end items-center space-x-4 pt-4">
                 <button
-                  onClick={handleWithdrawal}
+                  onClick={openWithdrawalModal} // 모달 열기 함수 호출
+                  type="button" // 폼 제출을 막기 위해 type="button"으로 변경
                   className="text-red-500 hover:text-red-700 font-semibold text-sm"
                 >
                   회원 탈퇴
@@ -246,6 +207,19 @@ function MyPage() {
           </section>
         </main>
       </div>
+
+      {/* 회원 탈퇴 ConfirmModal 추가 */}
+      {isModalOpen && (
+        <ConfirmModal
+          isOpen={isModalOpen}
+          title="회원 탈퇴 확인"
+          message="정말로 회원 탈퇴를 하시겠습니까? 모든 정보가 영구적으로 삭제됩니다."
+          onConfirm={handleWithdrawalConfirm}
+          onClose={closeWithdrawalModal}
+          leftBtnText="취소"
+          rightBtnText="탈퇴"
+        />
+      )}
     </div>
   );
 }
