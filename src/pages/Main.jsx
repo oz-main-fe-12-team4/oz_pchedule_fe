@@ -2,12 +2,15 @@ import MainCalendar from "../components/calendar/MainCalendar";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import { MdOutlineNavigateBefore } from "react-icons/md";
 import Button from "../components/common/Button";
+import PlusButton from "../components/common/PlusButton";
 import { useState } from "react";
+import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
 
 const Main = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const thisYear = currentDate.getFullYear();
   const thisMonth = currentDate.getMonth() + 1;
+  const [AddScheduleOpen, setAddScheduleOpen] = useState(false);
 
   const handleClickPrev = () => {
     setCurrentDate((prev) => new Date(prev.setMonth(prev.getMonth() - 1)));
@@ -32,7 +35,14 @@ const Main = () => {
         </div>
         <Button children={"오늘"} onClick={() => setCurrentDate(new Date())} />
       </div>
-      <MainCalendar year={thisYear} month={thisMonth} />
+      <div className="relative">
+        <MainCalendar year={thisYear} month={thisMonth} />
+
+        <PlusButton onClick={() => setAddScheduleOpen(true)} />
+        {AddScheduleOpen && (
+          <AddScheduleModal onClose={() => setAddScheduleOpen(false)} />
+        )}
+      </div>
     </div>
   );
 };

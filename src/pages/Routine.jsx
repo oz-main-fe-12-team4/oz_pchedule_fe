@@ -10,6 +10,8 @@ import FilterButtons from "../components/common/FilterButtons";
 import { posts } from "../assets/data/dummyPostList";
 import RoutineCard from "../components/RoutineCard";
 import TabButton from "../components/common/TabButton";
+import PlusButton from "../components/common/PlusButton";
+import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
 
 const Routine = () => {
   const [isWeekly, setIsWeekly] = useState(true);
@@ -20,6 +22,7 @@ const Routine = () => {
   const firstDateOfThisWeek = currentDate.getDate() - currentDayOfThisWeek;
   const lastDateOfThisWeek = currentDate.getDate() + (6 - currentDayOfThisWeek);
 
+  const [AddScheduleOpen, setAddScheduleOpen] = useState(false);
   const filterKeys = ["period", "date", "priority"];
   const list = posts.data;
 
@@ -38,7 +41,7 @@ const Routine = () => {
   };
 
   return (
-    <div className="w-[calc(100vw-200px)] h-[calc(100vh-100.18px)] p-5 relative">
+    <div className="w-[calc(100vw-200px)] h-[calc(100vh-100.18px)] pt-5 relative">
       <div className="absolute top-5 right-5">
         <button
           onClick={handleClickListButton}
@@ -58,7 +61,7 @@ const Routine = () => {
         </button>
       </div>
       {isWeekly && (
-        <div className="h-[100%] flex flex-col gap-3">
+        <div className="h-[100%] flex flex-col gap-3 mx-5">
           <Button onClick={() => setCurrentDate(new Date())}>오늘</Button>
           <h1 className="flex items-center gap-1 text-2xl font-bold pb-3">
             <div className="w-[270px]">
@@ -73,13 +76,15 @@ const Routine = () => {
         </div>
       )}
       {!isWeekly && (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1  mx-6">
           <FilterButtons keys={filterKeys} />
           <h1 className="flex items-center gap-3 pb-3">
             {thisYear}.{thisMonth}.{firstDateOfThisWeek} ~ {thisYear}.
             {thisMonth}.{lastDateOfThisWeek}
           </h1>
-          <TabButton />
+          <div className="w-full -mx-6">
+            <TabButton />
+          </div>
           <div className="divide-y-[0.5px] divide-gray-200">
             {list.map((post) => (
               <div key={post.id} className="py-4">
@@ -88,6 +93,10 @@ const Routine = () => {
             ))}
           </div>
         </div>
+      )}
+      <PlusButton onClick={() => setAddScheduleOpen(true)} />
+      {AddScheduleOpen && (
+        <AddScheduleModal onClose={() => setAddScheduleOpen(false)} />
       )}
     </div>
   );

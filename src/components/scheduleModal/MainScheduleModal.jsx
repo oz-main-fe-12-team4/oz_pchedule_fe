@@ -31,6 +31,7 @@ const MainScheduleModal = ({
   handleSaveMainSchedule,
   handleDateSelect,
   formatDate,
+  onClose,
 }) => {
   const ensureTimeRange = (nextStart, nextEnd) => {
     const sameDay = startDate.toDateString() === endDate.toDateString();
@@ -62,7 +63,11 @@ const MainScheduleModal = ({
           <button className="hover:text-gray-700 cursor-pointer" type="button">
             <FaTrash />
           </button>
-          <button className="hover:text-gray-700 cursor-pointer" type="button">
+          <button
+            className="hover:text-gray-700 cursor-pointer"
+            type="button"
+            onClick={onClose}
+          >
             <FaTimes />
           </button>
         </div>

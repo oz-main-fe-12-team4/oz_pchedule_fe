@@ -18,7 +18,7 @@ const MenuBar = () => {
             to={menu.params}
             onClick={() => navigate(menu.params)}
             activeClassName={
-              location.pathname === menu.params ? "bg-gray-200" : ""
+              location.pathname === menu.params ? "bg-[#CAE8F2]" : ""
             }
           />
         ))}

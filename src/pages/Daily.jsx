@@ -1,23 +1,21 @@
+import { useState } from "react";
 import ScheduleCard from "../components/ScheduleCard";
 import FilterButtons from "../components/common/FilterButtons";
+import PlusButton from "../components/common/PlusButton";
+import TabButton from "../components/common/TabButton";
+import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
 
 const Daily = ({ posts }) => {
   const list = posts?.data ?? [];
+  const [AddScheduleOpen, setAddScheduleOpen] = useState(false);
   return (
     <div className="w-full px-4 md:px-6 lg:px-8 py-4 text-left">
-      <div className="mb-4 text-gray-700">
-        <p className="text-2xl mb-1 font-bold">일정</p>
-      </div>
-      <div className="flex flex-row gap-3 mb-4">
+      <div className="flex flex-row gap-3 mt-4">
         <FilterButtons keys={["category", "latest", "priority"]} />
       </div>
-
-      <div className="flex flex-row gap-3 mb-4 border-b border-gray-200 pb-2">
-        <p>전체</p>
-        <p>완료된일</p>
-        <p>해야할일</p>
+      <div className="w-full flex justify-start items-start -mx-4 md:-mx-6 lg:-mx-8">
+        <TabButton tabs={["전체", "완료된일", "해야할일"]} />
       </div>
-
       <div className="divide-y-[0.5px] divide-gray-200">
         {list.map((post) => (
           <div key={post.post_id} className="py-4">
@@ -25,6 +23,10 @@ const Daily = ({ posts }) => {
           </div>
         ))}
       </div>
+      <PlusButton onClick={() => setAddScheduleOpen(true)} />
+      {AddScheduleOpen && (
+        <AddScheduleModal onClose={() => setAddScheduleOpen(false)} />
+      )}
     </div>
   );
 };
