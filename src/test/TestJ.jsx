@@ -1,7 +1,8 @@
-import DetailSchedulePage from "../pages/DetailSchedulePage";
+// src/test/TestJ.jsx
 
-function TestJ() {
-  return <DetailSchedulePage />;
+import React from "react";
+import ScheduleStoryDetailPage from "../pages/ScheduleStoryDetailPage";
+
+export default function TestJ() {
+  return <ScheduleStoryDetailPage />;
 }
-
-export default TestJ;

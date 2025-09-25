@@ -1,28 +1,19 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 
 export default function BookmarkButton() {
-  const [isBookmarked, setIsBookmarked] = useState(false); // 초기 상태를 false로 설정
-
-  const handleClick = () => {
-    // 클릭할 때마다 상태를 반전시킵니다.
-    setIsBookmarked(!isBookmarked);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const handleBookmarkClick = () => {
+    setIsBookmarked(true); // 한 번 클릭하면 계속 true 유지하도록
   };
 
-  const buttonText = isBookmarked ? "찜 완료" : "찜하기";
-
   return (
-    <button
-      className="bg-transparent border-none p-1.5 inline-flex items-center justify-center space-x-1 cursor-pointer"
-      title={buttonText}
-      onClick={handleClick} // 클릭 이벤트 핸들러를 연결합니다.
-    >
+    <button onClick={handleBookmarkClick} aria-label="북마크 버튼">
       {isBookmarked ? (
-        <FaBookmark className="text-amber-500" />
+        <FaBookmark className="text-yellow-400 w-6 h-6" /> // 채워진 노란 북마크
       ) : (
-        <FaRegBookmark className="text-gray-400" />
+        <FaRegBookmark className="text-gray-400 w-6 h-6" /> // 빈 회색 북마크
       )}
-      <span className="text-sm">{buttonText}</span>
     </button>
   );
 }
