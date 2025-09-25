@@ -1,13 +1,9 @@
-import Header from "../components/layout/Header";
-import MenuBar from "../components/layout/MenuBar";
+import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
 
 function TestD() {
   return (
-    <div>
-      <Header />
-      <div className="flex">
-        <MenuBar />
-      </div>
+    <div className="flex">
+      <AddScheduleModal />
     </div>
   );
 }

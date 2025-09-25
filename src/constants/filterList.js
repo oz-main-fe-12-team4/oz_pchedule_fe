@@ -42,9 +42,24 @@ export const SHARE_OPTION = [
 export const REPEAT_OPTION_LIST = [
   { value: "none", name: "반복없음" },
   { value: "daily", name: "매일반복" },
-  { value: "weekly", name: "매주반복" },
-  { value: "monthly", name: "매달반복" },
-  { value: "yearly", name: "매년반복" },
+  {
+    value: "weekly",
+    name: "매주반복",
+    subOptions: ["월", "화", "수", "목", "금", "토", "일"],
+  },
+  {
+    value: "monthly",
+    name: "매달반복",
+    subOptions: Array.from({ length: 31 }, (_, i) => i + 1),
+  },
+  {
+    value: "yearly",
+    name: "매년반복",
+    subOptions: {
+      months: Array.from({ length: 12 }, (_, i) => i + 1),
+      days: Array.from({ length: 31 }, (_, i) => i + 1),
+    },
+  },
 ];
 
 export const LATEST_OPTION_LIST = [

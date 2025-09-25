@@ -34,7 +34,7 @@ const CalendarModal = ({
 
   return (
     <div
-      className="relative mx-auto mt-3 flex flex-col items-center justify-start"
+      className="relative mx-auto mt-3 flex flex-col items-center justify-start "
       style={{ width, minHeight: height }}
     >
       <div className="relative">
