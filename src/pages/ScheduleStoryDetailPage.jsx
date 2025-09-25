@@ -8,39 +8,9 @@ import BookmarkButton from "../components/common/BookmarkButton";
 import myScheduleData from "../assets/data/dummyDetailSchedule";
 import { PiSirenDuotone } from "react-icons/pi";
 import { IoChevronBackSharp } from "react-icons/io5";
-
-// 날짜 문자열("YYYY-MM-DD") 받아 "월.일 요일" 반환
-function formatDateAndDay(dateString) {
-  const date = new Date(dateString);
-  if (isNaN(date)) return "날짜 오류";
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const daysKor = ["일", "월", "화", "수", "목", "금", "토"];
-  const dayName = daysKor[date.getDay()];
-  console.log(date);
-  return `${month}.${day} ${dayName}`;
-}
-
-// 일정 배열을 날짜별로 그룹핑 { "YYYY-MM-DD": [일정, ...], ... }
-function groupSchedulesByDate(schedules) {
-  return schedules.reduce((groups, schedule) => {
-    const date = schedule.start_time.slice(0, 10); // ISO 날짜 형식 앞부분
-    if (!groups[date]) groups[date] = [];
-    groups[date].push(schedule);
-    return groups;
-  }, {});
-}
-
-// 시작일부터 종료일까지 Day N 배열 생성
-function getDayCounts(startDateString, endDateString) {
-  const startDate = new Date(startDateString);
-  const endDate = new Date(endDateString);
-  const dayCounts = [];
-  for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-    dayCounts.push(`Day ${dayCounts.length + 1}`);
-  }
-  return dayCounts;
-}
+import formatDateAndDay from "../utils/formatDateAndDay";
+import groupSchedulesByDate from "../utils/groupSchedulesByDate";
+import getDayCounts from "../utils/getDayCounts";
 
 export default function ScheduleStoryDetailPage() {
   const { data } = myScheduleData;
@@ -48,7 +18,6 @@ export default function ScheduleStoryDetailPage() {
   // 날짜별 일정 묶기 & 정렬
   const groupedSchedules = groupSchedulesByDate(data.schedule);
   const sortedDates = Object.keys(groupedSchedules);
-  console.log("sortedDates:", sortedDates);
   // 시작일부터 종료일까지 Day N 배열
   const dayCounts = getDayCounts(data.start_period, data.end_period);
 
