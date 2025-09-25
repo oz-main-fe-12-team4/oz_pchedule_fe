@@ -22,7 +22,7 @@ const ScheduleStory = () => {
 
       <div className="flex flex-wrap justify-center items-center gap-2">
         {posts.data.map((post) => (
-          <div key={post.id} className="py-4">
+          <div key={post.id}>
             <ScheduleStoryCard schedule={post} />
           </div>
         ))}

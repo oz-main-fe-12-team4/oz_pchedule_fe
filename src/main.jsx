@@ -15,6 +15,7 @@ import ScheduleStory from "./pages/ScheduleStory";
 import Someday from "./pages/Someday";
 import Daily from "./pages/Daily";
 import AdminPage from "./pages/AdminPage";
+import ScheduleStoryDetailPage from "./pages/ScheduleStoryDetailPage";
 
 let router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ let router = createBrowserRouter([
       {
         path: "/schedule_story",
         Component: ScheduleStory,
+      },
+      {
+        path: "/schedule_story/:scheduleStoryId",
+        Component: ScheduleStoryDetailPage,
       },
       {
         path: "/search",
