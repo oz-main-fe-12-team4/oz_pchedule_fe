@@ -1,4 +1,4 @@
-import AddScheduleModal from "../components/AddScheduleModal";
+import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
 
 function TestD() {
   return (

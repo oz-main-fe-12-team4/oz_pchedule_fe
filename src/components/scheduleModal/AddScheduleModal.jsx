@@ -1,12 +1,12 @@
 import { FaTrash, FaTimes, FaPlusCircle } from "react-icons/fa";
-import React, { useState } from "react";
-import Button from "./common/Button";
-import FilterButtons from "./common/FilterButtons";
-import Input from "./common/Input";
-import CalendarModal from "./common/CalendarModal";
-import FilterOptionList from "./common/FilterOptionList";
+import React, { useRef, useState } from "react";
+import Button from "../common/Button";
+import FilterButtons from "../common/FilterButtons";
+import Input from "../common/Input";
+import CalendarModal from "../common/CalendarModal";
+import FilterOptionList from "../common/FilterOptionList";
 import TimePicker from "./TimePicker";
-import { FILTERS } from "../constants/filterList";
+import { FILTERS } from "../../constants/filterList";
 import DatePicker from "./DatePicker";
 
 const formatDate = (date) =>
@@ -23,6 +23,7 @@ const AddScheduleModal = ({ title, content }) => {
   const [titleValue, setTitleValue] = useState(title || "");
   const [contentValue, setContentValue] = useState(content || "");
   const [mainScheduleSaved, setMainScheduleSaved] = useState(false);
+  const [savedContent, setSavedContent] = useState("");
 
   // 세부 일정
   const [subContent, setSubContent] = useState("");
@@ -30,16 +31,17 @@ const AddScheduleModal = ({ title, content }) => {
   const [subStartTime, setSubStartTime] = useState(startTime);
   const [subEndTime, setSubEndTime] = useState(endTime);
   const [subSchedules, setSubSchedules] = useState([]);
+  const contentRef = useRef(null);
 
   // 공통
   const [calendarModal, setCalendarModal] = useState(false);
   const [activeDate, setActiveDate] = useState(null);
   const [openFilter, setOpenFilter] = useState(null);
   const [filters, setFilters] = useState({
-    category: null,
-    priority: null,
-    share: null,
-    repeat: null,
+    category: "daily",
+    priority: "medium",
+    share: "personalSchedule",
+    repeat: "none",
     repeatSub: null,
   });
 
@@ -89,6 +91,7 @@ const AddScheduleModal = ({ title, content }) => {
   };
 
   const handleSaveMainSchedule = () => {
+    setSavedContent(contentRef.current.value);
     setMainScheduleSaved(true);
     setSubSelectedDate(startDate);
     setSubStartTime(startTime);
@@ -97,7 +100,7 @@ const AddScheduleModal = ({ title, content }) => {
 
   const handleAddSubSchedule = () => {
     const newSub = {
-      mainTitle: titleValue,
+      mainContent: savedContent || "메인 일정",
       content: subContent,
       startDate: subSelectedDate,
       endDate: subSelectedDate,
@@ -137,7 +140,7 @@ const AddScheduleModal = ({ title, content }) => {
               setValue={setTitleValue}
               placeholder="메인 일정 제목"
               className="text-[22px] font-bold text-gray-700 placeholder-gray-300 border-none outline-none focus:ring-0"
-              disabled={mainScheduleSaved}
+              // disabled={mainScheduleSaved}
             />
           </div>
           <div className="flex items-center gap-3 text-gray-500 pt-1">
@@ -274,7 +277,7 @@ const AddScheduleModal = ({ title, content }) => {
             min="00:00"
             max="23:59"
             className="w-full"
-            disabled={mainScheduleSaved}
+            // disabled={mainScheduleSaved}
           />
           <span className="text-gray-400">~</span>
           <TimePicker
@@ -289,7 +292,7 @@ const AddScheduleModal = ({ title, content }) => {
             min="00:00"
             max="23:59"
             className="w-full"
-            disabled={mainScheduleSaved}
+            // disabled={mainScheduleSaved}
           />
         </div>
 
@@ -297,11 +300,12 @@ const AddScheduleModal = ({ title, content }) => {
         <Input
           inputId="schedule-content"
           value={contentValue}
+          ref={contentRef}
           setValue={setContentValue}
           placeholder="메인 일정 내용"
           className="w-full text-[18px] font-bold text-gray-700 placeholder-gray-300 border-none outline-none focus:ring-0"
           maxLength={300}
-          disabled={mainScheduleSaved}
+          // disabled={mainScheduleSaved}
         />
 
         {!mainScheduleSaved && (
@@ -317,7 +321,7 @@ const AddScheduleModal = ({ title, content }) => {
         {mainScheduleSaved && (
           <div className="mt-6 border-t pt-4">
             <div className="font-bold text-gray-700 text-lg mb-2">
-              {titleValue}
+              {contentValue}
             </div>
 
             <Input
@@ -368,7 +372,7 @@ const AddScheduleModal = ({ title, content }) => {
                 <div className="flex justify-between items-start">
                   <div>
                     <div className="font-bold text-gray-700">
-                      {sch.mainTitle}
+                      {sch.mainContent}
                     </div>
                     <div className="text-gray-500 text-sm">{sch.content}</div>
                     <div className="text-gray-400 text-xs mt-1">

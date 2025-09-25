@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Button from "./common/Button";
+import Button from "../common/Button";
 
 const ITEM_H = 36;
 
@@ -17,7 +17,6 @@ const DatePicker = ({
   const rootRef = useRef(null);
   const wheelRef = useRef(null);
 
-  // 외부 값 동기화
   useEffect(() => {
     if (value !== undefined) setTemp(value);
   }, [value]);
@@ -32,13 +31,11 @@ const DatePicker = ({
     (d) => new Date(d).toDateString() === new Date(temp).toDateString()
   );
 
-  // Wheel 스크롤 위치 맞추기
   useEffect(() => {
     const el = wheelRef.current;
     if (el && curIndex >= 0) el.scrollTop = curIndex * ITEM_H;
   }, [curIndex]);
 
-  // 외부 클릭 시 닫기
   useEffect(() => {
     if (!open) return;
     const onDown = (e) =>

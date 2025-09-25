@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import timeUtils from "../utils/timeUtils";
-import Button from "./common/Button";
+import timeUtils from "../../utils/timeUtils";
+import Button from "../common/Button";
 const { clamp, toMinutes, fromMinutes, parseInput, formatTime, snapToStep } =
   timeUtils;
 
 const ITEM_H = 36;
+// 0~n-1 배열 생성 (시,분)
 const range = (n) => Array.from({ length: n }, (_, i) => i);
 
 const TimePicker = ({
@@ -28,17 +29,18 @@ const TimePicker = ({
   const hourRef = useRef(null);
   const minuteRef = useRef(null);
 
-  // 최소/최대 분
+  // useMemo를 써서 min이나 max가 바뀔 때만 계산
+  // 휠 스크롤에서 선택할 수 있는 최소 시간을 분 단위 계산
   const minMins = useMemo(
     () => (min ? toMinutes(parseInput(min) ?? { h: 0, m: 0 }) : 0),
     [min]
   );
+  // 휠 스크롤에서 선택할 수 있는 최대 시간을 분 단위로 계산
   const maxMins = useMemo(
     () => (max ? toMinutes(parseInput(max) ?? { h: 23, m: 59 }) : 23 * 60 + 59),
     [max]
   );
 
-  // 외부 값 동기화
   useEffect(() => {
     if (value !== undefined) setInternal(value);
   }, [value]);
@@ -49,7 +51,6 @@ const TimePicker = ({
     onChange?.(formatted);
   };
 
-  // 열릴 때 temp 초기화 + 스크롤 위치 맞추기
   useEffect(() => {
     if (!open) return;
     const cur = parseInput(internal || temp) ?? { h: 0, m: 0 };
@@ -68,7 +69,6 @@ const TimePicker = ({
     setTemp(formatTime(h, m));
   }, [open]);
 
-  // 외부 클릭 시 닫기
   useEffect(() => {
     if (!open) return;
     const onDown = (e) =>

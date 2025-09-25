@@ -37,7 +37,7 @@ const AddScheduleModalCard = () => {
                 <FaTrash />
               </button>
             </div>
-            <div className="flex gap-2 text-xs text-gray-500 flex-wrap">
+            {/* <div className="flex gap-2 text-xs text-gray-500 flex-wrap">
               {schedule.filters.category && (
                 <span className="px-2 py-1 bg-gray-200 rounded">
                   {schedule.filters.category}
@@ -64,7 +64,7 @@ const AddScheduleModalCard = () => {
                       : ` (${schedule.filters.repeatSub})`)}
                 </span>
               )}
-            </div>
+            </div> */}
             <div className="text-gray-600 text-sm">
               {formatDate(schedule.startDate)} {schedule.startTime} ~{" "}
               {formatDate(schedule.endDate)} {schedule.endTime}
