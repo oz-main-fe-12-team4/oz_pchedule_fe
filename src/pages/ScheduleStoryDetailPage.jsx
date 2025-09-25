@@ -43,7 +43,7 @@ export default function ScheduleStoryDetailPage() {
         </div>
 
         <div className="flex items-start gap-4">
-          <div className="like-wrapper flex flex-col items-center">
+          <div className="flex flex-col items-center">
             <LikeButton />
             <span className="text-xs text-gray-600 mt-1">
               {data.like_count}
