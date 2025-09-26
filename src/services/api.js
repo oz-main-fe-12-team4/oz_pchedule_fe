@@ -1,11 +1,39 @@
-import { api } from "./api.js";
+import axios from "axios";
+
+// API 인스턴스 생성
+const api = axios.create({
+  baseURL: import.meta.env?.VITE_API_BASE_URL,
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+// 요청 인터셉터
+api.interceptors.request.use(
+  (config) => {
+    // 요청 전에 토큰 관련 로직 추가
+    return config;
+  },
+  (err) => {
+    return Promise.reject(err);
+  }
+);
+
+// 응답 인터셉터
+api.interceptors.response.use(
+  (res) => res,
+  async (error) => {
+    if (error.response?.status === 401) {
+      // 401 오류 처리 로직
+      await api.post("/user/token/refresh");
+    }
+    return Promise.reject(error);
+  }
+);
 
 /**
  * 비밀번호 변경 API 호출 함수
- * @param {string} currentPassword 현재 비밀번호
- * @param {string} newPassword 새 비밀번호
- * @param {string} confirmPassword 새 비밀번호 확인
- * @returns {Promise<boolean>} 성공 여부 (성공 시 true, 실패 시 false)
  */
 export const changePassword = async (
   currentPassword,
@@ -20,7 +48,6 @@ export const changePassword = async (
     };
 
     const response = await api.patch("/user/me/edit/password", requestBody);
-
     if (response.status === 200) {
       return true;
     }
@@ -43,12 +70,10 @@ export const changePassword = async (
 
 /**
  * 회원 탈퇴 API 호출 함수
- * @returns {Promise<boolean>} 성공 여부 (성공 시 true, 실패 시 false)
  */
 export const withdrawUser = async () => {
   try {
     const response = await api.delete("/user/me/withdraw");
-
     if (response.status === 200) {
       return true;
     }
@@ -64,3 +89,5 @@ export const withdrawUser = async () => {
   }
   return false;
 };
+
+export default api;
