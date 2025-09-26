@@ -22,7 +22,7 @@ const Routine = () => {
   const firstDateOfThisWeek = currentDate.getDate() - currentDayOfThisWeek;
   const lastDateOfThisWeek = currentDate.getDate() + (6 - currentDayOfThisWeek);
 
-  const [AddScheduleOpen, setAddScheduleOpen] = useState(false);
+  const [isAddScheduleOpen, setIsAddScheduleOpen] = useState(false);
   const filterKeys = ["period", "date", "priority"];
   const list = posts.data;
 
@@ -94,9 +94,9 @@ const Routine = () => {
           </div>
         </div>
       )}
-      <PlusButton onClick={() => setAddScheduleOpen(true)} />
-      {AddScheduleOpen && (
-        <AddScheduleModal onClose={() => setAddScheduleOpen(false)} />
+      <PlusButton onClick={() => setIsAddScheduleOpen(true)} />
+      {isAddScheduleOpen && (
+        <AddScheduleModal onClose={() => setIsAddScheduleOpen(false)} />
       )}
     </div>
   );

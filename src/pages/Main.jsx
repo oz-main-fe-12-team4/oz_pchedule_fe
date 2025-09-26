@@ -10,7 +10,7 @@ const Main = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const thisYear = currentDate.getFullYear();
   const thisMonth = currentDate.getMonth() + 1;
-  const [AddScheduleOpen, setAddScheduleOpen] = useState(false);
+  const [isAddScheduleOpen, setIsAddScheduleOpen] = useState(false);
 
   const handleClickPrev = () => {
     setCurrentDate((prev) => new Date(prev.setMonth(prev.getMonth() - 1)));
@@ -38,9 +38,9 @@ const Main = () => {
       <div className="relative">
         <MainCalendar year={thisYear} month={thisMonth} />
 
-        <PlusButton onClick={() => setAddScheduleOpen(true)} />
-        {AddScheduleOpen && (
-          <AddScheduleModal onClose={() => setAddScheduleOpen(false)} />
+        <PlusButton onClick={() => setIsAddScheduleOpen(true)} />
+        {isAddScheduleOpen && (
+          <AddScheduleModal onClose={() => setIsAddScheduleOpen(false)} />
         )}
       </div>
     </div>

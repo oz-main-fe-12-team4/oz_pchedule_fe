@@ -7,7 +7,7 @@ import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
 
 const Daily = ({ posts }) => {
   const list = posts?.data ?? [];
-  const [AddScheduleOpen, setAddScheduleOpen] = useState(false);
+  const [isAddScheduleOpen, setIsAddScheduleOpen] = useState(false);
   return (
     <div className="w-full px-4 md:px-6 lg:px-8 py-4 text-left">
       <div className="flex flex-row gap-3 mt-4">
@@ -23,9 +23,9 @@ const Daily = ({ posts }) => {
           </div>
         ))}
       </div>
-      <PlusButton onClick={() => setAddScheduleOpen(true)} />
-      {AddScheduleOpen && (
-        <AddScheduleModal onClose={() => setAddScheduleOpen(false)} />
+      <PlusButton onClick={() => setIsAddScheduleOpen(true)} />
+      {isAddScheduleOpen && (
+        <AddScheduleModal onClose={() => setIsAddScheduleOpen(false)} />
       )}
     </div>
   );
