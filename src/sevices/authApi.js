@@ -39,8 +39,12 @@ export const fetchSignin = async (email, password, name) => {
     if (!res) throw new Error("회원가입 에러");
 
     if (res.status === 201) window.location.href = "/login";
+
+    if (res.status === 409 || res.status === 422) return res;
   } catch (err) {
     console.error(err);
+    alert("예기치 못한 서버오류가 있습니다. 잠시후 다시 시도해주세요.");
+    return false;
   }
 };
 
@@ -59,8 +63,15 @@ export const fetchLogin = async (email, password) => {
 
     if (res.status === 200) window.location.href = "/";
 
+    if (res.status === 401) return res;
+
+    if (res.status === 403)
+      alert("정지된 계정입니다. 관리자에게 문의하세요. (admin@admin.com)");
+
     // console.log(res);
   } catch (err) {
     console.log(err);
+    alert("예기치 못한 서버오류가 있습니다. 잠시후 다시 시도해주세요.");
+    return false;
   }
 };

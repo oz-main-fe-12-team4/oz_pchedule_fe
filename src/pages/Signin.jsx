@@ -12,10 +12,18 @@ const Signin = () => {
   const [emailInputValue, setEmailInputValue] = useState("");
   const [passwordInputValue, setPasswordInputValue] = useState("");
   const [checkPasswordInputValue, setCheckPasswordInputValue] = useState("");
+  const [signinError, setSigninError] = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await fetchSignin(emailInputValue, passwordInputValue, nameInputValue);
+    const res = await fetchSignin(
+      emailInputValue,
+      passwordInputValue,
+      nameInputValue
+    );
+    if (!res) return;
+
+    setSigninError(res);
   };
 
   return (
@@ -79,6 +87,9 @@ const Signin = () => {
             compareValue={passwordInputValue}
           />
         </div>
+        {
+          signinError && <div>{signinError}</div> // response 확인해보고 변경해야함.
+        }
         <Button type="submit" variant={"login"} children={"회원가입"} />
       </form>
       <p className="w-[300px] text-center p-8 border-t border-[#d9d9d9]">
