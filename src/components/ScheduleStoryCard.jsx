@@ -1,4 +1,5 @@
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
+import { useNavigate } from "react-router";
 // import { RiAlarmWarningFill } from "react-icons/ri";
 // import DeleteButton from "./common/DeleteButton";
 // import { useState } from "react";
@@ -6,6 +7,7 @@ import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 
 function ScheduleStoryCard({ schedule }) {
   // const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   // const handleClickDeleteButton = () => {
   //   setIsConfirmModalOpen(true);
@@ -13,8 +15,9 @@ function ScheduleStoryCard({ schedule }) {
 
   return (
     <div
-      className="bg-white px-3 rounded-md cursor-pointer hover:scale-110 hover:shadow
+      className="bg-white p-3 rounded-md cursor-pointer hover:scale-110 hover:shadow
     flex flex-col items-center justify-center gap-1 text-center"
+      onClick={() => navigate(`/schedule_story/${schedule.id}`)}
     >
       {/* 회색 박스 */}
       <div className="bg-gray-300 rounded-md h-32 w-[200px] relative">

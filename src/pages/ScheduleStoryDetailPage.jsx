@@ -6,13 +6,15 @@ import DetailScheduleCard from "../components/DetailScheduleCard";
 import LikeButton from "../components/common/LikeButton";
 import BookmarkButton from "../components/common/BookmarkButton";
 import myScheduleData from "../assets/data/dummyDetailSchedule";
-import { PiSirenDuotone } from "react-icons/pi";
+import { RiAlarmWarningFill } from "react-icons/ri";
 import { IoChevronBackSharp } from "react-icons/io5";
 import formatDateAndDay from "../utils/formatDateAndDay";
 import groupSchedulesByDate from "../utils/groupSchedulesByDate";
 import getDayCounts from "../utils/getDayCounts";
+import { useNavigate } from "react-router";
 
 export default function ScheduleStoryDetailPage() {
+  const navigate = useNavigate();
   const { data } = myScheduleData;
 
   // 날짜별 일정 묶기 & 정렬
@@ -22,31 +24,33 @@ export default function ScheduleStoryDetailPage() {
   const dayCounts = getDayCounts(data.start_period, data.end_period);
 
   return (
-    <div className="p-4 min-h-screen bg-white text-gray-900">
+    <div className="w-[100vw-200px] flex flex-col gap-10 p-5 text-gray-900">
       {/* 상단 헤더 */}
-      <header className="flex items-center justify-between mb-6">
-        <button
-          type="button"
-          aria-label="뒤로 가기"
-          className="text-2xl font-bold cursor-pointer text-gray-600 hover:text-gray-800 transition-colors"
-          onClick={() => {}}
-        >
-          <IoChevronBackSharp />
-        </button>
+      <header className="w-[100%] flex items-center justify-between">
+        <div className="flex gap-2">
+          <button
+            type="button"
+            aria-label="뒤로 가기"
+            className="text-2xl font-bold cursor-pointer text-gray-600 hover:text-gray-800 transition-colors"
+            onClick={() => navigate(-1)}
+          >
+            <IoChevronBackSharp size={30} />
+          </button>
 
-        <h1 className="flex-2 text-left font-semibold text-lg truncate">
-          {data.title}
-        </h1>
+          <h1 className="text-left font-semibold text-2xl truncate">
+            {data.title}
+          </h1>
+        </div>
 
-        <div className="flex items-center space-x-4">
-          <div className="like-wrapper flex flex-col items-center">
+        <div className="flex items-start gap-4">
+          <div className="flex flex-col items-center">
             <LikeButton />
             <span className="text-xs text-gray-600 mt-1">
               {data.like_count}
             </span>
           </div>
 
-          <div className="bookmark-wrapper flex flex-col items-center">
+          <div className="flex flex-col items-center">
             <BookmarkButton />
             <span className="text-xs text-gray-600 mt-1">
               {data.bookmark_count}
@@ -60,7 +64,7 @@ export default function ScheduleStoryDetailPage() {
             className="cursor-pointer text-gray-700 hover:text-red-600 transition-colors p-1"
             onClick={() => {}}
           >
-            <PiSirenDuotone className="w-6 h-6" />
+            <RiAlarmWarningFill size={25} />
           </button>
         </div>
       </header>
