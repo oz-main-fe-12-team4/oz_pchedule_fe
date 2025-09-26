@@ -1,4 +1,4 @@
-import { api } from "../utils/api";
+import { api } from "./api.js";
 
 /**
  * 비밀번호 변경 API 호출 함수
@@ -19,14 +19,12 @@ export const changePassword = async (
       new_password_confirm: confirmPassword,
     };
 
-    // axios 대신 import 한 api 인스턴스 사용
     const response = await api.patch("/user/me/edit/password", requestBody);
 
     if (response.status === 200) {
       return true;
     }
   } catch (error) {
-    // 인터셉터에서 401 처리를 한다고 해도, 400 등 다른 오류는 여기서 처리
     if (error.response) {
       alert(
         `비밀번호 변경 실패: ${
@@ -49,7 +47,6 @@ export const changePassword = async (
  */
 export const withdrawUser = async () => {
   try {
-    // axios 대신 import 한 api 인스턴스 사용
     const response = await api.delete("/user/me/withdraw");
 
     if (response.status === 200) {
