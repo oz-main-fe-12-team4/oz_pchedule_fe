@@ -4,7 +4,7 @@ import Input from "../components/common/Input.jsx";
 import Button from "../components/common/Button.jsx";
 import ConfirmModal from "../components/common/ConfirmModal.jsx";
 import { user1 } from "../assets/data/dummyUser.js";
-import { changePassword, withdrawUser } from "../sevices/api.js";
+import { fetchChangePassword, fetchWithdrawUser } from "../sevices/authApi.js";
 
 function MyPage() {
   const [currentPassword, setCurrentPassword] = useState("");
