@@ -1,8 +1,15 @@
 // src/test/TestJ.jsx
-
 import React from "react";
-import ScheduleStoryDetailPage from "../pages/ScheduleStoryDetailPage";
+import Input from "../components/common/Input";
+import LikeButton from "../components/common/LikeButton";
+import { useState } from "react";
 
 export default function TestJ() {
-  return <ScheduleStoryDetailPage />;
+  const [inputValue, setInputValue] = useState("");
+  return (
+    <div>
+      <Input value={inputValue} setValue={setInputValue} />
+      <LikeButton />
+    </div>
+  );
 }
