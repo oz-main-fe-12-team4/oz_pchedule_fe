@@ -1,9 +1,8 @@
-import React from "react";
 import { FaPen } from "react-icons/fa6";
 
-function DetailScheduleCard({ title, description }) {
+function DetailScheduleCard({ title, description, onEdit }) {
   const handlePenClick = () => {
-    console.log("펜 아이콘 눌렸지만 기능은 없음");
+    onEdit?.({ title, description });
   };
 
   return (
@@ -15,7 +14,7 @@ function DetailScheduleCard({ title, description }) {
       <button
         type="button"
         onClick={handlePenClick}
-        className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+        className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 cursor-pointer"
         aria-label="정보 수정"
         title="정보 수정"
       >

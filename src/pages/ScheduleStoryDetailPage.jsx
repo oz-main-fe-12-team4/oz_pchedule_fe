@@ -1,6 +1,3 @@
-// src/pages/ScheduleStoryDetailPage.jsx
-
-import React from "react";
 import TimeCard from "../components/common/TimeCard";
 import DetailScheduleCard from "../components/DetailScheduleCard";
 import LikeButton from "../components/common/LikeButton";
@@ -12,8 +9,15 @@ import formatDateAndDay from "../utils/formatDateAndDay";
 import groupSchedulesByDate from "../utils/groupSchedulesByDate";
 import getDayCounts from "../utils/getDayCounts";
 import { useNavigate } from "react-router";
+import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
+import { useState } from "react";
 
-export default function ScheduleStoryDetailPage() {
+const toDate = (value) => {
+  if (value instanceof Date) return value;
+  return new Date(value);
+};
+
+function ScheduleStoryDetailPage() {
   const navigate = useNavigate();
   const { data } = myScheduleData;
 
@@ -22,6 +26,25 @@ export default function ScheduleStoryDetailPage() {
   const sortedDates = Object.keys(groupedSchedules);
   // 시작일부터 종료일까지 Day N 배열
   const dayCounts = getDayCounts(data.start_period, data.end_period);
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [scheduleToEdit, setScheduleToEdit] = useState(null);
+
+  const handleOpenEditModal = (editedValues, schedule) => {
+    setScheduleToEdit({
+      id: schedule.id,
+      title: editedValues.title ?? schedule.title,
+      description: editedValues.description ?? schedule.description,
+      startDate: toDate(schedule.start_time),
+      endDate: toDate(schedule.end_time),
+    });
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEdtModal = () => {
+    setIsEditModalOpen(false);
+    setScheduleToEdit(null);
+  };
 
   return (
     <div className="w-[calc(100vw-200px)] flex flex-col gap-10 p-5 text-gray-900">
@@ -106,6 +129,15 @@ export default function ScheduleStoryDetailPage() {
                     <DetailScheduleCard
                       title={title}
                       description={description}
+                      onEdit={(editedValues) =>
+                        handleOpenEditModal(editedValues, {
+                          id,
+                          start_time,
+                          end_time,
+                          title,
+                          description,
+                        })
+                      }
                     />
                   </div>
                 )
@@ -114,6 +146,18 @@ export default function ScheduleStoryDetailPage() {
           </section>
         );
       })}
+
+      {isEditModalOpen && scheduleToEdit && (
+        <AddScheduleModal
+          title={scheduleToEdit.title}
+          content={scheduleToEdit.content}
+          defaultStartDate={scheduleToEdit.defaultStartDate}
+          defaultEndDate={scheduleToEdit.defaultEndDate}
+          onClose={handleCloseEdtModal}
+        />
+      )}
     </div>
   );
 }
+
+export default ScheduleStoryDetailPage;
