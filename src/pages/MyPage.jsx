@@ -4,7 +4,7 @@ import Input from "../components/common/Input.jsx";
 import Button from "../components/common/Button.jsx";
 import ConfirmModal from "../components/common/ConfirmModal.jsx";
 import { user1 } from "../assets/data/dummyUser.js";
-import { changePassword, withdrawUser } from "../api/userApi";
+import { changePassword, withdrawUser } from "../sevices/api.js";
 
 function MyPage() {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -20,7 +20,6 @@ function MyPage() {
   const handlePasswordChange = async (e) => {
     e.preventDefault();
 
-    // accessToken 매개변수를 제거하고 호출
     const success = await changePassword(
       currentPassword,
       passwords.newPassword,
@@ -52,7 +51,6 @@ function MyPage() {
   const handleWithdrawalConfirm = async () => {
     closeWithdrawalModal(); // 모달 닫기
 
-    // accessToken 매개변수를 제거하고 호출
     const success = await withdrawUser();
 
     if (success) {
@@ -170,7 +168,6 @@ function MyPage() {
         </main>
       </div>
 
-      {/* 회원 탈퇴 ConfirmModal */}
       {isModalOpen && (
         <ConfirmModal
           isOpen={isModalOpen}
