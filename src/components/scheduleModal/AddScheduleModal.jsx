@@ -5,7 +5,7 @@ import MainScheduleModal from "./MainScheduleModal";
 const formatDate = (date) =>
   `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
 
-const AddScheduleModal = ({ title, content }) => {
+const AddScheduleModal = ({ title, content, onClose }) => {
   const today = new Date();
 
   // 메인 일정 상태
@@ -66,8 +66,8 @@ const AddScheduleModal = ({ title, content }) => {
   };
 
   return (
-    <div className="flex w-full justify-center bg-gray-50">
-      <div className="bg-white rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.15)] relative text-gray-800 w-full max-w-md mt-24">
+    <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
+      <div className="bg-white rounded-3xl p-6 shadow-lg w-full max-w-md">
         {/* 메인 일정 */}
         <MainScheduleModal
           titleValue={titleValue}
@@ -94,6 +94,7 @@ const AddScheduleModal = ({ title, content }) => {
           handleSaveMainSchedule={handleSaveMainSchedule}
           handleDateSelect={handleDateSelect}
           formatDate={formatDate}
+          onClose={onClose}
         />
 
         {/* 세부 일정 */}

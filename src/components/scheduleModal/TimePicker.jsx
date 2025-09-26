@@ -67,7 +67,7 @@ const TimePicker = ({
     scrollTo(minuteRef.current, m);
 
     setTemp(formatTime(h, m));
-  }, [open, internal, minuteStep, minMins, maxMins]);
+  }, [open, internal, temp, minuteStep, minMins, maxMins]);
 
   useEffect(() => {
     if (!open) return;
