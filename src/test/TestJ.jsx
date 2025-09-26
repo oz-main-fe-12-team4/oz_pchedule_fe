@@ -1,8 +1,11 @@
 // src/test/TestJ.jsx
-
 import React from "react";
-import ScheduleStoryDetailPage from "../pages/ScheduleStoryDetailPage";
+import UdinputLike from "../pages/Udinput&like";
 
 export default function TestJ() {
-  return <ScheduleStoryDetailPage />;
+  return (
+    <div>
+      <UdinputLike />
+    </div>
+  );
 }
