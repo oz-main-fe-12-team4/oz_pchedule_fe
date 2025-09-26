@@ -1,4 +1,5 @@
 import axios from "axios";
+import { fetchGetUserData } from "./userApi";
 
 export const api = axios.create({
   baseURL: import.meta.env?.VITE_API_BASE_URL,
@@ -58,10 +59,15 @@ export const fetchLogin = async (email, password) => {
     const res = await api.post("/user/login", userData);
     if (!res) throw new Error("로그인 응답이 없음.");
 
-    if (res.status === 200 && res.data?.is_admin === true)
+    if (res.status === 200 && res.data?.is_admin === true) {
       window.location.href = "/admin/user_list";
+      return await fetchGetUserData();
+    }
 
-    if (res.status === 200) window.location.href = "/";
+    if (res.status === 200) {
+      window.location.href = "/";
+      return await fetchGetUserData();
+    }
 
     if (res.status === 401) return res;
 

@@ -7,14 +7,17 @@ import kakaoLogo from "../assets/kakao.png";
 import { Link } from "react-router";
 import Button from "../components/common/Button";
 import { fetchLogin } from "../sevices/authApi";
+import { useUserStore } from "../stores/userStore";
 
 const Login = () => {
   const [emailInputValue, setEmailInputValue] = useState("");
   const [passwordInputValue, setPasswordInputValue] = useState("");
+  const { setUserData } = useUserStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await fetchLogin(emailInputValue, passwordInputValue);
+    const loginUserData = await fetchLogin(emailInputValue, passwordInputValue);
+    setUserData(loginUserData);
   };
 
   return (
