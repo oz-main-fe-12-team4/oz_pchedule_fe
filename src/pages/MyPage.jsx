@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { FaUserCircle, FaHeart, FaBookmark, FaPencilAlt } from "react-icons/fa";
 import Input from "../components/common/Input.jsx";
 import Button from "../components/common/Button.jsx";
-// ConfirmModal import 추가
 import ConfirmModal from "../components/common/ConfirmModal.jsx";
 import { user1 } from "../assets/data/dummyUser.js";
-
-const accessToken = "your_access_token_here";
+import { changePassword, withdrawUser } from "../api/userApi";
 
 function MyPage() {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -23,41 +20,20 @@ function MyPage() {
   const handlePasswordChange = async (e) => {
     e.preventDefault();
 
-    try {
-      const requestBody = {
-        current_password: currentPassword,
-        new_password: passwords.newPassword,
-        new_password_confirm: passwords.confirmPassword,
-      };
+    // accessToken 매개변수를 제거하고 호출
+    const success = await changePassword(
+      currentPassword,
+      passwords.newPassword,
+      passwords.confirmPassword
+    );
 
-      const response = await axios.patch(
-        "/user/me/edit/password",
-        requestBody,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        alert("비밀번호가 성공적으로 변경되었습니다.");
-        setCurrentPassword("");
-        setPasswords({
-          newPassword: "",
-          confirmPassword: "",
-        });
-      }
-    } catch (error) {
-      if (error.response) {
-        alert(`비밀번호 변경 실패: ${error.response.data.error}`);
-      } else {
-        console.error("API 호출 중 오류 발생:", error);
-        alert(
-          "비밀번호 변경 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
-        );
-      }
+    if (success) {
+      alert("비밀번호가 성공적으로 변경되었습니다.");
+      setCurrentPassword("");
+      setPasswords({
+        newPassword: "",
+        confirmPassword: "",
+      });
     }
   };
 
@@ -65,37 +41,23 @@ function MyPage() {
     setIsNotificationEnabled(!isNotificationEnabled);
   };
 
-  // 모달을 여는 함수 (회원 탈퇴 버튼 클릭 시 호출)
   const openWithdrawalModal = () => {
     setIsModalOpen(true);
   };
 
-  // 모달을 닫는 함수 (취소 버튼 클릭 시 호출)
   const closeWithdrawalModal = () => {
     setIsModalOpen(false);
   };
 
-  // 실제 회원 탈퇴 API를 호출하는 함수 (모달에서 '확인' 클릭 시 호출)
   const handleWithdrawalConfirm = async () => {
     closeWithdrawalModal(); // 모달 닫기
 
-    try {
-      const response = await axios.delete("/user/me/withdraw", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+    // accessToken 매개변수를 제거하고 호출
+    const success = await withdrawUser();
 
-      if (response.status === 200) {
-        alert("회원 탈퇴가 완료되었습니다.");
-      }
-    } catch (error) {
-      if (error.response) {
-        alert(`회원 탈퇴 실패: ${error.response.data.error}`);
-      } else {
-        console.error("API 호출 중 오류 발생:", error);
-        alert("회원 탈퇴 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
-      }
+    if (success) {
+      alert("회원 탈퇴가 완료되었습니다.");
+      // TODO: 회원 탈퇴 성공 시 로그인 페이지 등으로 리다이렉트하는 로직 추가
     }
   };
 
@@ -191,8 +153,8 @@ function MyPage() {
 
               <div className="flex justify-end items-center space-x-4 pt-4">
                 <button
-                  onClick={openWithdrawalModal} // 모달 열기 함수 호출
-                  type="button" // 폼 제출을 막기 위해 type="button"으로 변경
+                  onClick={openWithdrawalModal}
+                  type="button"
                   className="text-red-500 hover:text-red-700 font-semibold text-sm"
                 >
                   회원 탈퇴
@@ -208,7 +170,7 @@ function MyPage() {
         </main>
       </div>
 
-      {/* 회원 탈퇴 ConfirmModal 추가 */}
+      {/* 회원 탈퇴 ConfirmModal */}
       {isModalOpen && (
         <ConfirmModal
           isOpen={isModalOpen}
