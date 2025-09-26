@@ -2,15 +2,30 @@ import { useRef, useState } from "react";
 import SubScheduleModal from "./SubScheduleModal";
 import MainScheduleModal from "./MainScheduleModal";
 
-const formatDate = (date) =>
-  `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+const toDate = (input) => {
+  if (!input) return null;
+  if (input instanceof Date) return input;
+  const parsedDate = new Date(input);
+  return parsedDate;
+};
 
-const AddScheduleModal = ({ title, content, onClose }) => {
+const formatDate = (value) => {
+  const day = toDate(value);
+  return `${day.getFullYear()}년 ${day.getMonth() + 1}월 ${day.getDate()}일`;
+};
+
+const AddScheduleModal = ({
+  title,
+  content,
+  onClose,
+  defaultStartDate,
+  defaultEndDate,
+}) => {
   const today = new Date();
 
   // 메인 일정 상태
-  const [startDate, setStartDate] = useState(today);
-  const [endDate, setEndDate] = useState(today);
+  const [startDate, setStartDate] = useState(defaultStartDate ?? today);
+  const [endDate, setEndDate] = useState(defaultEndDate ?? today);
   const [startTime, setStartTime] = useState("00:00");
   const [endTime, setEndTime] = useState("23:59");
   const [titleValue, setTitleValue] = useState(title || "");

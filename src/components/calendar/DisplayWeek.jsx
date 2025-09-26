@@ -1,4 +1,4 @@
-const DisplayWeek = ({ week }) => {
+const DisplayWeek = ({ week, onDayClick }) => {
   return week.map((el, i) => (
     <div
       key={i}
@@ -9,9 +9,12 @@ const DisplayWeek = ({ week }) => {
           ? "text-[#7892f0]"
           : "text-black"
       } 
-             h-[102px] px-[8px] border-t border-[#393939] truncate`}
+            h-[102px] px-[8px] border-t border-[#393939] truncate`}
+      onClick={() => onDayClick(el.date)}
     >
-      <h2 className="h-[30px] text-[15px] flex p-[6px]">{el.date}</h2>
+      <h2 className="h-[30px] text-[15px] flex p-[6px] cursor-pointer">
+        {el.date}
+      </h2>
     </div>
   ));
 };

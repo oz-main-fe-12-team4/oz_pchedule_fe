@@ -28,6 +28,11 @@ const Main = () => {
     setCurrentDate((prev) => new Date(prev.setMonth(prev.getMonth() + 1)));
   };
 
+  const handleDayClick = (date) => {
+    setPickedDate(date);
+    setIsAddScheduleOpen(true);
+  };
+
   return (
     <div className="h-[calc(100vh-100.18px)]">
       <div className="flex items-center justify-between px-8">
@@ -45,11 +50,19 @@ const Main = () => {
         <Button children={"오늘"} onClick={() => setCurrentDate(new Date())} />
       </div>
       <div className="relative">
-        <MainCalendar year={thisYear} month={thisMonth} />
+        <MainCalendar
+          year={thisYear}
+          month={thisMonth}
+          onDayClick={handleDayClick}
+        />
 
         <PlusButton onClick={() => setIsAddScheduleOpen(true)} />
         {isAddScheduleOpen && (
-          <AddScheduleModal onClose={() => setIsAddScheduleOpen(false)} />
+          <AddScheduleModal
+            defaultStartDate={pickedDate}
+            defaultEndDate={pickedDate}
+            onClose={() => setIsAddScheduleOpen(false)}
+          />
         )}
       </div>
     </div>
