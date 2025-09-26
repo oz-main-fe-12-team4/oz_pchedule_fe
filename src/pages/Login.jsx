@@ -6,41 +6,48 @@ import naverLogo from "../assets/naver.png";
 import kakaoLogo from "../assets/kakao.png";
 import { Link } from "react-router";
 import Button from "../components/common/Button";
+import { fetchLogin } from "../sevices/authApi";
 
 const Login = () => {
   const [emailInputValue, setEmailInputValue] = useState("");
   const [passwordInputValue, setPasswordInputValue] = useState("");
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await fetchLogin(emailInputValue, passwordInputValue);
+  };
+
   return (
     <div className="flex flex-col justify-center items-center gap-5">
       <form
         name="login"
+        onSubmit={handleSubmit}
         className="flex flex-col justify-center items-center gap-5"
       >
         <img src={logo} alt="pchedule logo" className="w-[300px] scale-70" />
-        <div className="flex flex-col gap-1 justify-center items-start">
+        <div className="w-[300px] flex flex-col gap-1 justify-center items-start">
           <Input
             label={"이메일"}
             inputId={"이메일"}
             type={"email"}
-            placeHolder={"이메일을 입력하세요."}
+            placeholder={"이메일을 입력하세요."}
             value={emailInputValue}
             setValue={setEmailInputValue}
             required={true}
           />
         </div>
-        <div className="flex flex-col gap-1 justify-center items-start">
+        <div className="w-[300px] flex flex-col gap-1 justify-center items-start">
           <Input
             label={"비밀번호"}
             inputId={"비밀번호"}
             type={"password"}
-            placeHolder={"비밀번호를 입력하세요."}
+            placeholder={"비밀번호를 입력하세요."}
             value={passwordInputValue}
             setValue={setPasswordInputValue}
             required={true}
           />
         </div>
-        <Button variant={"login"} children={"로그인"} />
+        <Button type="submit" variant={"login"} children={"로그인"} />
       </form>
       <div className="w-[300px] flex justify-center items-center gap-10 p-8 border-t border-[#d9d9d9]">
         <img
