@@ -20,7 +20,7 @@ function MyPage() {
   const handlePasswordChange = async (e) => {
     e.preventDefault();
 
-    const success = await changePassword(
+    const success = await fetchChangePassword(
       currentPassword,
       passwords.newPassword,
       passwords.confirmPassword
@@ -51,7 +51,7 @@ function MyPage() {
   const handleWithdrawalConfirm = async () => {
     closeWithdrawalModal(); // 모달 닫기
 
-    const success = await withdrawUser();
+    const success = await fetchWithdrawUser();
 
     if (success) {
       alert("회원 탈퇴가 완료되었습니다.");
