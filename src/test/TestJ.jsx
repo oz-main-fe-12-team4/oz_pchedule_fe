@@ -1,11 +1,15 @@
 // src/test/TestJ.jsx
 import React from "react";
-import UdinputLike from "../pages/Udinput&like";
+import Input from "../components/common/Input";
+import LikeButton from "../components/common/LikeButton";
+import { useState } from "react";
 
 export default function TestJ() {
+  const [inputValue, setInputValue] = useState("");
   return (
     <div>
-      <UdinputLike />
+      <Input value={inputValue} setValue={setInputValue} />
+      <LikeButton />
     </div>
   );
 }
