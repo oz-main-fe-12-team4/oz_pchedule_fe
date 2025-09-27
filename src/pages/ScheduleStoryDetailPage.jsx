@@ -11,11 +11,7 @@ import getDayCounts from "../utils/getDayCounts";
 import { useNavigate } from "react-router";
 import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
 import { useState } from "react";
-
-const toDate = (value) => {
-  if (value instanceof Date) return value;
-  return new Date(value);
-};
+import { toDate, toTimeString } from "../utils/dateFormat";
 
 function ScheduleStoryDetailPage() {
   const navigate = useNavigate();
@@ -30,18 +26,20 @@ function ScheduleStoryDetailPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [scheduleToEdit, setScheduleToEdit] = useState(null);
 
-  const handleOpenEditModal = (editedValues, schedule) => {
+  const handleOpenEditModal = (editedValues, schedule, editDetailDate) => {
     setScheduleToEdit({
       id: schedule.id,
       title: editedValues.title ?? schedule.title,
       description: editedValues.description ?? schedule.description,
-      startDate: toDate(schedule.start_time),
-      endDate: toDate(schedule.end_time),
+      defaultStartDate: toDate(editDetailDate),
+      defaultEndDate: toDate(editDetailDate),
+      defaultStartTime: toTimeString(schedule.start_time),
+      defaultEndTime: toTimeString(schedule.end_time),
     });
     setIsEditModalOpen(true);
   };
 
-  const handleCloseEdtModal = () => {
+  const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     setScheduleToEdit(null);
   };
@@ -93,13 +91,13 @@ function ScheduleStoryDetailPage() {
       </header>
 
       {/* 날짜별 일정 묶어서 렌더링 */}
-      {sortedDates.map((date, index) => {
-        const schedulesForDate = groupedSchedules[date];
+      {sortedDates.map((editDetailDate, index) => {
+        const schedulesForDate = groupedSchedules[editDetailDate];
         const dayText = dayCounts[index] || `Day ${index + 1}`;
-        const formattedDate = formatDateAndDay(date);
+        const formattedDate = formatDateAndDay(editDetailDate);
 
         return (
-          <section key={date} className="mb-8">
+          <section key={editDetailDate} className="mb-8">
             {/* Day N ;; 월.일 요일 */}
             <div className="mb-4 flex items-center space-x-2 text-lg font-semibold">
               <span>{dayText}</span>
@@ -130,13 +128,17 @@ function ScheduleStoryDetailPage() {
                       title={title}
                       description={description}
                       onEdit={(editedValues) =>
-                        handleOpenEditModal(editedValues, {
-                          id,
-                          start_time,
-                          end_time,
-                          title,
-                          description,
-                        })
+                        handleOpenEditModal(
+                          editedValues,
+                          {
+                            id,
+                            start_time,
+                            end_time,
+                            title,
+                            description,
+                          },
+                          editDetailDate
+                        )
                       }
                     />
                   </div>
@@ -150,10 +152,12 @@ function ScheduleStoryDetailPage() {
       {isEditModalOpen && scheduleToEdit && (
         <AddScheduleModal
           title={scheduleToEdit.title}
-          content={scheduleToEdit.content}
+          content={scheduleToEdit.description}
           defaultStartDate={scheduleToEdit.defaultStartDate}
           defaultEndDate={scheduleToEdit.defaultEndDate}
-          onClose={handleCloseEdtModal}
+          defaultStartTime={scheduleToEdit.defaultStartTime}
+          defaultEndTime={scheduleToEdit.defaultEndTime}
+          onClose={handleCloseEditModal}
         />
       )}
     </div>

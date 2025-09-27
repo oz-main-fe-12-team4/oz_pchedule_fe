@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SubScheduleModal from "./SubScheduleModal";
 import MainScheduleModal from "./MainScheduleModal";
 
@@ -20,14 +20,16 @@ const AddScheduleModal = ({
   onClose,
   defaultStartDate,
   defaultEndDate,
+  defaultStartTime,
+  defaultEndTime,
 }) => {
   const today = new Date();
 
   // 메인 일정 상태
   const [startDate, setStartDate] = useState(defaultStartDate ?? today);
   const [endDate, setEndDate] = useState(defaultEndDate ?? today);
-  const [startTime, setStartTime] = useState("00:00");
-  const [endTime, setEndTime] = useState("23:59");
+  const [startTime, setStartTime] = useState(defaultStartTime ?? "00:00");
+  const [endTime, setEndTime] = useState(defaultEndTime ?? "23:59");
   const [titleValue, setTitleValue] = useState(title || "");
   const [contentValue, setContentValue] = useState(content || "");
   const [mainScheduleSaved, setMainScheduleSaved] = useState(false);
@@ -79,6 +81,13 @@ const AddScheduleModal = ({
     setSavedContent(contentRef.current.value);
     setMainScheduleSaved(true);
   };
+
+  useEffect(() => {
+    if (defaultStartDate) setStartDate(toDate(defaultStartDate));
+    if (defaultEndDate) setEndDate(toDate(defaultEndDate));
+    if (defaultStartTime) setStartTime(defaultStartTime);
+    if (defaultEndTime) setEndTime(defaultEndTime);
+  }, [defaultStartDate, defaultEndDate, defaultStartTime, defaultEndTime]);
 
   return (
     <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
