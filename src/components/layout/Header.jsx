@@ -15,7 +15,7 @@ const Header = () => {
   const [isDropdownProfile, setIsDropdownProfile] = useState(false);
   const [isDropdownNotification, setIsDropdownNotification] = useState(false);
   const navigate = useNavigate();
-  const { setUserData } = useUserStore();
+  const { clearUserData } = useUserStore();
 
   const sortedNotificationList = notificationList.data.sort(
     (a, b) => b.id - a.id
@@ -24,7 +24,7 @@ const Header = () => {
   const handleClickLogoutButton = async () => {
     const res = await fetchLogout();
     if (res.status === 200) {
-      setUserData(null);
+      clearUserData();
       navigate("/");
     }
   };
