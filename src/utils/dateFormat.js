@@ -26,3 +26,11 @@ export const toTimeString = (value) => {
   const date = toDate(value);
   return date.toTimeString().slice(0, 5);
 };
+
+// 날짜와 기간을 합쳐서 api 보낼때
+export const toApiDate = (dateObj, timeString) => {
+  const y = dateObj.getFullYear();
+  const m = dateObj.getMonth() + 1;
+  const d = dateObj.getDate();
+  return `${y}-${m}-${d} ${timeString}:00`;
+};

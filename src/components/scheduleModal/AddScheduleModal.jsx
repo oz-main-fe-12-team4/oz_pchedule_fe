@@ -1,16 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import SubScheduleModal from "./SubScheduleModal";
 import MainScheduleModal from "./MainScheduleModal";
-import { toDate, toTime, toTimeString } from "../../utils/dateFormat";
+import {
+  toDate,
+  toTime,
+  toTimeString,
+  toApiDate,
+} from "../../utils/dateFormat";
 
 const AddScheduleModal = ({
+  id,
   title,
   content,
   onClose,
+  onSubmit,
   defaultStartDate,
   defaultEndDate,
   defaultStartTime,
   defaultEndTime,
+  showSub = true,
 }) => {
   const today = new Date();
 
@@ -67,8 +75,16 @@ const AddScheduleModal = ({
   };
 
   const handleSaveMainSchedule = () => {
+    const payload = {
+      id, // 상위에서 내려준 id
+      title: titleValue,
+      description: contentValue,
+      start_time: toApiDate(startDate, startTime),
+      end_time: toApiDate(endDate, endTime),
+    };
+    onSubmit?.(payload);
     setSavedContent(contentRef.current.value);
-    setMainScheduleSaved(true);
+    if (showSub) setMainScheduleSaved(true);
   };
 
   useEffect(() => {
@@ -109,10 +125,11 @@ const AddScheduleModal = ({
           toTime={toTime}
           toTimeString={toTimeString}
           onClose={onClose}
+          showSub={showSub}
         />
 
         {/* 세부 일정 */}
-        {mainScheduleSaved && (
+        {showSub && mainScheduleSaved && (
           <SubScheduleModal
             subSchedules={subSchedules}
             setSubSchedules={setSubSchedules}

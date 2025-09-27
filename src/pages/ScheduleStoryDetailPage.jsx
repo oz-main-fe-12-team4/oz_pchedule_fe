@@ -17,9 +17,12 @@ function ScheduleStoryDetailPage() {
   const navigate = useNavigate();
   const { data } = myScheduleData;
 
+  // 상세일정 수정 반영용
+  const [schedules, setSchedules] = useState(data.schedule);
+
   // 날짜별 일정 묶기 & 정렬
-  const groupedSchedules = groupSchedulesByDate(data.schedule);
-  const sortedDates = Object.keys(groupedSchedules);
+  const groupedSchedules = groupSchedulesByDate(schedules ?? []);
+  const sortedDates = Object.keys(groupedSchedules ?? {});
   // 시작일부터 종료일까지 Day N 배열
   const dayCounts = getDayCounts(data.start_period, data.end_period);
 
@@ -38,8 +41,10 @@ function ScheduleStoryDetailPage() {
     });
     setIsEditModalOpen(true);
   };
-
-  const handleCloseEditModal = () => {
+  const handleEditSubmitMain = (payload) => {
+    setSchedules((prev) =>
+      prev.map((sch) => (sch.id === payload.id ? { ...sch, ...payload } : sch))
+    );
     setIsEditModalOpen(false);
     setScheduleToEdit(null);
   };
@@ -92,7 +97,7 @@ function ScheduleStoryDetailPage() {
 
       {/* 날짜별 일정 묶어서 렌더링 */}
       {sortedDates.map((editDetailDate, index) => {
-        const schedulesForDate = groupedSchedules[editDetailDate];
+        const schedulesForDate = groupedSchedules[editDetailDate] ?? [];
         const dayText = dayCounts[index] || `Day ${index + 1}`;
         const formattedDate = formatDateAndDay(editDetailDate);
 
@@ -119,9 +124,8 @@ function ScheduleStoryDetailPage() {
                     className="flex items-center mb-6 last:mb-0 relative z-10"
                   >
                     <TimeCard
-                      time={`${start_time.slice(11, 16)}~${end_time.slice(
-                        11,
-                        16
+                      time={`${toTimeString(start_time)}~${toTimeString(
+                        end_time
                       )}`}
                     />
                     <DetailScheduleCard
@@ -151,13 +155,19 @@ function ScheduleStoryDetailPage() {
 
       {isEditModalOpen && scheduleToEdit && (
         <AddScheduleModal
+          id={scheduleToEdit.id}
           title={scheduleToEdit.title}
           content={scheduleToEdit.description}
           defaultStartDate={scheduleToEdit.defaultStartDate}
           defaultEndDate={scheduleToEdit.defaultEndDate}
           defaultStartTime={scheduleToEdit.defaultStartTime}
           defaultEndTime={scheduleToEdit.defaultEndTime}
-          onClose={handleCloseEditModal}
+          onSubmit={handleEditSubmitMain}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setScheduleToEdit(null);
+          }}
+          showSub={false}
         />
       )}
     </div>
