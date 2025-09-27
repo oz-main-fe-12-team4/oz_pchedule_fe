@@ -16,6 +16,7 @@ import Someday from "./pages/Someday";
 import Daily from "./pages/Daily";
 import AdminPage from "./pages/AdminPage";
 import ScheduleStoryDetailPage from "./pages/ScheduleStoryDetailPage";
+import { fetchGetUserList } from "./sevices/userApi";
 
 let router = createBrowserRouter([
   {
@@ -52,6 +53,7 @@ let router = createBrowserRouter([
       },
       {
         path: "/admin/user_list",
+        loader: async () => await fetchGetUserList(),
         Component: AdminPage,
       },
       {

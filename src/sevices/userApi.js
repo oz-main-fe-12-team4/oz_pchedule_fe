@@ -14,3 +14,15 @@ export const fetchGetUserData = async () => {
     alert("예기치 못한 서버오류가 있습니다. 잠시후 다시 시도해주세요.");
   }
 };
+
+export const fetchGetUserList = async () => {
+  try {
+    const res = await api.get("/user/users");
+    if (!res) throw new Error("유저 리스트를 받아올 수 없습니다.");
+
+    if (res.status === 200) return res.data;
+  } catch (err) {
+    console.error(err);
+    alert(err?.message);
+  }
+};
