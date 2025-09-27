@@ -19,6 +19,8 @@ function ScheduleStoryDetailPage() {
 
   // 상세일정 수정 반영용
   const [schedules, setSchedules] = useState(data.schedule);
+  const periodStart = toDate(data.start_period);
+  const periodEnd = toDate(data.end_period);
 
   // 날짜별 일정 묶기 & 정렬
   const groupedSchedules = groupSchedulesByDate(schedules ?? []);
@@ -168,6 +170,9 @@ function ScheduleStoryDetailPage() {
             setScheduleToEdit(null);
           }}
           showSub={false}
+          periodStart={toDate(data.start_period)}
+          periodEnd={toDate(data.end_period)}
+          sameEndToStart={true}
         />
       )}
     </div>

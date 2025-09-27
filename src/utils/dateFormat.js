@@ -34,3 +34,11 @@ export const toApiDate = (dateObj, timeString) => {
   const d = dateObj.getDate();
   return `${y}-${m}-${d} ${timeString}:00`;
 };
+
+// 수정 모달창에서 제한된 기간으로 설정하기
+export const toPeriod = (dateInput, min, max) => {
+  const date = toDate(dateInput);
+  if (min && date < min) return min;
+  if (max && date > max) return max;
+  return date;
+};

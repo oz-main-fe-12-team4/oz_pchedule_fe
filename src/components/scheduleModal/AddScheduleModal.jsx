@@ -6,6 +6,7 @@ import {
   toTime,
   toTimeString,
   toApiDate,
+  toPeriod,
 } from "../../utils/dateFormat";
 
 const AddScheduleModal = ({
@@ -19,6 +20,9 @@ const AddScheduleModal = ({
   defaultStartTime,
   defaultEndTime,
   showSub = true,
+  periodStart,
+  periodEnd,
+  sameEndToStart = false,
 }) => {
   const today = new Date();
 
@@ -63,12 +67,19 @@ const AddScheduleModal = ({
 
   const handleDateSelect = (selected) => {
     if (!selected) return;
-    if (activeDate === "start") {
-      setStartDate(selected);
-      if (selected > endDate) setEndDate(selected);
-    } else if (activeDate === "end") {
-      setEndDate(selected);
-      if (selected < startDate) setStartDate(selected);
+    const rangeDate = toPeriod(selected, periodStart, periodEnd);
+
+    if (sameEndToStart) {
+      setStartDate(rangeDate);
+      setEndDate(rangeDate);
+    } else {
+      if (activeDate === "start") {
+        setStartDate(rangeDate);
+        if (rangeDate > endDate) setEndDate(rangeDate);
+      } else if (activeDate === "end") {
+        setEndDate(rangeDate);
+        if (rangeDate < startDate) setStartDate(rangeDate);
+      }
     }
     setCalendarModal(false);
     closeCalendar();
@@ -87,12 +98,26 @@ const AddScheduleModal = ({
     if (showSub) setMainScheduleSaved(true);
   };
 
+  // useEffect(() => {
+  //   if (defaultStartDate)
+  //     setStartDate(toPeriod(toDate(defaultStartDate), periodStart, periodEnd));
+  //   if (defaultEndDate)
+  //     setEndDate(toPeriod(toDate(defaultEndDate), periodStart, periodEnd));
+  //   if (defaultStartTime) setStartTime(defaultStartTime);
+  //   if (defaultEndTime) setEndTime(defaultEndTime);
+  // }, [
+  //   defaultStartDate,
+  //   defaultEndDate,
+  //   defaultStartTime,
+  //   defaultEndTime,
+  //   periodStart,
+  //   periodEnd,
+  // ]);
   useEffect(() => {
-    if (defaultStartDate) setStartDate(toDate(defaultStartDate));
-    if (defaultEndDate) setEndDate(toDate(defaultEndDate));
-    if (defaultStartTime) setStartTime(defaultStartTime);
-    if (defaultEndTime) setEndTime(defaultEndTime);
-  }, [defaultStartDate, defaultEndDate, defaultStartTime, defaultEndTime]);
+    if (sameEndToStart && startDate) {
+      setEndDate(startDate);
+    }
+  }, [sameEndToStart, startDate]);
 
   return (
     <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
@@ -104,10 +129,10 @@ const AddScheduleModal = ({
           contentValue={contentValue}
           setContentValue={setContentValue}
           contentRef={contentRef}
-          startDate={startDate}
+          startDate={sameEndToStart ? startDate : endDate}
           endDate={endDate}
           setStartDate={setStartDate}
-          setEndDate={setEndDate}
+          setEndDate={sameEndToStart ? startDate : setEndDate}
           startTime={startTime}
           endTime={endTime}
           setStartTime={setStartTime}
@@ -126,6 +151,8 @@ const AddScheduleModal = ({
           toTimeString={toTimeString}
           onClose={onClose}
           showSub={showSub}
+          minDate={periodStart ? toDate(periodStart) : undefined}
+          maxDate={periodEnd ? toDate(periodEnd) : undefined}
         />
 
         {/* 세부 일정 */}

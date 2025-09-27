@@ -33,6 +33,8 @@ const MainScheduleModal = ({
   handleDateSelect,
   onClose,
   showSub,
+  maxDate,
+  minDate,
 }) => {
   const ensureTimeRange = (nextStart, nextEnd) => {
     const sameDay = startDate.toDateString() === endDate.toDateString();
@@ -201,7 +203,7 @@ const MainScheduleModal = ({
         />
       </div>
 
-      {/* 메인 일정 내용 */}
+      {/* 세부 일정 내용 */}
       <Input
         inputId="schedule-content"
         value={contentValue}
@@ -212,7 +214,7 @@ const MainScheduleModal = ({
         maxLength={300}
       />
 
-      {/* 메인 일정 저장 버튼 */}
+      {/* 세부 일정 저장 버튼 */}
       {!mainScheduleSaved && (
         <Button
           variant="confirm"
@@ -237,7 +239,8 @@ const MainScheduleModal = ({
             <CalendarModal
               variant="single"
               onDateChange={handleDateSelect}
-              minDate={new Date()}
+              minDate={minDate ?? new Date()}
+              maxDate={maxDate ?? undefined}
               showTodayButton
             />
           </div>
