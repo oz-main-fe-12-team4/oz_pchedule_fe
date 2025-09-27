@@ -11,13 +11,13 @@ function AdminPage() {
   const [isReportedOnly, setIsReportedOnly] = useState(false);
 
   // 검색어와 필터링 상태에 따라 유저 목록을 동적으로 필터링
-  // const filteredUsers = userList.filter((user) => {
-  //   const matchesSearch =
-  //     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //     user.email.toLowerCase().includes(searchQuery.toLowerCase());
-  //   const matchesFilter = isReportedOnly ? user.is_reported : true;
-  //   return matchesSearch && matchesFilter;
-  // });
+  const filteredUsers = userList.filter((user) => {
+    const matchesSearch =
+      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesFilter = isReportedOnly ? user.is_reported : true;
+    return matchesSearch && matchesFilter;
+  });
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -51,8 +51,8 @@ function AdminPage() {
       </div>
 
       <div className="">
-        {userList.length > 0 ? (
-          userList.map((user) => <UserCard key={user.id} user={user} />)
+        {filteredUsers.length > 0 ? (
+          filteredUsers.map((user) => <UserCard key={user.id} user={user} />)
         ) : (
           <div className="text-gray-500 text-center">검색 결과가 없습니다.</div>
         )}
