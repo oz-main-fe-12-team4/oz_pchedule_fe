@@ -1,8 +1,12 @@
-import { createStore } from "zustand";
+import { create } from "zustand";
 
-export const useUserStore = createStore((set) => ({
-  userData: {},
+const useUserStore = create((set) => ({
+  userData: null,
+  isAdmin: false,
 
+  setIsAdmin: (state) => set({ isAdmin: state }),
   setUserData: (newUserData) => set({ userData: newUserData }),
-  clearUserData: () => set({ userData: {} }),
+  clearUserData: () => set({ userData: null }),
 }));
+
+export default useUserStore;

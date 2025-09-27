@@ -5,7 +5,9 @@ export const fetchGetUserData = async () => {
     const response = await api.get("/user/me");
     if (!response) throw new Error("유저 정보를 받아 올 수 없습니다.");
 
-    if (response.status === 200) return response.data;
+    if (response.status === 200) {
+      return await response.data;
+    }
     if (response.status === 401) window.location.href = "/login";
   } catch (e) {
     console.log(e);

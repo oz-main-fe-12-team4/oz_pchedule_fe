@@ -7,14 +7,27 @@ import { Link } from "react-router";
 import { useState } from "react";
 import { notificationList } from "../../assets/data/dummyNotificationList";
 import NotificationCard from "../NotificationCard";
+import { fetchLogout } from "../../sevices/authApi";
+import { useNavigate } from "react-router";
+import useUserStore from "../../stores/userStore";
 
 const Header = () => {
   const [isDropdownProfile, setIsDropdownProfile] = useState(false);
   const [isDropdownNotification, setIsDropdownNotification] = useState(false);
+  const navigate = useNavigate();
+  const { setUserData } = useUserStore();
 
   const sortedNotificationList = notificationList.data.sort(
     (a, b) => b.id - a.id
   );
+
+  const handleClickLogoutButton = async () => {
+    const res = await fetchLogout();
+    if (res.status === 200) {
+      setUserData(null);
+      navigate("/");
+    }
+  };
 
   return (
     <div>
@@ -51,9 +64,12 @@ const Header = () => {
                 <Link to={"/my_page"} className="hover:text-black">
                   마이페이지
                 </Link>
-                <Link to={"/"} className="hover:text-black">
+                <button
+                  onClick={handleClickLogoutButton}
+                  className="cursor-pointer hover:text-black"
+                >
                   로그아웃
-                </Link>
+                </button>
               </div>
             )}
           </div>
