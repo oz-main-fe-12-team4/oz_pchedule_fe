@@ -1,18 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import SubScheduleModal from "./SubScheduleModal";
 import MainScheduleModal from "./MainScheduleModal";
-
-const toDate = (input) => {
-  if (!input) return null;
-  if (input instanceof Date) return input;
-  const parsedDate = new Date(input);
-  return parsedDate;
-};
-
-const formatDate = (value) => {
-  const day = toDate(value);
-  return `${day.getFullYear()}년 ${day.getMonth() + 1}월 ${day.getDate()}일`;
-};
+import { toDate, toTime, toTimeString } from "../../utils/dateFormat";
 
 const AddScheduleModal = ({
   title,
@@ -117,7 +106,8 @@ const AddScheduleModal = ({
           closeCalendar={closeCalendar}
           handleSaveMainSchedule={handleSaveMainSchedule}
           handleDateSelect={handleDateSelect}
-          formatDate={formatDate}
+          toTime={toTime}
+          toTimeString={toTimeString}
           onClose={onClose}
         />
 
@@ -135,7 +125,8 @@ const AddScheduleModal = ({
             openFilter={openFilter}
             handleFilterToggle={handleFilterToggle}
             handleFilterChange={handleFilterChange}
-            formatDate={formatDate}
+            toTime={toTime}
+            toTimeString={toTimeString}
           />
         )}
       </div>

@@ -7,6 +7,7 @@ import FilterButtons from "../common/FilterButtons";
 import FilterOptionList from "../common/FilterOptionList";
 import CalendarModal from "../common/CalendarModal";
 import { FILTERS } from "../../constants/filterList";
+import { toTime } from "../../utils/dateFormat";
 
 const MainScheduleModal = ({
   titleValue,
@@ -30,7 +31,6 @@ const MainScheduleModal = ({
   closeCalendar,
   handleSaveMainSchedule,
   handleDateSelect,
-  formatDate,
   onClose,
 }) => {
   const ensureTimeRange = (nextStart, nextEnd) => {
@@ -79,7 +79,7 @@ const MainScheduleModal = ({
           onClick={() => openCalendar("start")}
           className="text-gray-500 text-xl hover:text-gray-800 cursor-pointer"
         >
-          {formatDate(startDate)}
+          {toTime(startDate)}
         </button>
         <span className="text-gray-500">~</span>
 
@@ -88,7 +88,7 @@ const MainScheduleModal = ({
           onClick={() => openCalendar("end")}
           className="text-gray-500 text-xl hover:text-gray-800 cursor-pointer"
         >
-          {formatDate(endDate)}
+          {toTime(endDate)}
         </button>
       </div>
 
