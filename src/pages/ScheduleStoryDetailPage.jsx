@@ -24,7 +24,7 @@ export default function ScheduleStoryDetailPage() {
   const dayCounts = getDayCounts(data.start_period, data.end_period);
 
   return (
-    <div className="w-[100vw-200px] flex flex-col gap-10 p-5 text-gray-900">
+    <div className="w-[calc(100vw-200px)] flex flex-col gap-10 p-5 text-gray-900">
       {/* 상단 헤더 */}
       <header className="w-[100%] flex items-center justify-between">
         <div className="flex gap-2">

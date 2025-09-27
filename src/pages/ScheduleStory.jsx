@@ -1,10 +1,10 @@
-import { useState } from "react";
 import { posts } from "../assets/data/dummyPostList";
 import FilterButtons from "../components/common/FilterButtons";
 import ScheduleStoryCard from "../components/ScheduleStoryCard";
+import useUserStore from "../stores/userStore";
 
 const ScheduleStory = () => {
-  const [isAdmin] = useState(false);
+  const { isAdmin } = useUserStore();
   const userFilterButtons = ["category", "latest", "period"];
   const adminFilterButtons = ["category", "latest", "period", "reported"];
 
