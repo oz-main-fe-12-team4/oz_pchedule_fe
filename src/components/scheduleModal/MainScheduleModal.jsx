@@ -35,7 +35,6 @@ const MainScheduleModal = ({
   showSub,
   maxDate,
   minDate,
-  sameEndToStart,
 }) => {
   const ensureTimeRange = (nextStart, nextEnd) => {
     const sameDay = startDate.toDateString() === endDate.toDateString();
@@ -240,8 +239,8 @@ const MainScheduleModal = ({
             <CalendarModal
               variant="single"
               onDateChange={handleDateSelect}
-              minDate={minDate ?? new Date()}
-              maxDate={maxDate ?? undefined}
+              minDate={minDate}
+              maxDate={maxDate}
               showTodayButton
             />
           </div>

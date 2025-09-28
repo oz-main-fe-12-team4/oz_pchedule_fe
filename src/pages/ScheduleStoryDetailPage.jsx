@@ -170,8 +170,8 @@ function ScheduleStoryDetailPage() {
             setScheduleToEdit(null);
           }}
           showSub={false}
-          periodStart={toDate(data.start_period)}
-          periodEnd={toDate(data.end_period)}
+          periodStart={periodStart}
+          periodEnd={periodEnd}
           sameEndToStart={true}
         />
       )}
