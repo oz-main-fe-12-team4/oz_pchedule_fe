@@ -153,6 +153,7 @@ const AddScheduleModal = ({
           showSub={showSub}
           minDate={periodStart ? toDate(periodStart) : undefined}
           maxDate={periodEnd ? toDate(periodEnd) : undefined}
+          sameEndToStart={sameEndToStart}
         />
 
         {/* 세부 일정 */}
@@ -171,6 +172,7 @@ const AddScheduleModal = ({
             handleFilterChange={handleFilterChange}
             toTime={toTime}
             toTimeString={toTimeString}
+            onClose={onClose}
           />
         )}
       </div>

@@ -35,6 +35,7 @@ const MainScheduleModal = ({
   showSub,
   maxDate,
   minDate,
+  sameEndToStart,
 }) => {
   const ensureTimeRange = (nextStart, nextEnd) => {
     const sameDay = startDate.toDateString() === endDate.toDateString();
@@ -197,7 +198,7 @@ const MainScheduleModal = ({
           }}
           format="hh:mm a"
           minuteStep={1}
-          min="00:00"
+          min={startTime}
           max="23:59"
           className="w-full"
         />
