@@ -22,7 +22,7 @@ api.interceptors.response.use(
   (res) => res,
   async (error) => {
     if (error.response?.status === 401) {
-      await api.post("/user/token/refresh");
+      await api.post("/api/token/refresh");
     }
   }
 );

@@ -15,7 +15,7 @@ const Header = () => {
   const [isDropdownProfile, setIsDropdownProfile] = useState(false);
   const [isDropdownNotification, setIsDropdownNotification] = useState(false);
   const navigate = useNavigate();
-  const { clearUserData } = useUserStore();
+  const { userData, clearUserData } = useUserStore();
 
   const sortedNotificationList = notificationList.data.sort(
     (a, b) => b.id - a.id
@@ -61,9 +61,12 @@ const Header = () => {
             <FaCircleUser size={34} />
             {isDropdownProfile && (
               <div className="p-5 rounded-2xl bg-white shadow-[0_0_40px_-10px_#0000003f] absolute top-20 right-5 flex flex-col justify-center items-center gap-3 z-50 text-gray-400">
-                <Link to={"/my_page"} className="hover:text-black">
-                  마이페이지
-                </Link>
+                {!userData?.is_admin && (
+                  <Link to={"/my_page"} className="hover:text-black">
+                    마이페이지
+                  </Link>
+                )}
+                {userData?.is_admin && <div>{userData.email}</div>}
                 <button
                   onClick={handleClickLogoutButton}
                   className="cursor-pointer hover:text-black"
