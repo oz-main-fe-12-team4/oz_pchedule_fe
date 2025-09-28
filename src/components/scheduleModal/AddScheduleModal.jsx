@@ -1,18 +1,36 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SubScheduleModal from "./SubScheduleModal";
 import MainScheduleModal from "./MainScheduleModal";
+import {
+  toDate,
+  toTime,
+  toTimeString,
+  toApiDate,
+  toPeriod,
+} from "../../utils/dateFormat";
 
-const formatDate = (date) =>
-  `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
-
-const AddScheduleModal = ({ title, content, onClose }) => {
+const AddScheduleModal = ({
+  id,
+  title,
+  content,
+  onClose,
+  onSubmit,
+  defaultStartDate,
+  defaultEndDate,
+  defaultStartTime,
+  defaultEndTime,
+  showSub = true,
+  periodStart,
+  periodEnd,
+  sameEndToStart = false,
+}) => {
   const today = new Date();
 
   // 메인 일정 상태
-  const [startDate, setStartDate] = useState(today);
-  const [endDate, setEndDate] = useState(today);
-  const [startTime, setStartTime] = useState("00:00");
-  const [endTime, setEndTime] = useState("23:59");
+  const [startDate, setStartDate] = useState(defaultStartDate ?? today);
+  const [endDate, setEndDate] = useState(defaultEndDate ?? today);
+  const [startTime, setStartTime] = useState(defaultStartTime ?? "00:00");
+  const [endTime, setEndTime] = useState(defaultEndTime ?? "23:59");
   const [titleValue, setTitleValue] = useState(title || "");
   const [contentValue, setContentValue] = useState(content || "");
   const [mainScheduleSaved, setMainScheduleSaved] = useState(false);
@@ -49,21 +67,57 @@ const AddScheduleModal = ({ title, content, onClose }) => {
 
   const handleDateSelect = (selected) => {
     if (!selected) return;
-    if (activeDate === "start") {
-      setStartDate(selected);
-      if (selected > endDate) setEndDate(selected);
-    } else if (activeDate === "end") {
-      setEndDate(selected);
-      if (selected < startDate) setStartDate(selected);
+    const rangeDate = toPeriod(selected, periodStart, periodEnd);
+
+    if (sameEndToStart) {
+      setStartDate(rangeDate);
+      setEndDate(rangeDate);
+    } else {
+      if (activeDate === "start") {
+        setStartDate(rangeDate);
+        if (rangeDate > endDate) setEndDate(rangeDate);
+      } else if (activeDate === "end") {
+        setEndDate(rangeDate);
+        if (rangeDate < startDate) setStartDate(rangeDate);
+      }
     }
     setCalendarModal(false);
     closeCalendar();
   };
 
   const handleSaveMainSchedule = () => {
+    const payload = {
+      id, // 상위에서 내려준 id
+      title: titleValue,
+      description: contentValue,
+      start_time: toApiDate(startDate, startTime),
+      end_time: toApiDate(endDate, endTime),
+    };
+    onSubmit?.(payload);
     setSavedContent(contentRef.current.value);
-    setMainScheduleSaved(true);
+    if (showSub) setMainScheduleSaved(true);
   };
+
+  // useEffect(() => {
+  //   if (defaultStartDate)
+  //     setStartDate(toPeriod(toDate(defaultStartDate), periodStart, periodEnd));
+  //   if (defaultEndDate)
+  //     setEndDate(toPeriod(toDate(defaultEndDate), periodStart, periodEnd));
+  //   if (defaultStartTime) setStartTime(defaultStartTime);
+  //   if (defaultEndTime) setEndTime(defaultEndTime);
+  // }, [
+  //   defaultStartDate,
+  //   defaultEndDate,
+  //   defaultStartTime,
+  //   defaultEndTime,
+  //   periodStart,
+  //   periodEnd,
+  // ]);
+  useEffect(() => {
+    if (sameEndToStart && startDate) {
+      setEndDate(startDate);
+    }
+  }, [sameEndToStart, startDate]);
 
   return (
     <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
@@ -76,9 +130,9 @@ const AddScheduleModal = ({ title, content, onClose }) => {
           setContentValue={setContentValue}
           contentRef={contentRef}
           startDate={startDate}
-          endDate={endDate}
+          endDate={sameEndToStart ? startDate : endDate}
           setStartDate={setStartDate}
-          setEndDate={setEndDate}
+          setEndDate={sameEndToStart ? startDate : setEndDate}
           startTime={startTime}
           endTime={endTime}
           setStartTime={setStartTime}
@@ -93,12 +147,17 @@ const AddScheduleModal = ({ title, content, onClose }) => {
           closeCalendar={closeCalendar}
           handleSaveMainSchedule={handleSaveMainSchedule}
           handleDateSelect={handleDateSelect}
-          formatDate={formatDate}
+          toTime={toTime}
+          toTimeString={toTimeString}
           onClose={onClose}
+          showSub={showSub}
+          minDate={periodStart ? toDate(periodStart) : undefined}
+          maxDate={periodEnd ? toDate(periodEnd) : undefined}
+          sameEndToStart={sameEndToStart}
         />
 
         {/* 세부 일정 */}
-        {mainScheduleSaved && (
+        {showSub && mainScheduleSaved && (
           <SubScheduleModal
             subSchedules={subSchedules}
             setSubSchedules={setSubSchedules}
@@ -111,7 +170,9 @@ const AddScheduleModal = ({ title, content, onClose }) => {
             openFilter={openFilter}
             handleFilterToggle={handleFilterToggle}
             handleFilterChange={handleFilterChange}
-            formatDate={formatDate}
+            toTime={toTime}
+            toTimeString={toTimeString}
+            onClose={onClose}
           />
         )}
       </div>

@@ -1,6 +1,3 @@
-// src/pages/ScheduleStoryDetailPage.jsx
-
-import React from "react";
 import TimeCard from "../components/common/TimeCard";
 import DetailScheduleCard from "../components/DetailScheduleCard";
 import LikeButton from "../components/common/LikeButton";
@@ -12,16 +9,47 @@ import formatDateAndDay from "../utils/formatDateAndDay";
 import groupSchedulesByDate from "../utils/groupSchedulesByDate";
 import getDayCounts from "../utils/getDayCounts";
 import { useNavigate } from "react-router";
+import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
+import { useState } from "react";
+import { toDate, toTimeString } from "../utils/dateFormat";
 
-export default function ScheduleStoryDetailPage() {
+function ScheduleStoryDetailPage() {
   const navigate = useNavigate();
   const { data } = myScheduleData;
 
+  // 상세일정 수정 반영용
+  const [schedules, setSchedules] = useState(data.schedule);
+  const periodStart = toDate(data.start_period);
+  const periodEnd = toDate(data.end_period);
+
   // 날짜별 일정 묶기 & 정렬
-  const groupedSchedules = groupSchedulesByDate(data.schedule);
-  const sortedDates = Object.keys(groupedSchedules);
+  const groupedSchedules = groupSchedulesByDate(schedules ?? []);
+  const sortedDates = Object.keys(groupedSchedules ?? {});
   // 시작일부터 종료일까지 Day N 배열
   const dayCounts = getDayCounts(data.start_period, data.end_period);
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [scheduleToEdit, setScheduleToEdit] = useState(null);
+
+  const handleOpenEditModal = (editedValues, schedule, editDetailDate) => {
+    setScheduleToEdit({
+      id: schedule.id,
+      title: editedValues.title ?? schedule.title,
+      description: editedValues.description ?? schedule.description,
+      defaultStartDate: toDate(editDetailDate),
+      defaultEndDate: toDate(editDetailDate),
+      defaultStartTime: toTimeString(schedule.start_time),
+      defaultEndTime: toTimeString(schedule.end_time),
+    });
+    setIsEditModalOpen(true);
+  };
+  const handleEditSubmitMain = (payload) => {
+    setSchedules((prev) =>
+      prev.map((sch) => (sch.id === payload.id ? { ...sch, ...payload } : sch))
+    );
+    setIsEditModalOpen(false);
+    setScheduleToEdit(null);
+  };
 
   return (
     <div className="w-[calc(100vw-200px)] flex flex-col gap-10 p-5 text-gray-900">
@@ -70,13 +98,13 @@ export default function ScheduleStoryDetailPage() {
       </header>
 
       {/* 날짜별 일정 묶어서 렌더링 */}
-      {sortedDates.map((date, index) => {
-        const schedulesForDate = groupedSchedules[date];
+      {sortedDates.map((editDetailDate, index) => {
+        const schedulesForDate = groupedSchedules[editDetailDate] ?? [];
         const dayText = dayCounts[index] || `Day ${index + 1}`;
-        const formattedDate = formatDateAndDay(date);
+        const formattedDate = formatDateAndDay(editDetailDate);
 
         return (
-          <section key={date} className="mb-8">
+          <section key={editDetailDate} className="mb-8">
             {/* Day N ;; 월.일 요일 */}
             <div className="mb-4 flex items-center space-x-2 text-lg font-semibold">
               <span>{dayText}</span>
@@ -98,14 +126,26 @@ export default function ScheduleStoryDetailPage() {
                     className="flex items-center mb-6 last:mb-0 relative z-10"
                   >
                     <TimeCard
-                      time={`${start_time.slice(11, 16)}~${end_time.slice(
-                        11,
-                        16
+                      time={`${toTimeString(start_time)}~${toTimeString(
+                        end_time
                       )}`}
                     />
                     <DetailScheduleCard
                       title={title}
                       description={description}
+                      onEdit={(editedValues) =>
+                        handleOpenEditModal(
+                          editedValues,
+                          {
+                            id,
+                            start_time,
+                            end_time,
+                            title,
+                            description,
+                          },
+                          editDetailDate
+                        )
+                      }
                     />
                   </div>
                 )
@@ -114,6 +154,29 @@ export default function ScheduleStoryDetailPage() {
           </section>
         );
       })}
+
+      {isEditModalOpen && scheduleToEdit && (
+        <AddScheduleModal
+          id={scheduleToEdit.id}
+          title={scheduleToEdit.title}
+          content={scheduleToEdit.description}
+          defaultStartDate={scheduleToEdit.defaultStartDate}
+          defaultEndDate={scheduleToEdit.defaultEndDate}
+          defaultStartTime={scheduleToEdit.defaultStartTime}
+          defaultEndTime={scheduleToEdit.defaultEndTime}
+          onSubmit={handleEditSubmitMain}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setScheduleToEdit(null);
+          }}
+          showSub={false}
+          periodStart={periodStart}
+          periodEnd={periodEnd}
+          sameEndToStart={true}
+        />
+      )}
     </div>
   );
 }
+
+export default ScheduleStoryDetailPage;

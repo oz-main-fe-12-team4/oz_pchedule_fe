@@ -16,6 +16,9 @@ const SubScheduleModal = ({
   endDate,
   startTime,
   endTime,
+  mainScheduleSaved,
+  handleSaveMainSchedule,
+  onClose,
 }) => {
   const [subContent, setSubContent] = useState("");
   const [subSelectedDate, setSubSelectedDate] = useState(startDate);
@@ -129,6 +132,19 @@ const SubScheduleModal = ({
           </div>
         </div>
       ))}
+
+      {!mainScheduleSaved && (
+        <Button
+          variant="confirm"
+          onClick={() => {
+            handleSaveMainSchedule();
+            onClose?.();
+          }}
+          className="w-full mt-7 bg-[#2F7884] hover:bg-[#5AA5B2] text-white font-semibold py-2 rounded-xl flex items-center justify-center gap-2 shadow-md transition-colors duration-200"
+        >
+          {subSchedules.length > 0 ? "세부 일정 저장" : "저장하기"}
+        </Button>
+      )}
     </div>
   );
 };

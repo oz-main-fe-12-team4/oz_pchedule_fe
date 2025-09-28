@@ -5,27 +5,33 @@ import Button from "../components/common/Button";
 import PlusButton from "../components/common/PlusButton";
 import { useState } from "react";
 import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
-import useUserStore from "../stores/userStore";
-import { useNavigate } from "react-router";
-import { useEffect } from "react";
+// import useUserStore from "../stores/userStore";
+// import { useNavigate } from "react-router";
+// import { useEffect } from "react";
 
 const Main = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const thisYear = currentDate.getFullYear();
   const thisMonth = currentDate.getMonth() + 1;
   const [isAddScheduleOpen, setIsAddScheduleOpen] = useState(false);
-  const { userData } = useUserStore();
-  const navigate = useNavigate();
+  const [pickedDate, setPickedDate] = useState(null);
+  // const { userData } = useUserStore();
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    if (userData === null) navigate("/login");
-  }, [userData, navigate]);
+  // useEffect(() => {
+  //   if (userData === null) navigate("/login");
+  // }, [userData, navigate]);
 
   const handleClickPrev = () => {
     setCurrentDate((prev) => new Date(prev.setMonth(prev.getMonth() - 1)));
   };
   const handleClickNext = () => {
     setCurrentDate((prev) => new Date(prev.setMonth(prev.getMonth() + 1)));
+  };
+
+  const handleDayClick = (date) => {
+    setPickedDate(date);
+    setIsAddScheduleOpen(true);
   };
 
   return (
@@ -45,11 +51,19 @@ const Main = () => {
         <Button children={"오늘"} onClick={() => setCurrentDate(new Date())} />
       </div>
       <div className="relative">
-        <MainCalendar year={thisYear} month={thisMonth} />
+        <MainCalendar
+          year={thisYear}
+          month={thisMonth}
+          onDayClick={handleDayClick}
+        />
 
         <PlusButton onClick={() => setIsAddScheduleOpen(true)} />
         {isAddScheduleOpen && (
-          <AddScheduleModal onClose={() => setIsAddScheduleOpen(false)} />
+          <AddScheduleModal
+            defaultStartDate={pickedDate}
+            defaultEndDate={pickedDate}
+            onClose={() => setIsAddScheduleOpen(false)}
+          />
         )}
       </div>
     </div>

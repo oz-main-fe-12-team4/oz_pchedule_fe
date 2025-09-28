@@ -7,6 +7,7 @@ import FilterButtons from "../common/FilterButtons";
 import FilterOptionList from "../common/FilterOptionList";
 import CalendarModal from "../common/CalendarModal";
 import { FILTERS } from "../../constants/filterList";
+import { toTime } from "../../utils/dateFormat";
 
 const MainScheduleModal = ({
   titleValue,
@@ -30,8 +31,10 @@ const MainScheduleModal = ({
   closeCalendar,
   handleSaveMainSchedule,
   handleDateSelect,
-  formatDate,
   onClose,
+  showSub,
+  maxDate,
+  minDate,
 }) => {
   const ensureTimeRange = (nextStart, nextEnd) => {
     const sameDay = startDate.toDateString() === endDate.toDateString();
@@ -79,7 +82,7 @@ const MainScheduleModal = ({
           onClick={() => openCalendar("start")}
           className="text-gray-500 text-xl hover:text-gray-800 cursor-pointer"
         >
-          {formatDate(startDate)}
+          {toTime(startDate)}
         </button>
         <span className="text-gray-500">~</span>
 
@@ -88,7 +91,7 @@ const MainScheduleModal = ({
           onClick={() => openCalendar("end")}
           className="text-gray-500 text-xl hover:text-gray-800 cursor-pointer"
         >
-          {formatDate(endDate)}
+          {toTime(endDate)}
         </button>
       </div>
 
@@ -194,13 +197,13 @@ const MainScheduleModal = ({
           }}
           format="hh:mm a"
           minuteStep={1}
-          min="00:00"
+          min={startTime}
           max="23:59"
           className="w-full"
         />
       </div>
 
-      {/* 메인 일정 내용 */}
+      {/* 세부 일정 내용 */}
       <Input
         inputId="schedule-content"
         value={contentValue}
@@ -211,14 +214,14 @@ const MainScheduleModal = ({
         maxLength={300}
       />
 
-      {/* 메인 일정 저장 버튼 */}
+      {/* 세부 일정 저장 버튼 */}
       {!mainScheduleSaved && (
         <Button
           variant="confirm"
           onClick={handleSaveMainSchedule}
           className="w-full mt-7 bg-[#2F7884] hover:bg-[#5AA5B2] text-white font-semibold py-2 rounded-xl flex items-center justify-center gap-2 shadow-md transition-colors duration-200"
         >
-          메인 일정 저장
+          {showSub ? "메인 일정 저장" : "세부 일정 저장"}
         </Button>
       )}
 
@@ -236,7 +239,8 @@ const MainScheduleModal = ({
             <CalendarModal
               variant="single"
               onDateChange={handleDateSelect}
-              minDate={new Date()}
+              minDate={minDate}
+              maxDate={maxDate}
               showTodayButton
             />
           </div>
