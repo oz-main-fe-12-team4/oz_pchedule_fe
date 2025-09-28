@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import UserCard from "../components/UserCard.jsx";
 import Input from "../components/common/Input.jsx";
-import { userList } from "../assets/data/dummyUser.js";
 import Button from "../components/common/Button.jsx";
+import { useLoaderData } from "react-router";
 
 function AdminPage() {
+  const data = useLoaderData();
+  const userList = data.data;
   const [searchQuery, setSearchQuery] = useState("");
   const [isReportedOnly, setIsReportedOnly] = useState(false);
 
@@ -30,7 +32,8 @@ function AdminPage() {
       <div className="flex flex-col gap-2 pb-5 border-b">
         <h1 className="text-2xl font-bold mb-4">유저 목록</h1>
         <p className="text-gray-300">
-          전체 {}명 신고된 유저 {}명
+          전체 {userList.total_user}명 신고된 유저{" "}
+          {userList.total_reported_user}명
         </p>
       </div>
       <div className="flex flex-col gap-3 pb-3 border-b">
