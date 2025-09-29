@@ -16,7 +16,6 @@ export default function LikeButton({ size = 20 }) {
 
   // 디바운스된 좋아요 상태가 바뀔 때 처리할 작업
   useEffect(() => {
-    console.log("디바운스된 좋아요 상태:", debouncedLike);
     // 좋아요 상태 반영 후 처리할 작업 가능
   }, [debouncedLike]);
 

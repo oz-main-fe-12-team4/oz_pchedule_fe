@@ -12,17 +12,48 @@ export const fetchGetUserData = async () => {
   } catch (e) {
     console.log(e);
     alert("예기치 못한 서버오류가 있습니다. 잠시후 다시 시도해주세요.");
+    return false;
   }
 };
 
 export const fetchGetUserList = async () => {
   try {
     const res = await api.get("/user/users");
+
+    if (res.status === 200) return res.data;
+
+    if (res.status === 403 || res.status === 401)
+      return alert("권한이 없습니다.");
+
     if (!res) throw new Error("유저 리스트를 받아올 수 없습니다.");
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+};
+
+export const fetchPostUserActivate = async (userId) => {
+  try {
+    const res = await api.post(`/user/users/${userId}/activate`);
+    if (!res) throw new Error("유저를 활성화 할 수 없습니다.");
 
     if (res.status === 200) return res.data;
   } catch (err) {
     console.error(err);
     alert(err?.message);
+    return false;
+  }
+};
+
+export const fetchPostUserDeactivate = async (userId) => {
+  try {
+    const res = await api.post(`/user/users/${userId}/deactivate`);
+    if (!res) throw new Error("유저를 활성화 할 수 없습니다.");
+
+    if (res.status === 200) return res.data;
+  } catch (err) {
+    console.error(err);
+    alert(err?.message);
+    return false;
   }
 };
