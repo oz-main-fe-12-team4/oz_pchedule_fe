@@ -10,21 +10,34 @@ import NotificationCard from "../NotificationCard";
 import { fetchLogout } from "../../sevices/authApi";
 import { useNavigate } from "react-router";
 import useUserStore from "../../stores/userStore";
+import { useEffect } from "react";
+import { fetchGetUserData } from "../../sevices/userApi";
 
 const Header = () => {
   const [isDropdownProfile, setIsDropdownProfile] = useState(false);
   const [isDropdownNotification, setIsDropdownNotification] = useState(false);
+  const [userData, setUserData] = useState();
   const navigate = useNavigate();
-  const { userData, clearUserData } = useUserStore();
+  const { isAdmin, setIsAdmin } = useUserStore();
+  const clearIsAdminStorage = useUserStore.persist.clearStorage;
 
   const sortedNotificationList = notificationList.data.sort(
     (a, b) => b.id - a.id
   );
 
+  useEffect(() => {
+    const getUserData = async () => {
+      const loginUserData = await fetchGetUserData();
+      setUserData(loginUserData.data);
+    };
+    getUserData();
+  }, []);
+
   const handleClickLogoutButton = async () => {
     const res = await fetchLogout();
     if (res.status === 200) {
-      clearUserData();
+      clearIsAdminStorage();
+      setIsAdmin(null);
       navigate("/");
     }
   };
@@ -61,12 +74,12 @@ const Header = () => {
             <FaCircleUser size={34} />
             {isDropdownProfile && (
               <div className="p-5 rounded-2xl bg-white shadow-[0_0_40px_-10px_#0000003f] absolute top-20 right-5 flex flex-col justify-center items-center gap-3 z-50 text-gray-400">
-                {!userData?.is_admin && (
+                {!isAdmin && (
                   <Link to={"/my_page"} className="hover:text-black">
                     마이페이지
                   </Link>
                 )}
-                {userData?.is_admin && <div>{userData.email}</div>}
+                {isAdmin && <div>{userData?.email}</div>}
                 <button
                   onClick={handleClickLogoutButton}
                   className="cursor-pointer hover:text-black"

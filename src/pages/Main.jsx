@@ -15,12 +15,12 @@ const Main = () => {
   const thisMonth = currentDate.getMonth() + 1;
   const [isAddScheduleOpen, setIsAddScheduleOpen] = useState(false);
   const [pickedDate, setPickedDate] = useState(null);
-  const { userData } = useUserStore();
+  const { isAdmin } = useUserStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userData === null) navigate("/login");
-  }, [userData, navigate]);
+    if (isAdmin === null) navigate("/login");
+  }, [isAdmin, navigate]);
 
   const handleClickPrev = () => {
     setCurrentDate((prev) => new Date(prev.setMonth(prev.getMonth() - 1)));

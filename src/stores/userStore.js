@@ -1,12 +1,17 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-const useUserStore = create((set) => ({
-  userData: null,
-  isAdmin: false,
+const useUserStore = create(
+  persist(
+    (set) => ({
+      isAdmin: null,
 
-  setIsAdmin: (state) => set({ isAdmin: state }),
-  setUserData: (newUserData) => set({ userData: newUserData }),
-  clearUserData: () => set({ userData: null }),
-}));
+      setIsAdmin: (state) => set({ isAdmin: state }),
+    }),
+    {
+      name: "isAdminStorage",
+    }
+  )
+);
 
 export default useUserStore;

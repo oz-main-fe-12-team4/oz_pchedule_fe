@@ -3,12 +3,17 @@ import UserCard from "../components/UserCard.jsx";
 import Input from "../components/common/Input.jsx";
 import Button from "../components/common/Button.jsx";
 import { useLoaderData } from "react-router";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import useUserStore from "../stores/userStore.js";
 
 function AdminPage() {
   const data = useLoaderData();
   const userList = data.data;
   const [searchQuery, setSearchQuery] = useState("");
   const [isReportedOnly, setIsReportedOnly] = useState(false);
+  const navigate = useNavigate();
+  const { isAdmin } = useUserStore();
 
   // 검색어와 필터링 상태에 따라 유저 목록을 동적으로 필터링
   const filteredUsers = userList.filter((user) => {
@@ -18,6 +23,11 @@ function AdminPage() {
     const matchesFilter = isReportedOnly ? user.is_reported : true;
     return matchesSearch && matchesFilter;
   });
+
+  useEffect(() => {
+    if (isAdmin === null) navigate("/login");
+    if (!isAdmin) navigate("/");
+  }, [isAdmin, navigate]);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);

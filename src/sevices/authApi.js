@@ -1,5 +1,5 @@
 import axios from "axios";
-import { fetchGetUserData } from "./userApi";
+// import { fetchGetUserData } from "./userApi";
 
 export const api = axios.create({
   baseURL: import.meta.env?.VITE_API_BASE_URL,
@@ -59,15 +59,15 @@ export const fetchLogin = async (email, password) => {
     const res = await api.post("/user/login", userData);
     if (!res) throw new Error("로그인 응답이 없음.");
 
-    if (res.status === 200 && res.data?.is_admin === true) {
-      return {
-        userData: await fetchGetUserData(),
-        is_admin: true,
-      };
-    }
+    // if (res.status === 200 && res.data?.is_admin === true) {
+    //   return {
+    //     userData: await fetchGetUserData(),
+    //     is_admin: true,
+    //   };
+    // }
 
     if (res.status === 200) {
-      return { userData: await fetchGetUserData(), is_admin: false };
+      return res.data.is_admin;
     }
 
     if (res.status === 403)
