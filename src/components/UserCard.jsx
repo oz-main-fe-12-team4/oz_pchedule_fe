@@ -9,11 +9,13 @@ import {
 } from "../sevices/userApi";
 
 export default function UserCard({ user }) {
-  const { name, email, is_active, is_reported, report_reason } = user;
+  const { id, name, email, is_active, is_reported, report_reason } = user;
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const handleLockAccount = async () => {
-    is_active ? await fetchPostUserDeactivate() : await fetchPostUserActivate();
+    is_active
+      ? await fetchPostUserDeactivate(id)
+      : await fetchPostUserActivate(id);
   };
 
   const handleClickDeleteButton = () => {
