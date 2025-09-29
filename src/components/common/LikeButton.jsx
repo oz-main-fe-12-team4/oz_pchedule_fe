@@ -1,49 +1,65 @@
-// src/components/common/LikeButton.jsx
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { useDebounce } from "../../hooks/useDebounce";
+import { likeSchedule, unlikeSchedule } from "../../sevices/likeApi";
 
 export default function LikeButton({
   size = 20,
   scheduleId,
-  apiBase, // 넘겨주면 우선 사용
-  token, // 넘겨주면 우선 사용
-  onMessage, // 선택: 토스트 핸들러
+  token,
+  onMessage,
 }) {
+  console.log("[LikeButton] render");
   const [isLiked, setIsLiked] = useState(false);
-  const [count, setCount] = useState(undefined);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const debouncedLike = useDebounce(isLiked, 300);
 
-  useEffect(() => {
-    // 필요하면 여기서 초기 조회(GET) 붙이면 됨
-  }, [debouncedLike]);
+  async function handleClick() {
+    console.log("[LikeButton] clicked", { scheduleId, isLiked, loading });
+    if (loading) return;
+    if (!scheduleId || (typeof scheduleId === "string" && !scheduleId.trim())) {
+      alert("scheduleId가 없습니다.");
+      return;
+    }
+    setLoading(true);
+    const prev = isLiked;
+    setIsLiked(!prev);
+    try {
+      const accessToken =
+        token ||
+        (typeof window !== "undefined"
+          ? localStorage.getItem("access_token")
+          : "");
+      const data = prev
+        ? await unlikeSchedule(scheduleId, accessToken)
+        : await likeSchedule(scheduleId, accessToken);
+      if (data?.message)
+        onMessage ? onMessage(data.message) : alert(data.message);
+    } catch (e) {
+      setIsLiked(prev); // 롤백
+      console.error(e);
+      alert(e?.message || "요청 실패");
+    } finally {
+      setLoading(false);
+      console.log("[LikeButton] done");
+    }
+  }
 
   return (
-    <div style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-      <button
-        style={{ padding: 8, cursor: "pointer" }}
-        title={isLiked ? "좋아요 취소" : "좋아요"}
-        onClick={handleClick}
-        disabled={loading}
-        aria-pressed={isLiked}
-      >
-        {isLiked ? (
-          <FaHeart size={size} className="text-red-500" />
-        ) : (
-          <FaRegHeart size={size} className="text-gray-400" />
-        )}
-      </button>
-      {typeof count === "number" ? (
-        <span className="text-sm text-gray-600">{count}</span>
-      ) : null}
-      {!scheduleId || !resolvedApiBase ? (
-        <span style={{ fontSize: 12, color: "#888" }}>
-          scheduleId와 API Base를 입력해줘.
-        </span>
-      ) : null}
-      {error ? <span className="sr-only">에러: {error}</span> : null}
-    </div>
+    <button
+      onClick={handleClick}
+      disabled={loading}
+      style={{
+        padding: 12,
+        cursor: loading ? "not-allowed" : "pointer",
+        pointerEvents: "auto",
+      }}
+      aria-pressed={isLiked}
+      title={isLiked ? "좋아요 취소" : "좋아요"}
+    >
+      {isLiked ? (
+        <FaHeart size={size} color="#ef4444" />
+      ) : (
+        <FaRegHeart size={size} color="#9ca3af" />
+      )}
+    </button>
   );
 }
