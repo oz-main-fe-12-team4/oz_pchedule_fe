@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
 
-export const useDebounce = (value, delay) => {
-  const [debounce, setDebounce] = useState();
-
+export function useDebounce(value, delay) {
+  const [debouncedValue, setDebouncedValue] = useState(value); // 초기값 value 주기
   useEffect(() => {
-    const debounceValue = setTimeout(() => {
-      setDebounce(value);
-    }, delay);
-    return () => clearTimeout(debounceValue);
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(handler);
   }, [value, delay]);
-
-  return debounce;
-};
+  return debouncedValue;
+}

@@ -1,15 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDebounce } from "../../hooks/useDebounce";
 
 const Input = ({
   label,
   inputId,
+  value,
   setValue,
   errorMessage,
   compareValue = null,
   ...props
 }) => {
   const [isError, setIsError] = useState(false);
-
+  const debouncedInput = useDebounce(value, 500);
+  // 디바운스된 검색어 값이 바뀔 때 처리할 작업(예: API 호출)
+  useEffect(() => {
+    if (debouncedInput !== "") {
+      console.log("디바운스된 검색어 값:", debouncedInput);
+      // 여기서 검색 API 호출 등 작업 추가 가능해
+    }
+  }, [debouncedInput]);
   const handleChange = (e) => {
     setValue(e.target.value);
 
