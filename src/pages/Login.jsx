@@ -4,7 +4,7 @@ import logo from "../assets/Logo.svg";
 import googleLogo from "../assets/google.png";
 import naverLogo from "../assets/naver.png";
 import kakaoLogo from "../assets/kakao.png";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import Button from "../components/common/Button";
 import { fetchLogin } from "../services/authApi";
 import useUserStore from "../stores/userStore";

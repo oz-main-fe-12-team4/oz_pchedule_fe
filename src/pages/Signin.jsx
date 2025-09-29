@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Input from "../components/common/Input";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import logo from "../assets/Logo.svg";
 import Button from "../components/common/Button";
 import { REG_EXP } from "../constants/regExp";
@@ -12,18 +12,34 @@ const Signin = () => {
   const [emailInputValue, setEmailInputValue] = useState("");
   const [passwordInputValue, setPasswordInputValue] = useState("");
   const [checkPasswordInputValue, setCheckPasswordInputValue] = useState("");
-  const [signinError, setSigninError] = useState();
+  const [signinError, setSigninError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const isPasswordMatch = passwordInputValue === checkPasswordInputValue;
+    if (!isPasswordMatch) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
     const res = await fetchSignin(
       emailInputValue,
       passwordInputValue,
       nameInputValue
     );
-    if (!res) return;
 
-    setSigninError(res);
+    if (res) {
+      setSigninError(res);
+    } else {
+      alert("회원가입이 완료되었습니다.");
+      console.log("회원가입 정보:", {
+        name: nameInputValue,
+        email: emailInputValue,
+        password: passwordInputValue,
+      });
+      setSigninError(null);
+    }
   };
 
   return (
@@ -87,9 +103,7 @@ const Signin = () => {
             compareValue={passwordInputValue}
           />
         </div>
-        {
-          signinError && <div>{signinError}</div> // response 확인해보고 변경해야함.
-        }
+        {signinError && <div>{signinError}</div>}
         <Button type="submit" variant={"login"} children={"회원가입"} />
       </form>
       <p className="w-[300px] text-center p-8 border-t border-[#d9d9d9]">

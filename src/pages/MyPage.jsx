@@ -3,9 +3,9 @@ import { FaUserCircle, FaHeart, FaBookmark, FaPencilAlt } from "react-icons/fa";
 import Input from "../components/common/Input.jsx";
 import Button from "../components/common/Button.jsx";
 import ConfirmModal from "../components/common/ConfirmModal.jsx";
-import { user1 } from "../assets/data/dummyUser.js";
+import { dummyUser } from "../assets/data/dummyUser.js";
 import { fetchChangePassword, fetchWithdrawUser } from "../sevices/authApi.js";
-import Header from "../components/common/Header.jsx";
+import Header from "../components/layout/Header.jsx";
 
 function MyPage() {
   const [currentPassword, setCurrentPassword] = useState("");
