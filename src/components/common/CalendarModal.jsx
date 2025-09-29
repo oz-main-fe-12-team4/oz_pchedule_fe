@@ -4,7 +4,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
 const CalendarModal = ({
-  variant = "range", // 'single' or 'range'
+  variant = "range", // 'single' , 'range'
   onDateChange,
   showTodayButton = true,
   width = 400,

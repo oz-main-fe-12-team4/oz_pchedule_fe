@@ -1,16 +1,15 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import timeUtils from "../../utils/timeUtils";
 import Button from "../common/Button";
+
 const { clamp, toMinutes, fromMinutes, parseInput, formatTime, snapToStep } =
   timeUtils;
 
 const ITEM_H = 36;
-// 0~n-1 배열 생성 (시,분)
 const range = (n) => Array.from({ length: n }, (_, i) => i);
 
 const TimePicker = ({
   value,
-  defaultValue,
   onChange,
   minuteStep = 1,
   min,
@@ -20,90 +19,35 @@ const TimePicker = ({
   className,
 }) => {
   const [open, setOpen] = useState(false);
-  const [internal, setInternal] = useState(
-    () => value ?? defaultValue ?? "00:00"
-  );
-  const [temp, setTemp] = useState(() => internal);
-
   const rootRef = useRef(null);
   const hourRef = useRef(null);
   const minuteRef = useRef(null);
 
-  // useMemo를 써서 min이나 max가 바뀔 때만 계산
-  // 휠 스크롤에서 선택할 수 있는 최소 시간을 분 단위 계산
-  const minMins = useMemo(
-    () => (min ? toMinutes(parseInput(min) ?? { h: 0, m: 0 }) : 0),
-    [min]
-  );
-  // 휠 스크롤에서 선택할 수 있는 최대 시간을 분 단위로 계산
-  const maxMins = useMemo(
-    () => (max ? toMinutes(parseInput(max) ?? { h: 23, m: 59 }) : 23 * 60 + 59),
-    [max]
-  );
+  //제한된 시간만 선택할 수 있게
+  const minMins = min ? toMinutes(parseInput(min)) : 0;
+  const maxMins = max ? toMinutes(parseInput(max)) : 23 * 60 + 59;
 
-  useEffect(() => {
-    if (value !== undefined) setInternal(value);
-  }, [value]);
+  // 현재 value를 기준으로 시간 계산
+  const parsed = parseInput(value ?? "00:00") ?? { h: 0, m: 0 }; // value가 없으면 "00:00" 사용
+  const curHourIdx = parsed.h; //시간은 그대로 인덱스로 사용 (15시 = 인덱스 15)
+  const curMinuteIdx = Math.floor(parsed.m / minuteStep); //Wheel의 인덱스번호로 시간 선택하기위해서
 
-  const commit = (formatted) => {
-    if (disabled) return;
-    if (value === undefined) setInternal(formatted);
-    onChange?.(formatted);
-  };
-
-  useEffect(() => {
-    if (!open) return;
-    const cur = parseInput(internal || temp) ?? { h: 0, m: 0 };
-    const mins = clamp(
-      snapToStep(toMinutes(cur), minuteStep),
-      minMins,
-      maxMins
-    );
-    const { h, m } = fromMinutes(mins);
-
-    const scrollTo = (el, idx) => el && (el.scrollTop = idx * ITEM_H);
-
-    scrollTo(hourRef.current, h);
-    scrollTo(minuteRef.current, m);
-
-    setTemp(formatTime(h, m));
-  }, [open, internal, temp, minuteStep, minMins, maxMins]);
-
-  useEffect(() => {
-    if (!open) return;
-    const onDown = (e) =>
-      !rootRef.current?.contains(e.target) && setOpen(false);
-    document.addEventListener("mousedown", onDown);
-    document.addEventListener("touchstart", onDown);
-    return () => {
-      document.removeEventListener("mousedown", onDown);
-      document.removeEventListener("touchstart", onDown);
-    };
-  }, [open]);
-
+  //선택을 실제 시간으로 변환
   const applyByIndex = (hIdx, mIdx) => {
-    const h = hIdx;
-    const m = clamp(mIdx * minuteStep, 0, 59);
-    const clamped = clamp(snapToStep(h * 60 + m, minuteStep), minMins, maxMins);
-    const { h: hh, m: mm } = fromMinutes(clamped);
-    setTemp(formatTime(hh, mm));
+    const actualMinute = mIdx * minuteStep;
+    const mins = clamp(hIdx * 60 + actualMinute, minMins, maxMins);
+    const { h, m } = fromMinutes(mins);
+    const out = formatTime(h, m);
+    onChange?.(out);
   };
-
-  const parsedTemp = parseInput(temp) ?? { h: 0, m: 0 };
-  const curHourIdx = parsedTemp.h;
-  const curMinuteIdx = parsedTemp.m;
-
-  const disabledCls = disabled ? "opacity-60 pointer-events-none" : "";
-
-  const hours = useMemo(() => range(24), []);
-  const minutes = useMemo(() => range(60), []);
 
   const setFromNow = () => {
     if (disabled) return;
     const d = new Date();
     const snapped = snapToStep(d.getHours() * 60 + d.getMinutes(), minuteStep);
     const { h, m } = fromMinutes(clamp(snapped, minMins, maxMins));
-    setTemp(formatTime(h, m));
+    const out = formatTime(h, m);
+    onChange?.(out);
   };
 
   return (
@@ -111,17 +55,21 @@ const TimePicker = ({
       <button
         type="button"
         onClick={() => !disabled && setOpen(true)}
-        className={`h-10 w-full rounded-md border px-3 text-left text-sm bg-white border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-200 ${disabledCls}`}
+        className={`h-10 w-full rounded-md border px-3 text-left text-sm bg-white border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-200 ${
+          disabled ? "opacity-60 pointer-events-none" : ""
+        }`}
       >
-        {internal || placeholder || "00:00"}
+        {value || placeholder || "00:00"}
       </button>
 
       {open && (
         <div
-          className={`absolute z-30 mt-2 w-[180px] rounded-md border border-gray-200 bg-white shadow-lg ${disabledCls}`}
+          className={`absolute z-30 mt-2 w-[180px] rounded-md border border-gray-200 bg-white shadow-lg ${
+            disabled ? "opacity-60 pointer-events-none" : ""
+          }`}
         >
           <div className="flex items-center justify-between px-4 py-3 border-b">
-            <div className="font-semibold">{temp}</div>
+            <div className="font-semibold">{value || "00:00"}</div>
             <button
               type="button"
               onClick={setFromNow}
@@ -140,7 +88,7 @@ const TimePicker = ({
             <div className="col-span-1">
               <Wheel
                 refEl={hourRef}
-                items={hours}
+                items={range(24)}
                 activeIndex={curHourIdx}
                 onSnap={(idx) => applyByIndex(idx, curMinuteIdx)}
               />
@@ -148,7 +96,9 @@ const TimePicker = ({
             <div className="col-span-1">
               <Wheel
                 refEl={minuteRef}
-                items={minutes.map((m) => m.toString().padStart(2, "0"))}
+                items={range(Math.floor(60 / minuteStep)).map((index) =>
+                  String(index * minuteStep).padStart(2, "0")
+                )}
                 activeIndex={curMinuteIdx}
                 onSnap={(idx) => applyByIndex(curHourIdx, idx)}
               />
@@ -160,7 +110,7 @@ const TimePicker = ({
             style={{ top: (180 - ITEM_H) / 2, height: ITEM_H }}
           />
 
-          <div className="flex justify-center gap-4 mb-2">
+          <div className="flex justify-center gap-4 mb-2 mt-2">
             <Button
               variant="cancel"
               type="button"
@@ -172,17 +122,13 @@ const TimePicker = ({
               variant="confirm"
               type="button"
               onClick={() => {
-                const p = parseInput(temp);
-                if (p) {
-                  const mins = clamp(
-                    snapToStep(toMinutes(p), minuteStep),
-                    minMins,
-                    maxMins
-                  );
-                  const { h, m } = fromMinutes(mins);
-                  const out = formatTime(h, m);
-                  commit(out);
-                }
+                const hIdx = hourRef.current?.dataset.idx
+                  ? Number(hourRef.current.dataset.idx)
+                  : curHourIdx;
+                const mIdx = minuteRef.current?.dataset.idx
+                  ? Number(minuteRef.current.dataset.idx)
+                  : curMinuteIdx;
+                applyByIndex(hIdx, mIdx);
                 setOpen(false);
               }}
             >
@@ -194,23 +140,39 @@ const TimePicker = ({
     </div>
   );
 };
-
+// 외부에서 전달한 DOM 참조 , 표시할 항목들 , 현재 선택된 인덱스 , 선택이 확정될 때 호출되는 함수
 const Wheel = ({ refEl, items, activeIndex, onSnap }) => {
   const localRef = useRef(null);
-  useEffect(() => {
-    const el = refEl?.current || localRef.current;
-    if (el) el.scrollTop = activeIndex * ITEM_H;
-  }, [activeIndex, refEl]);
+  const [currentIndex, setCurrentIndex] = useState(activeIndex);
 
+  // Wheel이 처음 열릴 때, 또는 activeIndex가 바뀔 때 해당 위치로 즉시 스크롤
+  useEffect(() => {
+    const el = refEl?.current || localRef.current; //외부/내부 ref 모두 지원
+    if (el) {
+      el.scrollTop = activeIndex * ITEM_H;
+      el.dataset.idx = activeIndex;
+    }
+    setCurrentIndex(activeIndex);
+  }, [activeIndex, refEl]); //사용자가 다른 시간을 선택했을 때 , 컴포넌트가 처음 마운트될 때
+
+  //사용자가 스크롤을 멈추면, 가장 가까운 항목에 딱 맞춰서 스냅
   useEffect(() => {
     const el = refEl?.current || localRef.current;
     if (!el) return;
+
+    // 스크롤 이벤트 디바운싱을 막고 마지막 이벤트만 처리하기 위해
     let to;
     const onScroll = () => {
       clearTimeout(to);
       to = setTimeout(() => {
-        const idx = Math.round(el.scrollTop / ITEM_H);
+        const maxIndex = items.length - 1;
+        const idx = Math.min(
+          maxIndex,
+          Math.max(0, Math.round(el.scrollTop / ITEM_H))
+        );
         el.scrollTo({ top: idx * ITEM_H, behavior: "smooth" });
+        setCurrentIndex(idx);
+        el.dataset.idx = idx; // 현재 선택 인덱스를 ref DOM에 기록
         onSnap?.(idx);
       }, 80);
     };
@@ -228,11 +190,11 @@ const Wheel = ({ refEl, items, activeIndex, onSnap }) => {
       style={{ scrollBehavior: "smooth" }}
     >
       <div style={{ height: `${(180 - ITEM_H) / 2}px` }} />
-      {items.map((it, i) => (
+      {items.map((it, idx) => (
         <div
-          key={i}
+          key={idx}
           className={`snap-center h-[36px] flex items-center justify-center text-sm ${
-            i === activeIndex ? "text-black" : "text-gray-500"
+            idx === currentIndex ? "text-black" : "text-gray-300"
           }`}
         >
           {typeof it === "number" ? it.toString().padStart(2, "0") : it}
