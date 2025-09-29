@@ -6,7 +6,7 @@ import naverLogo from "../assets/naver.png";
 import kakaoLogo from "../assets/kakao.png";
 import { Link } from "react-router";
 import Button from "../components/common/Button";
-import { fetchLogin } from "../sevices/authApi";
+import { fetchLogin } from "../services/authApi";
 import useUserStore from "../stores/userStore";
 import { useNavigate } from "react-router";
 

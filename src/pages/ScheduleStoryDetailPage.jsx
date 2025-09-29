@@ -12,6 +12,7 @@ import { useNavigate } from "react-router";
 import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
 import { useState } from "react";
 import { toDate, toTimeString } from "../utils/dateFormat";
+import { fetchPutDetailSchedule } from "../services/scheduleApi";
 
 function ScheduleStoryDetailPage() {
   const navigate = useNavigate();
@@ -43,12 +44,41 @@ function ScheduleStoryDetailPage() {
     });
     setIsEditModalOpen(true);
   };
-  const handleEditSubmitMain = (payload) => {
-    setSchedules((prev) =>
-      prev.map((sch) => (sch.id === payload.id ? { ...sch, ...payload } : sch))
-    );
-    setIsEditModalOpen(false);
-    setScheduleToEdit(null);
+
+  //onSubmit에서 api 호출 { id, title, description, start_time, end_time, detailSchedules }
+  const handleEditSubmitDetail = async (payload) => {
+    try {
+      const res = await fetchPutDetailSchedule(
+        payload.id, // detailScheduleId
+        payload.title, // title
+        payload.description, // description
+        payload.start_time, // startTime
+        payload.end_time, // endTime
+        payload.is_completed ?? false // isCompleted
+      );
+
+      // 로컬 상태 업데이트
+      setSchedules((prev) =>
+        prev.map((sch) =>
+          sch.id === payload.id
+            ? {
+                ...sch,
+                title: payload.title ?? sch.title,
+                description: payload.description ?? sch.description,
+                start_time: payload.start_time ?? sch.start_time,
+                end_time: payload.end_time ?? sch.end_time,
+                is_completed: payload.is_completed ?? sch.is_completed,
+              }
+            : sch
+        )
+      );
+
+      setIsEditModalOpen(false);
+      setScheduleToEdit(null);
+      return res;
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -164,7 +194,7 @@ function ScheduleStoryDetailPage() {
           defaultEndDate={scheduleToEdit.defaultEndDate}
           defaultStartTime={scheduleToEdit.defaultStartTime}
           defaultEndTime={scheduleToEdit.defaultEndTime}
-          onSubmit={handleEditSubmitMain}
+          onSubmit={handleEditSubmitDetail}
           onClose={() => {
             setIsEditModalOpen(false);
             setScheduleToEdit(null);

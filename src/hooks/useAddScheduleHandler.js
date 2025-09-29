@@ -2,14 +2,13 @@ import { useEffect, useRef } from "react";
 import useScheduleStore from "../stores/useScheduleStore";
 import {
   toDate,
-  toTime,
   toApiDate,
   toPeriod,
   recurrenceToArgs,
   toTimeString,
 } from "../utils/dateFormat";
 
-import { fetchPostSchedule, fetchPutSchedules } from "../sevices/scheduleApi";
+import { fetchPostSchedule, fetchPutSchedules } from "../services/scheduleApi";
 
 export default function useAddScheduleHandlers(props) {
   const {
@@ -41,6 +40,7 @@ export default function useAddScheduleHandlers(props) {
     setActiveDate,
     setOpenFilter,
     saveMainSchedule,
+    setLoading,
   } = useScheduleStore();
 
   useEffect(() => {
@@ -111,6 +111,8 @@ export default function useAddScheduleHandlers(props) {
   const handleFilterToggle = (key) => setOpenFilter(key);
 
   const handleSaveMainSchedule = async (onClose) => {
+    // onSubmit로 api 호출없이 바로 콜백
+    // onSubmit이 없을 때는 API 저장 + 스토어 최신화 + 모달 닫기
     if (onSubmit) {
       const payload = {
         id,
@@ -127,9 +129,14 @@ export default function useAddScheduleHandlers(props) {
       return;
     }
 
-    const start_period = toTime(mainSchedule.startDate);
-    const end_period = toTime(
-      sameEndToStart ? mainSchedule.startDate : mainSchedule.endDate
+    // api 저장하기
+    const start_period = toApiDate(
+      mainSchedule.startDate,
+      mainSchedule.startTime
+    );
+    const end_period = toApiDate(
+      sameEndToStart ? mainSchedule.startDate : mainSchedule.endDate,
+      mainSchedule.endTime
     );
 
     const {
@@ -147,57 +154,69 @@ export default function useAddScheduleHandlers(props) {
     const isSomeday = mainSchedule.filters.isSomeday ?? false;
     const detailSchedules = Array.isArray(subSchedules) ? subSchedules : [];
 
-    let result;
-    if (id) {
-      result = await fetchPutSchedules(
-        id,
-        mainTitle,
-        start_period,
-        end_period,
-        category,
-        priority,
-        shareType,
-        isRecurrence,
-        recurrenceType,
-        recurrenceWeekdays,
-        recurrenceDay,
-        recurrenceMonth,
-        isSomeday,
-        detailSchedules
-      );
-    } else {
-      result = await fetchPostSchedule(
-        mainTitle,
-        start_period,
-        end_period,
-        category,
-        priority,
-        shareType,
-        isRecurrence,
-        recurrenceType,
-        recurrenceWeekdays,
-        recurrenceDay,
-        recurrenceMonth,
-        isSomeday,
-        detailSchedules
-      );
-    }
+    // 로딩중이라면
+    setLoading?.(true);
+    try {
+      let result;
+      if (id) {
+        result = await fetchPutSchedules(
+          id,
+          mainTitle,
+          start_period,
+          end_period,
+          category,
+          priority,
+          shareType,
+          isRecurrence,
+          recurrenceType,
+          recurrenceWeekdays,
+          recurrenceDay,
+          recurrenceMonth,
+          isSomeday,
+          detailSchedules
+        );
+      } else {
+        result = await fetchPostSchedule(
+          mainTitle,
+          start_period,
+          end_period,
+          category,
+          priority,
+          shareType,
+          isRecurrence,
+          recurrenceType,
+          recurrenceWeekdays,
+          recurrenceDay,
+          recurrenceMonth,
+          isSomeday,
+          detailSchedules
+        );
+      }
 
-    if (result) {
-      saveMainSchedule({
-        id: result.id ?? id ?? null,
-        title: mainTitle,
-        description: mainSchedule.description || content || "",
-        start_time: start_period,
-        end_time: end_period,
-        filters: mainSchedule.filters,
-        isRecurrence,
-        recurrenceType,
-        recurrenceWeekdays,
-        recurrenceDay,
-        recurrenceMonth,
-      });
-      if (onClose) onClose(result);
+      // 성공일때 스토어 동기화
+      if (result) {
+        saveMainSchedule({
+          id: result.id ?? id ?? null,
+          title: mainTitle,
+          description: mainSchedule.description || content || "",
+          start_time: start_period,
+          end_time: end_period,
+          filters: mainSchedule.filters,
+          isRecurrence,
+          recurrenceType,
+          recurrenceWeekdays,
+          recurrenceDay,
+          recurrenceMonth,
+        });
+
+        onClose?.(result);
+      }
+      return result;
+    } catch (e) {
+      console.error("[handleSaveMainSchedule] save failed:", e);
+      throw e;
+    } finally {
+      setLoading?.(false);
     }
   };
 
@@ -215,6 +234,8 @@ export default function useAddScheduleHandlers(props) {
     handleFilterToggle,
     handleSaveMainSchedule,
     toTimeString,
+
+    // TimePicker에서 바로 store 값을 바꿀 수 있도록
     setStartTime: (time) => setMainSchedule("startTime", time),
     setEndTime: (time) => setMainSchedule("endTime", time),
   };

@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import toTimeString from "../utils/dateFormat";
 
 const mainScheduleTemplate = {
   id: null,
@@ -78,19 +79,32 @@ const useScheduleStore = create((set) => ({
   },
 
   saveMainSchedule({ id, title, description, start_time, end_time, filters }) {
-    const payload = {
-      id,
-      title,
-      description,
-      start_time,
-      end_time,
-      filters,
-      mainScheduleSaved: true,
-      savedContent: description || title,
-    };
-    set((state) => ({
-      mainSchedule: { ...state.mainSchedule, ...payload },
-    }));
+    set((state) => {
+      const nextStartTime =
+        typeof start_time === "string"
+          ? toTimeString(start_time)
+          : state.mainSchedule.startTime;
+
+      const nextEndTime =
+        typeof end_time === "string"
+          ? toTimeString(end_time)
+          : state.mainSchedule.endTime;
+
+      const payload = {
+        id,
+        title,
+        description,
+        start_time,
+        end_time,
+        startTime: nextStartTime,
+        endTime: nextEndTime,
+        filters,
+        mainScheduleSaved: true,
+        savedContent: description || title,
+      };
+
+      return { mainSchedule: { ...state.mainSchedule, ...payload } };
+    });
   },
 
   clearMainSchedule() {

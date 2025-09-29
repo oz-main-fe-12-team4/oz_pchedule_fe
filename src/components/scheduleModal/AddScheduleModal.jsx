@@ -1,4 +1,3 @@
-// src/components/schedule/AddScheduleModal.jsx
 import SubScheduleModal from "./SubScheduleModal";
 import MainScheduleModal from "./MainScheduleModal";
 import { toDate } from "../../utils/dateFormat";
