@@ -1,9 +1,13 @@
-name: CI (React + Vite, npm, Node 22.17)
+name: CI / CD (React + Vite, npm, Node 22.17)
 
 on:
   push:
     branches: [main, dev]
   pull_request:
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   build-test:
@@ -27,3 +31,44 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Select role by branch
+        if: github.event_name == 'push'
+        id: role
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+          echo "role_arn=arn:aws:iam::243429551485:role/pchedule-deploy-prod" >> $GITHUB_OUTPUT
+          else
+          echo "role_arn=arn:aws:iam::243429551485:role/pchedule-deploy-dev" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Configure AWS credentials (OIDC)
+        if: github.event_name == 'push'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ steps.role.outputs.role_arn }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Select bucket
+        if: github.event_name == 'push'
+        id: bucket
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            echo "bucket=${{secrets.AWS_PROD_BUCKET_NAME}}" >> $GITHUB_OUTPUT
+          else
+            echo "bucket=${{secrets.AWS_DEV_BUCKET_NAME}}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload assets (long cache)
+        if: github.event_name == 'push'
+        run: |
+          aws s3 sync dist/ s3://${{ steps.bucket.outputs.bucket }}/ \
+            --delete \
+            --exclude "index.html" \
+            --cache-control "public, max-age=31536000, immutable"
+
+      - name: Upload index.html (short cache)
+        if: github.event_name == 'push'
+        run: |
+          aws s3 cp dist/index.html s3://${{ steps.bucket.outputs.bucket }}/index.html \
+            --cache-control "public, max-age=60"
