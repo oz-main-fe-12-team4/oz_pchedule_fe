@@ -42,3 +42,46 @@ export const toPeriod = (dateInput, min, max) => {
   if (max && date > max) return max;
   return date;
 };
+
+//반복 필터링을 api 보낼때
+export const recurrenceToArgs = ({ repeat = "none", repeatSub } = {}) => {
+  const isRecurrence = repeat !== "none";
+  const recurrenceType = repeat;
+
+  let recurrenceWeekdays = [];
+  let recurrenceDay = "";
+  let recurrenceMonth = "";
+
+  switch (repeat) {
+    case "weekly":
+      recurrenceWeekdays = Array.isArray(repeatSub) ? repeatSub : [];
+      break;
+
+    case "monthly":
+      recurrenceDay = String(
+        Array.isArray(repeatSub) ? repeatSub[0] ?? "" : repeatSub ?? ""
+      );
+      break;
+
+    case "yearly":
+      if (Array.isArray(repeatSub)) {
+        recurrenceMonth = String(repeatSub[0] ?? "");
+        recurrenceDay = String(repeatSub[1] ?? "");
+      } else if (repeatSub && typeof repeatSub === "object") {
+        recurrenceMonth = String(repeatSub.month ?? repeatSub.months ?? "");
+        recurrenceDay = String(repeatSub.day ?? repeatSub.days ?? "");
+      }
+      break;
+
+    default:
+      break;
+  }
+
+  return {
+    isRecurrence,
+    recurrenceType,
+    recurrenceWeekdays,
+    recurrenceDay,
+    recurrenceMonth,
+  };
+};

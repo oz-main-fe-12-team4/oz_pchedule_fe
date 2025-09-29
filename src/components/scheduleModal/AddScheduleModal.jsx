@@ -7,7 +7,9 @@ import {
   toTimeString,
   toApiDate,
   toPeriod,
+  recurrenceToArgs,
 } from "../../utils/dateFormat";
+import useScheduleStore from "../../stores/useScheduleStore";
 
 const AddScheduleModal = ({
   id,
@@ -54,6 +56,8 @@ const AddScheduleModal = ({
   const [calendarModal, setCalendarModal] = useState(false);
   const [activeDate, setActiveDate] = useState(null);
 
+  const { saveSchedule } = useScheduleStore.getState();
+
   const openCalendar = (dateType) => {
     setActiveDate(dateType);
     setCalendarModal(true);
@@ -67,7 +71,11 @@ const AddScheduleModal = ({
 
   const handleDateSelect = (selected) => {
     if (!selected) return;
-    const rangeDate = toPeriod(selected, periodStart, periodEnd);
+    const rangeDate = toPeriod(
+      selected,
+      periodStart ? toDate(periodStart) : undefined,
+      periodEnd ? toDate(periodEnd) : undefined
+    );
 
     if (sameEndToStart) {
       setStartDate(rangeDate);
@@ -86,33 +94,52 @@ const AddScheduleModal = ({
   };
 
   const handleSaveMainSchedule = () => {
-    const payload = {
-      id, // 상위에서 내려준 id
+    if (onSubmit) {
+      const payload = {
+        id,
+        title: titleValue,
+        description: contentValue,
+        start_time: toApiDate(startDate, startTime),
+        end_time: toApiDate(sameEndToStart ? startDate : endDate, endTime),
+      };
+      onSubmit(payload);
+      setSavedContent(contentRef.current?.value ?? titleValue);
+      if (showSub) setMainScheduleSaved(true);
+      return;
+    }
+
+    // 생성/수정 공통 저장
+    const start_period = toTime(startDate);
+    const end_period = toTime(sameEndToStart ? startDate : endDate);
+
+    const {
+      isRecurrence,
+      recurrenceType,
+      recurrenceWeekdays,
+      recurrenceDay,
+      recurrenceMonth,
+    } = recurrenceToArgs(filters);
+
+    saveSchedule({
+      id,
       title: titleValue,
-      description: contentValue,
-      start_time: toApiDate(startDate, startTime),
-      end_time: toApiDate(endDate, endTime),
-    };
-    onSubmit?.(payload);
-    setSavedContent(contentRef.current.value);
+      start_period,
+      end_period,
+      category: filters.category,
+      priority: filters.priority,
+      share: filters.share,
+      isRecurrence,
+      recurrenceType,
+      recurrenceWeekdays,
+      recurrenceDay,
+      recurrenceMonth,
+      detailSchedules: [],
+    });
+
+    setSavedContent(contentRef.current?.value ?? titleValue);
     if (showSub) setMainScheduleSaved(true);
   };
 
-  // useEffect(() => {
-  //   if (defaultStartDate)
-  //     setStartDate(toPeriod(toDate(defaultStartDate), periodStart, periodEnd));
-  //   if (defaultEndDate)
-  //     setEndDate(toPeriod(toDate(defaultEndDate), periodStart, periodEnd));
-  //   if (defaultStartTime) setStartTime(defaultStartTime);
-  //   if (defaultEndTime) setEndTime(defaultEndTime);
-  // }, [
-  //   defaultStartDate,
-  //   defaultEndDate,
-  //   defaultStartTime,
-  //   defaultEndTime,
-  //   periodStart,
-  //   periodEnd,
-  // ]);
   useEffect(() => {
     if (sameEndToStart && startDate) {
       setEndDate(startDate);
@@ -132,7 +159,7 @@ const AddScheduleModal = ({
           startDate={startDate}
           endDate={sameEndToStart ? startDate : endDate}
           setStartDate={setStartDate}
-          setEndDate={sameEndToStart ? startDate : setEndDate}
+          setEndDate={setEndDate}
           startTime={startTime}
           endTime={endTime}
           setStartTime={setStartTime}
