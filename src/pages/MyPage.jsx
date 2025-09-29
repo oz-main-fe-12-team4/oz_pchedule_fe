@@ -5,6 +5,7 @@ import Button from "../components/common/Button.jsx";
 import ConfirmModal from "../components/common/ConfirmModal.jsx";
 import { user1 } from "../assets/data/dummyUser.js";
 import { fetchChangePassword, fetchWithdrawUser } from "../sevices/authApi.js";
+import Header from "../components/common/Header.jsx";
 
 function MyPage() {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -60,7 +61,9 @@ function MyPage() {
   };
 
   return (
-    <div className="p-5 max-w-2xl mx-auto font-sans">
+    // 상단 패딩(pt-20)을 추가해 헤더가 내용을 가리지 않도록 합니다.
+    <div className="p-5 max-w-2xl mx-auto font-sans pt-20">
+      <Header /> {/* 헤더 컴포넌트 추가 */}
       <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
         <aside className="w-full md:w-1/3 p-6 bg-white rounded-xl shadow-md border border-gray-200">
           <section className="flex flex-col items-center text-center">
@@ -167,7 +170,6 @@ function MyPage() {
           </section>
         </main>
       </div>
-
       {isModalOpen && (
         <ConfirmModal
           isOpen={isModalOpen}
