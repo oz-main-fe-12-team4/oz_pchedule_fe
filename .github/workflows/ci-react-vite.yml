@@ -72,3 +72,5 @@ jobs:
         run: |
           aws s3 cp dist/index.html s3://${{ steps.bucket.outputs.bucket }}/index.html \
             --cache-control "public, max-age=60"
+
+
