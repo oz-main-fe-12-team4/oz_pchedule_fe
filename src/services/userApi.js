@@ -1,4 +1,4 @@
-import { api } from "./authApi";
+import { api } from "./api";
 
 export const fetchGetUserData = async () => {
   try {
