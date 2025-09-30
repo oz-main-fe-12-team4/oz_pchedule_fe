@@ -76,11 +76,12 @@ export default function useAddScheduleHandlers(props) {
     }
   }, [sameEndToStart, mainSchedule.startDate, setMainSchedule]);
 
-  const openCalendarHandler = (dateType) => {
-    setActiveDate(dateType);
-    setCalendarModal(true);
-  };
-  const closeCalendarHandler = () => setCalendarModal(false);
+  const openCalendarHandler = (dateType) =>
+    useScheduleStore.getState().openCalendar?.(dateType) ??
+    (setActiveDate(dateType), setCalendarModal(true));
+
+  const closeCalendarHandler = () =>
+    useScheduleStore.getState().closeCalendar?.() ?? setCalendarModal(false);
 
   const handleDateSelect = (selected) => {
     if (!selected) return;

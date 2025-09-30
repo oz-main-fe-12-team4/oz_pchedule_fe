@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import toTimeString from "../utils/dateFormat";
+import { toTimeString } from "../utils/dateFormat";
 
 const mainScheduleTemplate = {
   id: null,
@@ -12,7 +12,7 @@ const mainScheduleTemplate = {
   filters: {
     category: "daily",
     priority: "medium",
-    share: "나만보기",
+    share: "personalSchedule",
     repeat: "none",
     repeatSub: null,
   },
@@ -64,6 +64,14 @@ const useScheduleStore = create((set) => ({
 
   setCalendarModal(value) {
     set({ calendarModal: value });
+  },
+
+  openCalendar(dateType) {
+    set({ activeDate: dateType, calendarModal: true });
+  },
+
+  closeCalendar() {
+    set({ calendarModal: false, activeDate: null });
   },
 
   setActiveDate(value) {
