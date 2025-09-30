@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useDebounce } from "../../hooks/useDebounce"; // 유지
-import { likeSchedule, unlikeSchedule } from "../../sevices/likeApi";
+import { likeSchedule, unlikeSchedule } from "../../services/likeApi";
 
 export default function LikeButton({
   size = 20,

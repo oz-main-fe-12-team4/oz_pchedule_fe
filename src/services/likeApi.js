@@ -1,5 +1,5 @@
 // src/sevices/likeApi.js
-import api from "./api";
+import { api } from "./api";
 
 // false -> true
 export async function likeSchedule(scheduleId) {
