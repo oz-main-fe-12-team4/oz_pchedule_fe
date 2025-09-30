@@ -3,13 +3,19 @@ import { FaUserCircle, FaLock } from "react-icons/fa";
 import DeleteButton from "./common/DeleteButton";
 import ConfirmModal from "./common/ConfirmModal";
 import { useState } from "react";
+import {
+  fetchPostUserActivate,
+  fetchPostUserDeactivate,
+} from "../services/userApi";
 
 export default function UserCard({ user }) {
-  const { name, email, is_active, is_reported, report_reason } = user;
+  const { id, name, email, is_active, is_reported, report_reason } = user;
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
-  const handleLockAccount = () => {
-    console.log("계정 잠금/해제 API 호출");
+  const handleLockAccount = async () => {
+    is_active
+      ? await fetchPostUserDeactivate(id)
+      : await fetchPostUserActivate(id);
   };
 
   const handleClickDeleteButton = () => {

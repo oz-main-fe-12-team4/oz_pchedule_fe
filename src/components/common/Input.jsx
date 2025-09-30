@@ -15,7 +15,6 @@ const Input = ({
   // 디바운스된 검색어 값이 바뀔 때 처리할 작업(예: API 호출)
   useEffect(() => {
     if (debouncedInput !== "") {
-      console.log("디바운스된 검색어 값:", debouncedInput);
       // 여기서 검색 API 호출 등 작업 추가 가능해
     }
   }, [debouncedInput]);
@@ -23,7 +22,7 @@ const Input = ({
     setValue(e.target.value);
 
     const isValid = e.target.validity.valid;
-    // console.log(e.target.validity);
+
     const isMatch = compareValue === null || compareValue === e.target.value;
     setIsError(!isValid || !isMatch);
   };
