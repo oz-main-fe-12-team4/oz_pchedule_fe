@@ -181,7 +181,7 @@ const Wheel = ({ refEl, items, activeIndex, onSnap }) => {
       el.removeEventListener("scroll", onScroll);
       clearTimeout(to);
     };
-  }, [onSnap, refEl]);
+  }, [onSnap, refEl, items.length]);
 
   return (
     <div
