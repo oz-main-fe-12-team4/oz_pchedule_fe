@@ -6,7 +6,7 @@ import { useState } from "react";
 import {
   fetchPostUserActivate,
   fetchPostUserDeactivate,
-} from "../sevices/userApi";
+} from "../services/userApi";
 
 export default function UserCard({ user }) {
   const { id, name, email, is_active, is_reported, report_reason } = user;
