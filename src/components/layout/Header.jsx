@@ -7,11 +7,11 @@ import { Link } from "react-router";
 import { useState } from "react";
 import { notificationList } from "../../assets/data/dummyNotificationList";
 import NotificationCard from "../NotificationCard";
-import { fetchLogout } from "../../sevices/authApi";
+import { fetchLogout } from "../../services/authApi";
 import { useNavigate } from "react-router";
 import useUserStore from "../../stores/userStore";
 import { useEffect } from "react";
-import { fetchGetUserData } from "../../sevices/userApi";
+import { fetchGetUserData } from "../../services/userApi";
 
 const Header = () => {
   const [isDropdownProfile, setIsDropdownProfile] = useState(false);

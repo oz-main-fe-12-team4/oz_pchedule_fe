@@ -16,7 +16,7 @@ import Someday from "./pages/Someday";
 import Daily from "./pages/Daily";
 import AdminPage from "./pages/AdminPage";
 import ScheduleStoryDetailPage from "./pages/ScheduleStoryDetailPage";
-import { fetchGetUserList } from "./sevices/userApi";
+import { fetchGetUserList } from "./services/userApi";
 
 let router = createBrowserRouter([
   {

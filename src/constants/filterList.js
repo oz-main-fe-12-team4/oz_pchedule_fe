@@ -35,8 +35,8 @@ export const PRIORITY_OPTION_LIST = [
 ];
 
 export const SHARE_OPTION = [
-  { value: "personalSchedule", name: "개인일정", Icon: FaUser },
-  { value: "sharedSchedule", name: "공유하기", Icon: FaShareAlt },
+  { value: "나만보기", name: "개인일정", Icon: FaUser },
+  { value: "전체공개", name: "공유하기", Icon: FaShareAlt },
 ];
 
 export const REPEAT_OPTION_LIST = [

@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import logo from "../assets/Logo.svg";
 import Button from "../components/common/Button";
 import { REG_EXP } from "../constants/regExp";
-import { fetchSignin } from "../sevices/authApi";
+import { fetchSignin } from "../services/authApi";
 import { ERROR_MESSAGE } from "../constants/errorMessage";
 
 const Signin = () => {
