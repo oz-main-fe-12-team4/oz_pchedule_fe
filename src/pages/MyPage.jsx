@@ -1,26 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaUserCircle, FaHeart, FaBookmark, FaPencilAlt } from "react-icons/fa";
 import Input from "../components/common/Input.jsx";
 import Button from "../components/common/Button.jsx";
 import ConfirmModal from "../components/common/ConfirmModal.jsx";
-import { fetchChangePassword, fetchWithdrawUser } from "../sevices/authApi.js";
+import {
+  changePassword,
+  fetchWithdrawUser,
+  fetchGetUserData,
+} from "../services/userApi.js";
 import Header from "../components/layout/Header.jsx";
+import { useNavigate } from "react-router";
 
 function MyPage() {
+  const navigate = useNavigate();
+
+  const [userData, setUserData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [passwords, setPasswords] = useState({
     newPassword: "",
     confirmPassword: "",
   });
-  const [isNotificationEnabled, setIsNotificationEnabled] = useState(
-    user1.data.allow_notification
-  );
+  const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const loadUserData = async () => {
+      const data = await fetchGetUserData();
+      if (data) {
+        setUserData(data);
+        setIsNotificationEnabled(data.allow_notification);
+      }
+      setIsLoading(false);
+    };
+    loadUserData();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="p-20 text-center text-xl">
+        사용자 정보를 불러오는 중입니다...
+      </div>
+    );
+  }
+
+  if (!userData) {
+    return (
+      <div className="p-20 text-center text-red-600 text-xl">
+        사용자 정보를 불러올 수 없습니다.
+      </div>
+    );
+  }
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
 
-    const success = await fetchChangePassword(
+    const success = await changePassword(
       currentPassword,
       passwords.newPassword,
       passwords.confirmPassword
@@ -38,6 +74,7 @@ function MyPage() {
 
   const handleNotificationToggle = () => {
     setIsNotificationEnabled(!isNotificationEnabled);
+    // TODO: 서버에 알림 설정 변경 API 호출 로직 추가
   };
 
   const openWithdrawalModal = () => {
@@ -49,39 +86,38 @@ function MyPage() {
   };
 
   const handleWithdrawalConfirm = async () => {
-    closeWithdrawalModal(); // 모달 닫기
+    closeWithdrawalModal();
 
     const success = await fetchWithdrawUser();
 
     if (success) {
       alert("회원 탈퇴가 완료되었습니다.");
-      // TODO: 회원 탈퇴 성공 시 로그인 페이지 등으로 리다이렉트하는 로직 추가
+      navigate("/login");
     }
   };
 
   return (
-    // 상단 패딩(pt-20)을 추가해 헤더가 내용을 가리지 않도록 합니다.
     <div className="p-5 max-w-2xl mx-auto font-sans pt-20">
-      <Header /> {/* 헤더 컴포넌트 추가 */}
+      <Header />
       <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
         <aside className="w-full md:w-1/3 p-6 bg-white rounded-xl shadow-md border border-gray-200">
           <section className="flex flex-col items-center text-center">
             <FaUserCircle className="w-24 h-24 text-gray-400 mb-4" />
             <div className="flex items-center space-x-2 mb-1">
-              <p className="text-xl font-semibold">{user1.data.name}</p>
+              <p className="text-xl font-semibold">{userData.name}</p>
               <button className="text-gray-500">
                 <FaPencilAlt className="w-4 h-4" />
               </button>
             </div>
-            <p className="text-sm text-gray-500 mb-4">{user1.data.email}</p>
+            <p className="text-sm text-gray-500 mb-4">{userData.email}</p>
             <div className="flex space-x-6 text-gray-600">
               <div className="flex items-center space-x-1">
                 <FaHeart className="w-5 h-5 text-red-500" />
-                <span>{user1.data.total_like}</span>
+                <span>{userData.total_like}</span>
               </div>
               <div className="flex items-center space-x-1">
                 <FaBookmark className="w-5 h-5 text-yellow-500" />
-                <span>{user1.data.total_bookmark}</span>
+                <span>{userData.total_bookmark}</span>
               </div>
             </div>
           </section>
@@ -130,9 +166,9 @@ function MyPage() {
                   setValue={(value) =>
                     setPasswords((prev) => ({ ...prev, newPassword: value }))
                   }
-                  placeholder="새 비밀번호"
+                  placeholder="새 비밀번호 (8~20자)"
                   type="password"
-                  errorMessage="비밀번호가 일치하지 않습니다."
+                  errorMessage="8~20자 사이의 영문, 숫자, 특수문자 조합이어야 합니다."
                 />
                 <Input
                   label="새 비밀번호 확인"
@@ -173,7 +209,7 @@ function MyPage() {
         <ConfirmModal
           isOpen={isModalOpen}
           title="회원 탈퇴 확인"
-          message="정말로 회원 탈퇴를 하시겠습니까? 모든 정보가 영구적으로 삭제됩니다."
+          message="정말로 회원 탈퇴를 하시겠습니까? 모든 정보가 영구적으로 삭제되며, 되돌릴 수 없습니다."
           onConfirm={handleWithdrawalConfirm}
           onClose={closeWithdrawalModal}
           leftBtnText="취소"
