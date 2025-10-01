@@ -16,15 +16,18 @@ const Input = ({
   useEffect(() => {
     if (debouncedInput !== "") {
       console.log("디바운스된 검색어 값:", debouncedInput);
-      // 여기서 검색 API 호출 등 작업 추가 가능해
     }
   }, [debouncedInput]);
-  const handleChange = (e) => {
-    setValue(e.target.value);
 
-    const isValid = e.target.validity.valid;
-    // console.log(e.target.validity);
-    const isMatch = compareValue === null || compareValue === e.target.value;
+  const handleChange = (e) => {
+    const next = e.target.value;
+
+    if (typeof setValue === "function") {
+      setValue(next);
+    }
+
+    const isValid = e.target.validity?.valid ?? true;
+    const isMatch = compareValue === null || compareValue === next;
     setIsError(!isValid || !isMatch);
   };
   return (
@@ -34,6 +37,7 @@ const Input = ({
       </label>
       <input
         id={inputId}
+        value={value}
         className={`w-[100%] h-10 p-[0_25px] rounded-xl border border-[#C2C2C2]`}
         onChange={handleChange}
         {...props}

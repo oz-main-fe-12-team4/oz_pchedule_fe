@@ -45,6 +45,7 @@ function ScheduleStoryDetailPage() {
     setIsEditModalOpen(true);
   };
 
+  // @여기서 한번 체크해볼것!!!(로직을 한번더 정리/세부일정이후에 저장을 누르고 나서 api 호출되게 변경/여기서 사용되지 않는데 프롭스로 넘어가고있는 상황->실제사용하는 컴포넌트로 이동해서 함수실행하도록 변경)
   //onSubmit에서 api 호출 { id, title, description, start_time, end_time, detailSchedules }
   const handleEditSubmitDetail = async (payload) => {
     try {
@@ -199,7 +200,7 @@ function ScheduleStoryDetailPage() {
             setIsEditModalOpen(false);
             setScheduleToEdit(null);
           }}
-          showSub={false}
+          showSub={true}
           periodStart={periodStart}
           periodEnd={periodEnd}
           sameEndToStart={true}
