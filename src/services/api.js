@@ -1,50 +1,29 @@
+// services/api.js
 import axios from "axios";
 
-export const setAccessToken = (token) => {
-  window.localStorage.setItem("access_token", token);
-};
+const rawBase = import.meta.env?.VITE_API_BASE_URL || "http://localhost:8000";
+const API_BASE = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
 
-export const getAccessToken = () => window.localStorage.getItem("access_token");
-
-export const clearAccessToken = () => {
-  window.localStorage.removeItem("access_token");
-};
-
-export const api = axios.create({
-  baseURL: import.meta.env?.VITE_API_BASE_URL,
-  withCredentials: true, // Refresh 쿠키 전송/수신 -> 서버 CORS 정책 : Access-Control-Allow-Credentials: true
-  headers: {
-    "Content-Type": "application/json",
-  },
+const api = axios.create({
+  baseURL: API_BASE,
+  withCredentials: true, // 쿠키 전송
 });
 
 api.interceptors.request.use(
   (config) => {
-    const token = getAccessToken();
-    if (token === null) window.location.href = "/login";
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+    try {
+      const token =
+        typeof window !== "undefined"
+          ? localStorage.getItem("access_token")
+          : "";
+      if (token) {
+        config.headers = config.headers || {};
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    } catch {}
     return config;
   },
-  (err) => {
-    Promise.reject(err);
-  }
+  (error) => Promise.reject(error)
 );
 
-api.interceptors.response.use(
-  (res) => res,
-  async (error) => {
-    if (error.response?.status === 401) {
-      try {
-        const res = await api.post("/user/token/refresh");
-        if (!res) throw new Error("access token 재발급 응답이 없습니다.");
-
-        const data = await res.data;
-        setAccessToken(data.access_token);
-      } catch (err) {
-        if (err.response?.status === 401) {
-          setAccessToken(null);
-        }
-      }
-    }
-  }
-);
+export default api;
