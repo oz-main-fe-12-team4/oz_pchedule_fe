@@ -28,6 +28,7 @@ const Login = () => {
     <div className="flex flex-col justify-center items-center gap-5 m-20">
       <form
         name="login"
+        onSubmit={handleSubmit}
         className="flex flex-col justify-center items-center gap-5"
       >
         <img src={logo} alt="pchedule logo" className="w-[300px] scale-70" />
