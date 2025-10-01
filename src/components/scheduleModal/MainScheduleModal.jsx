@@ -122,12 +122,13 @@ const MainScheduleModal = ({
         )}
         {filters.priority && (
           <span className="px-2 py-1 bg-gray-200 rounded text-sm flex items-center gap-1">
-            {React.createElement(
-              FILTERS.priority.options.find(
+            {(() => {
+              const opt = FILTERS.priority.options.find(
                 (opt) => opt.value === filters.priority
-              )?.Icon,
-              { size: 12 }
-            )}
+              );
+              const Icon = opt && opt.Icon;
+              return Icon ? <Icon size={12} /> : null;
+            })()}
             {
               FILTERS.priority.options.find(
                 (opt) => opt.value === filters.priority
@@ -137,11 +138,13 @@ const MainScheduleModal = ({
         )}
         {filters.share && (
           <span className="px-2 py-1 bg-gray-200 rounded text-sm flex items-center gap-1">
-            {React.createElement(
-              FILTERS.share.options.find((opt) => opt.value === filters.share)
-                ?.Icon,
-              { size: 12 }
-            )}
+            {(() => {
+              const opt = FILTERS.share.options.find(
+                (opt) => opt.value === filters.share
+              );
+              const Icon = opt && opt.Icon;
+              return Icon ? <Icon size={12} /> : null;
+            })()}
             {
               FILTERS.share.options.find((opt) => opt.value === filters.share)
                 ?.name

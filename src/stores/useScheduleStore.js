@@ -30,7 +30,7 @@ const subScheduleTemplate = {
 
 const useScheduleStore = create((set) => ({
   mainSchedule: { ...mainScheduleTemplate },
-  subSchedules: [{ ...subScheduleTemplate }],
+  subSchedules: [],
 
   calendarModal: false,
   activeDate: null,

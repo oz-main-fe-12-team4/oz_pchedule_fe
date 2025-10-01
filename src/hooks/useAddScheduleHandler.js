@@ -7,15 +7,15 @@ import {
   recurrenceToArgs,
   toTimeString,
 } from "../utils/dateFormat";
-
 import { fetchPostSchedule, fetchPutSchedules } from "../services/scheduleApi";
 
-export default function useAddScheduleHandlers(props) {
+const MOCK_TEST = true;
+
+const useAddScheduleHandlers = (props) => {
   const {
     id,
     title,
     content,
-    onSubmit,
     periodStart,
     periodEnd,
     defaultStartDate,
@@ -35,12 +35,12 @@ export default function useAddScheduleHandlers(props) {
     openFilter,
     setMainSchedule,
     setMainScheduleFilters,
-    // setSubSchedules,
     setCalendarModal,
     setActiveDate,
     setOpenFilter,
     saveMainSchedule,
     setLoading,
+    setSubSchedules,
   } = useScheduleStore();
 
   useEffect(() => {
@@ -70,6 +70,7 @@ export default function useAddScheduleHandlers(props) {
     setMainSchedule,
   ]);
 
+  // sameEndToStart가 true면 endDate를 startDate에 맞춤
   useEffect(() => {
     if (sameEndToStart && mainSchedule.startDate) {
       setMainSchedule("endDate", mainSchedule.startDate);
@@ -111,26 +112,27 @@ export default function useAddScheduleHandlers(props) {
   const handleFilterChange = (key, value) => setMainScheduleFilters(key, value);
   const handleFilterToggle = (key) => setOpenFilter(key);
 
-  const handleSaveMainSchedule = async (onClose) => {
-    // onSubmit로 api 호출없이 바로 콜백
-    // onSubmit이 없을 때는 API 저장 + 스토어 최신화 + 모달 닫기
-    if (onSubmit) {
-      const payload = {
-        id,
-        title: mainSchedule.title || title || "",
-        description: mainSchedule.description || content || "",
-        start_time: toApiDate(mainSchedule.startDate, mainSchedule.startTime),
-        end_time: toApiDate(
-          sameEndToStart ? mainSchedule.startDate : mainSchedule.endDate,
-          mainSchedule.endTime
-        ),
-        detailSchedules: subSchedules ?? [],
-      };
-      onSubmit(payload);
-      return;
-    }
+  // 메인 일정 저장-> 세부일정 모달창 열기
+  const handleSaveMainSchedule = () => {
+    const payload = {
+      id,
+      title: mainSchedule.title || title || "",
+      description: mainSchedule.description || content || "",
+      start_time: toApiDate(mainSchedule.startDate, mainSchedule.startTime),
+      end_time: toApiDate(
+        sameEndToStart ? mainSchedule.startDate : mainSchedule.endDate,
+        mainSchedule.endTime
+      ),
+      filters: mainSchedule.filters,
+      mainScheduleSaved: true,
+      savedContent: mainSchedule.description || content || "",
+    };
+    // 전역 스토어에 머지
+    saveMainSchedule(payload);
+  };
 
-    // api 저장하기
+  // 최종저장 -> api호출
+  const handleSubmitSchedule = async (onClose) => {
     const start_period = toApiDate(
       mainSchedule.startDate,
       mainSchedule.startTime
@@ -139,6 +141,26 @@ export default function useAddScheduleHandlers(props) {
       sameEndToStart ? mainSchedule.startDate : mainSchedule.endDate,
       mainSchedule.endTime
     );
+
+    const detailSchedulesPayload = (
+      Array.isArray(subSchedules) ? subSchedules : []
+    ).map((sch) => {
+      const start_time = toApiDate(
+        sch.startDate ?? sch.start_time,
+        sch.startTime ?? "00:00"
+      );
+      const end_time = toApiDate(
+        sch.endDate ?? sch.startDate ?? sch.end_time,
+        sch.endTime ?? "00:00"
+      );
+      return {
+        title: sch.title ?? sch.mainContent ?? "",
+        description: sch.description ?? sch.content ?? "",
+        start_time,
+        end_time,
+        is_completed: Boolean(sch.is_completed) || false,
+      };
+    });
 
     const {
       isRecurrence,
@@ -153,7 +175,29 @@ export default function useAddScheduleHandlers(props) {
     const priority = mainSchedule.filters.priority;
     const shareType = mainSchedule.filters.share;
     const isSomeday = mainSchedule.filters.isSomeday ?? false;
-    const detailSchedules = Array.isArray(subSchedules) ? subSchedules : [];
+    // const detailSchedules = Array.isArray(subSchedules) ? subSchedules : [];
+
+    console.log("[handleSubmitSchedule] request payload:", {
+      isUpdate: Boolean(id),
+      mainTitle,
+      start_period,
+      end_period,
+      category,
+      priority,
+      shareType,
+      isRecurrence,
+      recurrenceType,
+      recurrenceWeekdays,
+      recurrenceDay,
+      recurrenceMonth,
+      isSomeday,
+      detailSchedulesPayload,
+    });
+
+    if (MOCK_TEST) {
+      console.log("[MOCK] 저장 성공 처리");
+      return true;
+    }
 
     // 로딩중이라면
     setLoading?.(true);
@@ -174,7 +218,7 @@ export default function useAddScheduleHandlers(props) {
           recurrenceDay,
           recurrenceMonth,
           isSomeday,
-          detailSchedules
+          detailSchedulesPayload
         );
       } else {
         result = await fetchPostSchedule(
@@ -190,12 +234,13 @@ export default function useAddScheduleHandlers(props) {
           recurrenceDay,
           recurrenceMonth,
           isSomeday,
-          detailSchedules
+          detailSchedulesPayload
         );
       }
 
-      // 성공일때 스토어 동기화
       if (result) {
+        // 성공 시 id 같은 서버 값으로 동기화 (mainScheduleSaved는 이미 true)
+        console.log("[handleSubmitSchedule] API 성공:", result);
         saveMainSchedule({
           id: result.id ?? id ?? null,
           title: mainTitle,
@@ -210,11 +255,13 @@ export default function useAddScheduleHandlers(props) {
           recurrenceMonth,
         });
 
-        onClose?.(result);
+        if (typeof onClose === "function") onClose(result);
+        return true;
+      } else {
+        console.warn("[handleSubmitSchedule] API 응답 없음");
       }
-      return result;
     } catch (e) {
-      console.error("[handleSaveMainSchedule] save failed:", e);
+      console.error("[handleSubmitSchedule] API 실패:", e);
       throw e;
     } finally {
       setLoading?.(false);
@@ -233,11 +280,15 @@ export default function useAddScheduleHandlers(props) {
     handleDateSelect,
     handleFilterChange,
     handleFilterToggle,
-    handleSaveMainSchedule,
-    toTimeString,
 
-    // TimePicker에서 바로 store 값을 바꿀 수 있도록
+    handleSaveMainSchedule, // 메인만 로컬 저장 -> 세부영역 오픈
+    handleSubmitSchedule, // 최종 저장(API 호출)
+
+    toTimeString,
     setStartTime: (time) => setMainSchedule("startTime", time),
     setEndTime: (time) => setMainSchedule("endTime", time),
+    setSubSchedules,
+    setMainSchedule,
   };
-}
+};
+export default useAddScheduleHandlers;
