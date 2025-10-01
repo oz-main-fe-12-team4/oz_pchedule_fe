@@ -1,4 +1,3 @@
-// src/test/TestJ.jsx
 import React from "react";
 import Input from "../components/common/Input";
 import LikeButton from "../components/common/LikeButton";
@@ -9,7 +8,13 @@ export default function TestJ() {
   return (
     <div>
       <Input value={inputValue} setValue={setInputValue} />
-      <LikeButton />
+      <LikeButton
+        scheduleId={scheduleId}
+        onMessage={(m) => {
+          console.log("[TestJ] message:", m);
+          alert(m);
+        }}
+      />
     </div>
   );
 }
