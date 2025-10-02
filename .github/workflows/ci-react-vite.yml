@@ -44,7 +44,7 @@ jobs:
 
       - name: Configure AWS credentials (OIDC)
         if: github.event_name == 'push'
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ steps.role.outputs.role_arn }}
           aws-region: ${{ secrets.AWS_REGION }}
@@ -59,6 +59,16 @@ jobs:
             echo "bucket=${{secrets.AWS_DEV_BUCKET_NAME}}" >> $GITHUB_OUTPUT
           fi
 
+      - name: Select CloudFront distribution
+        if: github.event_name == 'push'
+        id: cf
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            echo "dist_id=${{secrets.AWS_PROD_CLOUDFRONT_ID}}" >> $GITHUB_OUTPUT
+          else
+            echo "dist_id=${{secrets.AWS_DEV_CLOUDFRONT_ID}}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Upload assets (long cache)
         if: github.event_name == 'push'
         run: |
@@ -71,6 +81,11 @@ jobs:
         if: github.event_name == 'push'
         run: |
           aws s3 cp dist/index.html s3://${{ steps.bucket.outputs.bucket }}/index.html \
-            --cache-control "public, max-age=60"
+            --cache-control "no-cache"
 
-
+      - name: Invalidate CloudFront (/*)
+        if: github.event_name == 'push'
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ steps.cf.outputs.dist_id }} \
+            --paths "/*"
