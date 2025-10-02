@@ -18,15 +18,6 @@ export const api = axios.create({
   withCredentials: true, // Refresh 쿠키 전송/수신 -> 서버 CORS 정책 : Access-Control-Allow-Credentials: true
 });
 
-export const getCsrf = async () => {
-  try {
-    const res = await api.get("/user/get-csrf/");
-    if (!res) throw new Error("csrf fail");
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 api.interceptors.request.use(
   (config) => {
     const token = getAccessToken();
