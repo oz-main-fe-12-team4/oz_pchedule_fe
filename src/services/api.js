@@ -12,17 +12,28 @@ export const clearAccessToken = () => {
 
 export const api = axios.create({
   baseURL: import.meta.env?.VITE_API_BASE_URL,
-  withCredentials: true, // Refresh 쿠키 전송/수신 -> 서버 CORS 정책 : Access-Control-Allow-Credentials: true
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true, // Refresh 쿠키 전송/수신 -> 서버 CORS 정책 : Access-Control-Allow-Credentials: true
 });
+
+export const getCsrf = async () => {
+  try {
+    const res = await api.get("/user/get-csrf/");
+    if (!res) throw new Error("csrf fail");
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 api.interceptors.request.use(
   (config) => {
     const token = getAccessToken();
-    if (token === null) window.location.href = "/login";
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+    // if (token === null) window.location.href = "/login"; // 로그인 하기 전에도 로그인화면으로 이동
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (err) => {
@@ -35,7 +46,7 @@ api.interceptors.response.use(
   async (error) => {
     if (error.response?.status === 401) {
       try {
-        const res = await api.post("/user/token/refresh");
+        const res = await api.post("/api/token/refresh/");
         if (!res) throw new Error("access token 재발급 응답이 없습니다.");
 
         const data = await res.data;

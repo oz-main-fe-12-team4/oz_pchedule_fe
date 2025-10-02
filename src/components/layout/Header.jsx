@@ -38,7 +38,7 @@ const Header = () => {
     if (res.status === 200) {
       clearIsAdminStorage();
       setIsAdmin(null);
-      navigate("/");
+      navigate("/login");
     }
   };
 

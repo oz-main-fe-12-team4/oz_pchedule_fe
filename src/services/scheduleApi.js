@@ -2,7 +2,7 @@ import { api } from "./api";
 
 export const fetchGetScheduleList = async () => {
   try {
-    const res = await api.get("/schedule/schedules");
+    const res = await api.get("/schedule/schedules/");
     if (!res) throw new Error("일정리스트를 받아올 수 없습니다.");
 
     if (res.status === 200) return res.data;
@@ -43,7 +43,7 @@ export const fetchPostSchedule = async (
     detail_schedule: detailSchedules,
   };
   try {
-    const res = await api.post("/schedule/schedules", newSchedule);
+    const res = await api.post("/schedule/schedules/", newSchedule);
     if (!res) throw new Error("일정 등록이 안되었습니다.");
 
     if (res.status === 200) return res.data;
@@ -55,7 +55,7 @@ export const fetchPostSchedule = async (
 
 export const fetchGetDetailSchedules = async (schedulesId) => {
   try {
-    const res = await api.get(`/schedule/schedules/${schedulesId}`);
+    const res = await api.get(`/schedule/schedules/${schedulesId}/`);
     if (!res) throw new Error("상세일정을 받아올 수 없습니다.");
 
     if (res.status === 200) return res.data;
@@ -98,7 +98,7 @@ export const fetchPutSchedules = async (
   };
   try {
     const res = await api.put(
-      `/schedule/schedules/${schedulesId}`,
+      `/schedule/schedules/${schedulesId}/`,
       updateSchedule
     );
     if (!res) throw new Error("일정을 수정할 수 없습니다.");
@@ -127,7 +127,7 @@ export const fetchPutDetailSchedule = async (
   };
   try {
     const res = await api.put(
-      `/schedule/detail-schedules/${detailScheduleId}`,
+      `/schedule/detail-schedules/${detailScheduleId}/`,
       newDetailSchedule
     );
     if (!res) throw new Error("상세일정을 수정할 수 없습니다.");
@@ -141,7 +141,7 @@ export const fetchPutDetailSchedule = async (
 
 export const fetchDeleteSchedules = async (schedulesId) => {
   try {
-    const res = await api.delete(`/schedule/schedules/${schedulesId}`);
+    const res = await api.delete(`/schedule/schedules/${schedulesId}/`);
     if (!res) throw new Error("일정을 삭제할 수 없습니다.");
 
     if (res.status === 200) return res.data;
@@ -154,7 +154,7 @@ export const fetchDeleteSchedules = async (schedulesId) => {
 export const fetchDeleteDetailSchedule = async (detailScheduleId) => {
   try {
     const res = await api.delete(
-      `/schedule/detail-schedules/${detailScheduleId}`
+      `/schedule/detail-schedules/${detailScheduleId}/`
     );
     if (!res) throw new Error("상세일정을 삭제할 수 없습니다.");
 
