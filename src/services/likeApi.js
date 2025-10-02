@@ -1,5 +1,5 @@
 // services/likeApi.js
-import api from "./api";
+import { api } from "./api";
 
 // 좋아요 추가: false -> true
 export async function likeSchedule(scheduleId) {

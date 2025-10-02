@@ -20,10 +20,13 @@ api.interceptors.request.use(
         config.headers = config.headers || {};
         config.headers.Authorization = `Bearer ${token}`;
       }
-    } catch {}
+    } catch (e) {
+      // 토큰 읽기 실패해도 요청은 진행
+      console.warn("[api] token read error:", e);
+    }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-export default api;
+export { api };
