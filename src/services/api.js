@@ -37,7 +37,7 @@ api.interceptors.response.use(
   async (error) => {
     if (error.response?.status === 401) {
       try {
-        const res = await api.post("/api/token/refresh/");
+        const res = await api.post("/token/refresh/");
         if (!res) throw new Error("access token 재발급 응답이 없습니다.");
 
         const data = await res.data;
