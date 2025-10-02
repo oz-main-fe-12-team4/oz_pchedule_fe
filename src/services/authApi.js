@@ -9,7 +9,7 @@ export const fetchSignin = async (email, password, name) => {
     allow_notification: true,
   };
   try {
-    const res = await api.post("/user/signup/", userData);
+    const res = await api.post("/api/user/signup/", userData);
     if (!res) throw new Error("회원가입 에러");
 
     if (res.status === 201) window.location.href = "/login";
@@ -29,7 +29,7 @@ export const fetchLogin = async (email, password) => {
   };
 
   try {
-    const res = await api.post("/user/login/", userData);
+    const res = await api.post("/api/user/login/", userData);
     console.log(res?.data);
     if (!res) throw new Error("로그인 응답이 없음.");
 
@@ -53,7 +53,7 @@ export const fetchLogin = async (email, password) => {
 export const fetchLogout = async () => {
   try {
     console.log("getCsrf", document.cookie);
-    const res = await api.post("/user/logout/");
+    const res = await api.post("/api/user/logout/");
     if (!res) throw new Error("로그아웃 응답 없음.");
 
     if (res.status === 200) {
