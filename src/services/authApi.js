@@ -1,4 +1,4 @@
-import { api } from "./api";
+import { api, clearAccessToken, setAccessToken } from "./api";
 
 export const fetchSignin = async (email, password, name) => {
   const userData = {
@@ -9,7 +9,7 @@ export const fetchSignin = async (email, password, name) => {
     allow_notification: true,
   };
   try {
-    const res = await api.post("/user/signup", userData);
+    const res = await api.post("/user/signup/", userData);
     if (!res) throw new Error("회원가입 에러");
 
     if (res.status === 201) window.location.href = "/login";
@@ -29,18 +29,17 @@ export const fetchLogin = async (email, password) => {
   };
 
   try {
-    const res = await api.post("/user/login", userData);
+    const res = await api.post("/user/login/", userData);
+    console.log(res?.data);
     if (!res) throw new Error("로그인 응답이 없음.");
 
-    // if (res.status === 200 && res.data?.is_admin === true) {
-    //   return {
-    //     userData: await fetchGetUserData(),
-    //     is_admin: true,
-    //   };
-    // }
-
     if (res.status === 200) {
+      setAccessToken(res.data.access_token);
       return res.data.is_admin;
+    }
+
+    if (res.status === 401) {
+      window.location.href = "/login";
     }
 
     if (res.status === 403)
@@ -53,10 +52,14 @@ export const fetchLogin = async (email, password) => {
 
 export const fetchLogout = async () => {
   try {
-    const res = await api.post("/user/logout");
+    console.log("getCsrf", document.cookie);
+    const res = await api.post("/user/logout/");
     if (!res) throw new Error("로그아웃 응답 없음.");
 
-    if (res.status === 200) return res;
+    if (res.status === 200) {
+      clearAccessToken();
+      return res;
+    }
   } catch (err) {
     console.log(err);
     alert("예기치 못한 서버오류가 있습니다. 잠시후 다시 시도해주세요.");
