@@ -13,15 +13,16 @@ import { useNavigate } from "react-router";
 const Login = () => {
   const [emailInputValue, setEmailInputValue] = useState("");
   const [passwordInputValue, setPasswordInputValue] = useState("");
-  const { setIsAdmin } = useUserStore();
+  const { isAdmin, setIsAdmin } = useUserStore();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const isAdminUser = await fetchLogin(emailInputValue, passwordInputValue);
-    await setIsAdmin(isAdminUser);
-    if (isAdminUser) navigate("/admin/user_list");
-    if (!isAdminUser) navigate("/");
+    const res = await fetchLogin(emailInputValue, passwordInputValue);
+    await setIsAdmin(res.data.is_admin);
+    if (res.status === 401) navigate("/login");
+    if (isAdmin) navigate("/admin/user_list");
+    if (!isAdmin) navigate("/");
   };
 
   return (

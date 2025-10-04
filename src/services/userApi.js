@@ -11,7 +11,7 @@ export const fetchGetUserData = async () => {
     if (response.status === 401) window.location.href = "/login";
   } catch (e) {
     console.log(e);
-    alert("예기치 못한 서버오류가 있습니다. 잠시후 다시 시도해주세요.");
+    return false;
   }
 };
 
@@ -23,6 +23,6 @@ export const fetchGetUserList = async () => {
     if (res.status === 200) return res.data;
   } catch (err) {
     console.error(err);
-    alert(err?.message);
+    return false;
   }
 };

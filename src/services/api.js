@@ -10,8 +10,13 @@ export const clearAccessToken = () => {
   window.localStorage.removeItem("access_token");
 };
 
+const baseUrl =
+  window.location.hostname === "localhost"
+    ? import.meta.env.VITE_API_BASE_URL
+    : "/api";
+
 export const api = axios.create({
-  baseURL: "/api",
+  baseURL: baseUrl,
   headers: {
     "Content-Type": "application/json",
   },
@@ -42,6 +47,8 @@ api.interceptors.response.use(
 
         const data = await res.data;
         setAccessToken(data.access_token);
+
+        if (res.status === 401) window.location.href = "/login";
       } catch (err) {
         if (err.response?.status === 401) {
           setAccessToken(null);
