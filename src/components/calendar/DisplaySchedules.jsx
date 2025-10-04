@@ -1,6 +1,7 @@
 import { posts } from "../../assets/data/dummyPostList";
 import { COL_END, COL_START, ROW_START } from "../../constants/gridClass";
 import { toDate } from "../../utils/dateFormat";
+import { getCategoryEmoji } from "../../utils/getCategoryEmoji";
 import { getBackgroundColorOfPriority } from "../../utils/getColorOfPriority";
 
 const DisplaySchedules = ({ week }) => {
@@ -21,7 +22,7 @@ const DisplaySchedules = ({ week }) => {
       end: endDate,
       priorityColor: getBackgroundColorOfPriority(schedule.priority),
       title: schedule.title,
-      category: schedule.category,
+      category: getCategoryEmoji(schedule.category_name),
       isStart: isStartDate,
       isEnd: isEndDate,
     };
@@ -54,7 +55,7 @@ const DisplaySchedules = ({ week }) => {
           ${ROW_START[index]}
           `}
         >
-          {schedule.title}
+          {schedule.category + schedule.title}
         </button>
       ))}
     </div>
