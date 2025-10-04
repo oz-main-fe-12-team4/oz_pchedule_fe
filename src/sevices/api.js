@@ -1,32 +1,40 @@
-import { api } from "./api";
+import { api } from "./authApi";
 
 export const fetchGetUserData = async () => {
   try {
-    const response = await api.get("/user/me/");
+    const response = await api.get("/user/me");
     if (!response) throw new Error("유저 정보를 받아 올 수 없습니다.");
 
     if (response.status === 200) {
-      return response.data;
+      return await response.data;
     }
     if (response.status === 401) window.location.href = "/login";
   } catch (e) {
     console.log(e);
-    return false;
+    alert("예기치 못한 서버오류가 있습니다. 잠시후 다시 시도해주세요.");
   }
 };
 
 export const fetchGetUserList = async () => {
   try {
-    const res = await api.get("/user/users/");
+    const res = await api.get("/user/users");
     if (!res) throw new Error("유저 리스트를 받아올 수 없습니다.");
 
     if (res.status === 200) return res.data;
   } catch (err) {
     console.error(err);
-    return false;
+    alert(err?.message);
   }
-};
+import { api } from "../utils/api";
+import { api } from "./api.js";
 
+/**
+ * 비밀번호 변경 API 호출 함수
+ * @param {string} currentPassword 현재 비밀번호
+ * @param {string} newPassword 새 비밀번호
+ * @param {string} confirmPassword 새 비밀번호 확인
+ * @returns {Promise<boolean>} 성공 여부 (성공 시 true, 실패 시 false)
+ */
 export const changePassword = async (
   currentPassword,
   newPassword,
@@ -40,6 +48,7 @@ export const changePassword = async (
     };
 
     const response = await api.patch("/user/me/edit/password", requestBody);
+
     if (response.status === 200) {
       return true;
     }
@@ -60,9 +69,14 @@ export const changePassword = async (
   return false;
 };
 
-export const fetchWithdrawUser = async () => {
+/**
+ * 회원 탈퇴 API 호출 함수
+ * @returns {Promise<boolean>} 성공 여부 (성공 시 true, 실패 시 false)
+ */
+export const withdrawUser = async () => {
   try {
     const response = await api.delete("/user/me/withdraw");
+
     if (response.status === 200) {
       return true;
     }

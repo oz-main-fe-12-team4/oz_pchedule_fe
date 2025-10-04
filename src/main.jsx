@@ -17,6 +17,7 @@ import Daily from "./pages/Daily";
 import AdminPage from "./pages/AdminPage";
 import ScheduleStoryDetailPage from "./pages/ScheduleStoryDetailPage";
 import { fetchGetUserList } from "./services/userApi";
+import MyPage from "./pages/MyPage";
 
 let router = createBrowserRouter([
   {
@@ -72,6 +73,7 @@ let router = createBrowserRouter([
   },
   {
     path: "/my_page",
+    Component: MyPage,
   },
   {
     path: "/testH",
