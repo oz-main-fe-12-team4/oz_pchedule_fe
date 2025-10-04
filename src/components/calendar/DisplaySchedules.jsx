@@ -36,7 +36,7 @@ const DisplaySchedules = ({ week }) => {
   );
 
   return (
-    <div className="grid grid-cols-7 gap-1">
+    <div className="w-full absolute top-[30px] grid grid-cols-7 gap-1">
       {filteredScheduleList.map((schedule, index) => (
         <button
           key={schedule.id}

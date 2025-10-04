@@ -2,8 +2,8 @@ import DisplaySchedules from "./DisplaySchedules";
 
 const DisplayWeek = ({ week, onDayClick }) => {
   return (
-    <div>
-      <div className="grid grid-cols-7">
+    <div className="relative">
+      <div className="h-[102px] grid grid-cols-7">
         {week.map((el, i) => (
           <div
             key={i}
