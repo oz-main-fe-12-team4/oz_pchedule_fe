@@ -2,6 +2,7 @@ import SubScheduleModal from "./SubScheduleModal";
 import MainScheduleModal from "./MainScheduleModal";
 import { toDate } from "../../utils/dateFormat";
 import useAddScheduleHandlers from "../../hooks/useAddScheduleHandler";
+import Button from "../common/Button";
 
 const AddScheduleModal = (props) => {
   const {
@@ -66,8 +67,8 @@ const AddScheduleModal = (props) => {
               setStartTime={setStartTime}
               setEndTime={setEndTime}
             />
-
-            {showSub && mainSchedule.mainScheduleSaved && (
+            {/* showSub가 false 일때 세부일정모달없이 저장하기 버튼 보이기, true일때는 세부일정모달 + 추가기능 */}
+            {showSub && mainSchedule.mainScheduleSaved ? (
               <SubScheduleModal
                 subSchedules={subSchedules}
                 setSubSchedules={setSubSchedules}
@@ -85,6 +86,16 @@ const AddScheduleModal = (props) => {
                 mainScheduleSaved={mainSchedule.mainScheduleSaved}
                 handleSubmitSchedule={handleSubmitSchedule}
               />
+            ) : (
+              <Button
+                variant="confirm"
+                onClick={async () => {
+                  await handleSubmitSchedule(onClose);
+                }}
+                className="w-full mt-7 bg-[#2F7884] hover:bg-[#5AA5B2] text-white font-semibold py-2 rounded-xl flex items-center justify-center gap-2 shadow-md transition-colors duration-200"
+              >
+                저장하기
+              </Button>
             )}
           </div>
         </div>

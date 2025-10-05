@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import { toTimeString } from "../utils/dateFormat";
 
 const mainScheduleTemplate = {
@@ -28,99 +29,117 @@ const subScheduleTemplate = {
   is_completed: false,
 };
 
-const useScheduleStore = create((set) => ({
-  mainSchedule: { ...mainScheduleTemplate },
-  subSchedules: [],
+const useScheduleStore = create(
+  persist(
+    (set) => ({
+      mainSchedule: { ...mainScheduleTemplate },
+      subSchedules: [],
+      scheduleList: [],
 
-  calendarModal: false,
-  activeDate: null,
-  openFilter: null,
-  loading: false,
+      calendarModal: false,
+      activeDate: null,
+      openFilter: null,
+      loading: false,
 
-  setMainSchedule(field, value) {
-    set((state) => ({
-      mainSchedule: { ...state.mainSchedule, [field]: value },
-    }));
-  },
-
-  setMainScheduleFilters(key, value) {
-    set((state) => ({
-      mainSchedule: {
-        ...state.mainSchedule,
-        filters: { ...state.mainSchedule.filters, [key]: value },
+      setMainSchedule(field, value) {
+        set((state) => ({
+          mainSchedule: { ...state.mainSchedule, [field]: value },
+        }));
       },
-    }));
-  },
 
-  setSubSchedules(subs) {
-    set({ subSchedules: subs }); // 배열 전체 교체
-  },
+      setMainScheduleFilters(key, value) {
+        set((state) => ({
+          mainSchedule: {
+            ...state.mainSchedule,
+            filters: { ...state.mainSchedule.filters, [key]: value },
+          },
+        }));
+      },
 
-  addSubSchedule() {
-    set((state) => ({
-      subSchedules: [...state.subSchedules, { ...subScheduleTemplate }],
-    }));
-  },
+      setSubSchedules(subs) {
+        set({ subSchedules: subs }); // 배열 전체 교체
+      },
 
-  setCalendarModal(value) {
-    set({ calendarModal: value });
-  },
+      addSubSchedule() {
+        set((state) => ({
+          subSchedules: [...state.subSchedules, { ...subScheduleTemplate }],
+        }));
+      },
 
-  openCalendar(dateType) {
-    set({ activeDate: dateType, calendarModal: true });
-  },
+      setCalendarModal(value) {
+        set({ calendarModal: value });
+      },
 
-  closeCalendar() {
-    set({ calendarModal: false, activeDate: null });
-  },
+      openCalendar(dateType) {
+        set({ activeDate: dateType, calendarModal: true });
+      },
 
-  setActiveDate(value) {
-    set({ activeDate: value });
-  },
+      closeCalendar() {
+        set({ calendarModal: false, activeDate: null });
+      },
 
-  setOpenFilter(key) {
-    set((state) => ({ openFilter: state.openFilter === key ? null : key }));
-  },
+      setActiveDate(value) {
+        set({ activeDate: value });
+      },
 
-  setLoading(value) {
-    set({ loading: value });
-  },
+      setOpenFilter(key) {
+        set((state) => ({ openFilter: state.openFilter === key ? null : key }));
+      },
 
-  saveMainSchedule({ id, title, description, start_time, end_time, filters }) {
-    set((state) => {
-      const nextStartTime =
-        typeof start_time === "string"
-          ? toTimeString(start_time)
-          : state.mainSchedule.startTime;
+      setLoading(value) {
+        set({ loading: value });
+      },
 
-      const nextEndTime =
-        typeof end_time === "string"
-          ? toTimeString(end_time)
-          : state.mainSchedule.endTime;
-
-      const payload = {
+      saveMainSchedule({
         id,
         title,
         description,
         start_time,
         end_time,
-        startTime: nextStartTime,
-        endTime: nextEndTime,
         filters,
-        mainScheduleSaved: true,
-        savedContent: description || title,
-      };
+      }) {
+        set((state) => {
+          const nextStartTime =
+            typeof start_time === "string"
+              ? toTimeString(start_time)
+              : state.mainSchedule.startTime;
 
-      return { mainSchedule: { ...state.mainSchedule, ...payload } };
-    });
-  },
+          const nextEndTime =
+            typeof end_time === "string"
+              ? toTimeString(end_time)
+              : state.mainSchedule.endTime;
 
-  clearMainSchedule() {
-    set({
-      mainSchedule: { ...mainScheduleTemplate },
-      subSchedules: [{ ...subScheduleTemplate }], // 배열로 초기화
-    });
-  },
-}));
+          const payload = {
+            id,
+            title,
+            description,
+            start_time,
+            end_time,
+            startTime: nextStartTime,
+            endTime: nextEndTime,
+            filters,
+            mainScheduleSaved: true,
+            savedContent: description || title,
+          };
 
+          return { mainSchedule: { ...state.mainSchedule, ...payload } };
+        });
+      },
+
+      clearMainSchedule() {
+        set({
+          mainSchedule: { ...mainScheduleTemplate },
+          subSchedules: [], // 배열로 초기화
+        });
+      },
+
+      addScheduleList(schedule) {
+        set((state) => ({
+          scheduleList: [schedule, ...state.scheduleList],
+        }));
+      },
+    }),
+    { name: "schedule-store", getStorage: () => localStorage }
+  )
+);
 export default useScheduleStore;

@@ -196,6 +196,32 @@ const useAddScheduleHandlers = (props) => {
 
     if (MOCK_TEST) {
       console.log("[MOCK] 저장 성공 처리");
+
+      saveMainSchedule({
+        id: id ?? null,
+        title: mainTitle,
+        description: mainSchedule.description || content || "",
+        start_time: start_period,
+        end_time: end_period,
+        filters: mainSchedule.filters,
+        isRecurrence,
+        recurrenceType,
+        recurrenceWeekdays,
+        recurrenceDay,
+        recurrenceMonth,
+      });
+
+      const { addScheduleList } = useScheduleStore.getState();
+      addScheduleList?.({
+        id: id ?? Date.now(),
+        title: mainTitle,
+        description: mainSchedule.description || content || "",
+        start_time: start_period,
+        end_time: end_period,
+        filters: mainSchedule.filters,
+      });
+
+      if (typeof onClose === "function") onClose();
       return true;
     }
 
@@ -254,7 +280,15 @@ const useAddScheduleHandlers = (props) => {
           recurrenceDay,
           recurrenceMonth,
         });
-
+        const { addScheduleList } = useScheduleStore.getState();
+        addScheduleList?.({
+          id: result.id ?? id ?? null,
+          title: mainTitle,
+          description: mainSchedule.description || content || "",
+          start_time: start_period,
+          end_time: end_period,
+          filters: mainSchedule.filters,
+        });
         if (typeof onClose === "function") onClose(result);
         return true;
       } else {

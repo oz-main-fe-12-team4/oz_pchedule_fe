@@ -7,7 +7,7 @@ function DetailScheduleCard({ title, description, onEdit }) {
 
   return (
     <div
-      className="bg-gray-200 rounded-md p-3 ml-4 shadow-sm relative inline-flex flex-col max-w-[90vw] overflow-x-auto"
+      className="bg-[#CAE8F2] rounded-md p-3 ml-4 shadow-sm relative inline-flex flex-col max-w-[90vw] overflow-x-auto"
       style={{ width: "fit-content" }}
     >
       {/* 수정 아이콘 오른쪽 상단 고정 */}
@@ -22,7 +22,9 @@ function DetailScheduleCard({ title, description, onEdit }) {
       </button>
 
       {/* 제목 */}
-      <h1 className="font-bold mb-1 pr-8 whitespace-nowrap">{title}</h1>
+      <h1 className="font-bold mb-1 pr-8 text-[#192A2D] whitespace-nowrap">
+        {title}
+      </h1>
 
       {/* 내용 */}
       <p className="text-sm text-gray-700 pr-8 whitespace-nowrap">
