@@ -45,7 +45,6 @@ function ScheduleStoryDetailPage() {
     setIsEditModalOpen(true);
   };
 
-  // @여기서 한번 체크해볼것!!!(로직을 한번더 정리/세부일정이후에 저장을 누르고 나서 api 호출되게 변경/여기서 사용되지 않는데 프롭스로 넘어가고있는 상황->실제사용하는 컴포넌트로 이동해서 함수실행하도록 변경)
   //onSubmit에서 api 호출 { id, title, description, start_time, end_time, detailSchedules }
   const handleEditSubmitDetail = async (payload) => {
     try {
@@ -145,7 +144,7 @@ function ScheduleStoryDetailPage() {
             <div className="relative flex flex-col">
               {/* 왼쪽 점선 */}
               <div
-                className="absolute top-5 left-12 h-[calc(100%-2rem)] border-l-4 border-dashed border-gray-400"
+                className="absolute top-4 left-12 ml-15  h-[calc(100%-2rem)] border-l-2 border-dashed border-[#223F43]"
                 style={{ zIndex: 0 }}
               />
 
@@ -154,7 +153,7 @@ function ScheduleStoryDetailPage() {
                 ({ id, start_time, end_time, title, description }) => (
                   <div
                     key={id}
-                    className="flex items-center mb-6 last:mb-0 relative z-10"
+                    className="flex items-center mb-6 ml-15 last:mb-0 relative z-10"
                   >
                     <TimeCard
                       time={`${toTimeString(start_time)}~${toTimeString(
@@ -200,7 +199,7 @@ function ScheduleStoryDetailPage() {
             setIsEditModalOpen(false);
             setScheduleToEdit(null);
           }}
-          showSub={true}
+          showSub={false}
           periodStart={periodStart}
           periodEnd={periodEnd}
           sameEndToStart={true}
