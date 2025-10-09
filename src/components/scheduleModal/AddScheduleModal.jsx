@@ -36,8 +36,8 @@ const AddScheduleModal = (props) => {
   return (
     <div className="fixed inset-0 bg-black/20 z-50">
       <div className="absolute inset-0 flex items-center justify-center p-4">
-        <div className="bg-white rounded-3xl shadow-lg w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col">
-          <div className="overflow-y-auto overscroll-contain p-6">
+        <div className="bg-white rounded-3xl shadow-lg w-full max-w-md overflow-visible flex flex-col">
+          <div className="overflow-visible overscroll-contain p-6">
             <MainScheduleModal
               titleValue={mainSchedule.title}
               setTitleValue={(value) => setMainSchedule("title", value)}

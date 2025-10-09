@@ -4,9 +4,6 @@
 // startTime: "00:00"
 // endTime: "23:59"
 
-// const pad = (n) => String(n).padStart(2, "0"); // 숫자 00 두자리로 맞추기
-// const isValidDate = (date) => date instanceof Date && !isNaN(date.getTime()); // Date 맞는지 유효성 검사
-
 // 문자열을 Date형식으로 바꾸기
 export const toDate = (value) => {
   if (value instanceof Date) return value;
