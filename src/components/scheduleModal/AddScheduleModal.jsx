@@ -68,24 +68,26 @@ const AddScheduleModal = (props) => {
               setEndTime={setEndTime}
             />
             {/* showSub가 false 일때 세부일정모달없이 저장하기 버튼 보이기, true일때는 세부일정모달 + 추가기능 */}
-            {showSub && mainSchedule.mainScheduleSaved ? (
-              <SubScheduleModal
-                subSchedules={subSchedules}
-                setSubSchedules={setSubSchedules}
-                savedContent={mainSchedule.savedContent}
-                startDate={mainSchedule.startDate}
-                endDate={mainSchedule.endDate}
-                startTime={mainSchedule.startTime}
-                endTime={mainSchedule.endTime}
-                filters={mainSchedule.filters}
-                openFilter={openFilter}
-                handleFilterToggle={handleFilterToggle}
-                handleFilterChange={handleFilterChange}
-                toTimeString={toTimeString}
-                onClose={onClose}
-                mainScheduleSaved={mainSchedule.mainScheduleSaved}
-                handleSubmitSchedule={handleSubmitSchedule}
-              />
+            {showSub ? (
+              mainSchedule.mainScheduleSaved ? (
+                <SubScheduleModal
+                  subSchedules={subSchedules}
+                  setSubSchedules={setSubSchedules}
+                  savedContent={mainSchedule.savedContent}
+                  startDate={mainSchedule.startDate}
+                  endDate={mainSchedule.endDate}
+                  startTime={mainSchedule.startTime}
+                  endTime={mainSchedule.endTime}
+                  filters={mainSchedule.filters}
+                  openFilter={openFilter}
+                  handleFilterToggle={handleFilterToggle}
+                  handleFilterChange={handleFilterChange}
+                  toTimeString={toTimeString}
+                  onClose={onClose}
+                  mainScheduleSaved={mainSchedule.mainScheduleSaved}
+                  handleSubmitSchedule={handleSubmitSchedule}
+                />
+              ) : null
             ) : (
               <Button
                 variant="confirm"

@@ -11,7 +11,7 @@ export const clearAccessToken = () => {
 };
 
 export const api = axios.create({
-  baseURL: import.meta.env?.VITE_API_BASE_URL,
+  baseURL: import.meta.env?.VITE_API_BASE_URL || "https://pchedule.kro.kr/api",
   headers: {
     "Content-Type": "application/json",
   },
@@ -37,25 +37,58 @@ api.interceptors.request.use(
     return config;
   },
   (err) => {
-    Promise.reject(err);
+    return Promise.reject(err);
   }
 );
 
+//(_retry) : 요청은 이미 한 번 토큰 재발급을 거쳤다는 마킹용
 api.interceptors.response.use(
   (res) => res,
   async (error) => {
-    if (error.response?.status === 401) {
-      try {
-        const res = await api.post("/api/token/refresh/");
-        if (!res) throw new Error("access token 재발급 응답이 없습니다.");
+    const original = error.config;
 
-        const data = await res.data;
+    if (error.response?.status === 401 && !original?._retry) {
+      try {
+        original._retry = true;
+
+        const refreshRes = await axios.post(
+          `${api.defaults.baseURL}/api/token/refresh/`,
+          {},
+          { withCredentials: true }
+        );
+
+        const data = refreshRes.data;
         setAccessToken(data.access_token);
+
+        original.headers = original.headers || {};
+        original.headers.Authorization = `Bearer ${data.access_token}`;
+        return api(original);
       } catch (err) {
         if (err.response?.status === 401) {
           setAccessToken(null);
         }
+        return Promise.reject(err);
       }
     }
+
+    return Promise.reject(error);
   }
 );
+// api.interceptors.response.use(
+//   (res) => res,
+//   async (error) => {
+//     if (error.response?.status === 401) {
+//       try {
+//         const res = await api.post("/api/token/refresh/");
+//         if (!res) throw new Error("access token 재발급 응답이 없습니다.");
+
+//         const data = await res.data;
+//         setAccessToken(data.access_token);
+//       } catch (err) {
+//         if (err.response?.status === 401) {
+//           setAccessToken(null);
+//         }
+//       }
+//     }
+//   }
+// );

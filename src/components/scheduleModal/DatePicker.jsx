@@ -3,6 +3,18 @@ import Button from "../common/Button";
 
 const ITEM_H = 36;
 
+const toDate = (v) => {
+  if (!v && v !== 0) return null;
+  if (v instanceof Date) return isNaN(v.getTime()) ? null : v;
+  const d = new Date(v);
+  return isNaN(d.getTime()) ? null : d;
+};
+
+const formatDate = (v, locale = undefined) => {
+  const d = toDate(v);
+  return d ? d.toLocaleDateString(locale) : "";
+};
+
 const DatePicker = ({
   value,
   onChange,
@@ -10,6 +22,7 @@ const DatePicker = ({
   placeholder,
   className,
   disabled,
+  locale,
 }) => {
   const [open, setOpen] = useState(false);
   const [temp, setTemp] = useState(value ?? options[0] ?? null); //선택중인 값
@@ -62,7 +75,8 @@ const DatePicker = ({
           disabled ? "opacity-60 pointer-events-none" : ""
         }`}
       >
-        {temp ? temp.toLocaleDateString() : placeholder || "날짜 선택"}
+        {/* {temp ? temp.toLocaleDateString() : placeholder || "날짜 선택"} */}
+        {formatDate(temp, locale) || placeholder || "날짜 선택"}
       </button>
 
       {open && (
@@ -73,17 +87,22 @@ const DatePicker = ({
             style={{ scrollBehavior: "smooth" }}
           >
             <div style={{ height: `${(180 - ITEM_H) / 2}px` }} />
-            {options.map((d, i) => (
-              <div
-                key={i}
-                className={`snap-center h-[36px] flex items-center justify-center text-sm ${
-                  i === curIndex ? "text-black font-semibold" : "text-gray-500"
-                }`}
-                onClick={() => commit(d)}
-              >
-                {new Date(d).toLocaleDateString()}
-              </div>
-            ))}
+            {options.map((d, i) => {
+              const label = formatDate(d, locale) || String(d);
+              const selected = i === curIndex;
+              return (
+                <div
+                  id={`date-opt-${i}`}
+                  key={i}
+                  className={`snap-center h-[36px] flex items-center justify-center text-sm cursor-pointer ${
+                    selected ? "text-black font-semibold" : "text-gray-500"
+                  }`}
+                  onClick={() => commit(d)}
+                >
+                  {label}
+                </div>
+              );
+            })}
             <div style={{ height: `${(180 - ITEM_H) / 2}px` }} />
           </div>
 

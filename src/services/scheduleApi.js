@@ -46,7 +46,8 @@ export const fetchPostSchedule = async (
     const res = await api.post("/schedule/schedules/", newSchedule);
     if (!res) throw new Error("일정 등록이 안되었습니다.");
 
-    if (res.status === 200) return res.data;
+    // if (res.status === 200) return res.data;
+    if (res && res.status >= 200 && res.status < 300) return res.data;
   } catch (err) {
     console.log(err);
     return false;
@@ -58,7 +59,8 @@ export const fetchGetDetailSchedules = async (schedulesId) => {
     const res = await api.get(`/schedule/schedules/${schedulesId}/`);
     if (!res) throw new Error("상세일정을 받아올 수 없습니다.");
 
-    if (res.status === 200) return res.data;
+    // if (res.status === 200) return res.data;
+    if (res && res.status >= 200 && res.status < 300) return res.data ?? true;
   } catch (err) {
     console.log(err);
     return false;
@@ -103,7 +105,8 @@ export const fetchPutSchedules = async (
     );
     if (!res) throw new Error("일정을 수정할 수 없습니다.");
 
-    if (res.status === 200) return res.data;
+    // if (res.status === 200) return res.data;
+    if (res && res.status >= 200 && res.status < 300) return res.data ?? true;
   } catch (err) {
     console.log(err);
     return false;
@@ -132,7 +135,8 @@ export const fetchPutDetailSchedule = async (
     );
     if (!res) throw new Error("상세일정을 수정할 수 없습니다.");
 
-    if (res.status === 200) return res.data;
+    // if (res.status === 200) return res.data;
+    if (res && res.status >= 200 && res.status < 300) return res.data ?? true;
   } catch (err) {
     console.log(err);
     return false;
@@ -144,7 +148,8 @@ export const fetchDeleteSchedules = async (schedulesId) => {
     const res = await api.delete(`/schedule/schedules/${schedulesId}/`);
     if (!res) throw new Error("일정을 삭제할 수 없습니다.");
 
-    if (res.status === 200) return res.data;
+    // if (res.status === 200) return res.data;
+    if (res && res.status >= 200 && res.status < 300) return res.data ?? true;
   } catch (err) {
     console.log(err);
     return false;
@@ -158,7 +163,8 @@ export const fetchDeleteDetailSchedule = async (detailScheduleId) => {
     );
     if (!res) throw new Error("상세일정을 삭제할 수 없습니다.");
 
-    if (res.status === 200) return res.data;
+    // if (res.status === 200) return res.data;
+    if (res && res.status >= 200 && res.status < 300) return res.data ?? true;
   } catch (err) {
     console.log(err);
     return false;

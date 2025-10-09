@@ -12,6 +12,7 @@ import RoutineCard from "../components/RoutineCard";
 import TabButton from "../components/common/TabButton";
 import PlusButton from "../components/common/PlusButton";
 import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
+import useScheduleStore from "../stores/useScheduleStore";
 
 const Routine = () => {
   const [isWeekly, setIsWeekly] = useState(true);
@@ -23,6 +24,7 @@ const Routine = () => {
   const lastDateOfThisWeek = currentDate.getDate() + (6 - currentDayOfThisWeek);
 
   const [isAddScheduleOpen, setIsAddScheduleOpen] = useState(false);
+  const { clearMainSchedule } = useScheduleStore();
   const filterKeys = ["period", "date", "priority"];
   const list = posts.data;
 
@@ -38,6 +40,11 @@ const Routine = () => {
   };
   const handleClickNext = () => {
     setCurrentDate((prev) => new Date(prev.setDate(prev.getDate() + 7)));
+  };
+
+  const handlePlusClick = () => {
+    clearMainSchedule();
+    setIsAddScheduleOpen(true);
   };
 
   return (
@@ -94,7 +101,7 @@ const Routine = () => {
           </div>
         </div>
       )}
-      <PlusButton onClick={() => setIsAddScheduleOpen(true)} />
+      <PlusButton onClick={handlePlusClick} />
       {isAddScheduleOpen && (
         <AddScheduleModal onClose={() => setIsAddScheduleOpen(false)} />
       )}
