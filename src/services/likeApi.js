@@ -1,5 +1,5 @@
-// services/likeApi.js
-import { api } from "./api";
+// src/services/likeApi.js
+import { api } from "./api"; // 팀 컨벤션: 네임드 임포트
 
 // 좋아요 추가: false -> true
 export async function likeSchedule(scheduleId) {
