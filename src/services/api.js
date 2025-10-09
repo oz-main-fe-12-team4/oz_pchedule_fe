@@ -33,19 +33,22 @@ api.interceptors.request.use(
     return config;
   },
   (err) => {
-    Promise.reject(err);
+    return Promise.reject(err);
   }
 );
 
+//(_retry) : 요청은 이미 한 번 토큰 재발급을 거쳤다는 마킹용
 api.interceptors.response.use(
   (res) => res,
   async (error) => {
-    if (error.response?.status === 401) {
+    const original = error.config;
+
+    if (error.response?.status === 401 && !original?._retry) {
       try {
         const res = await api.post("/token/refresh/");
         if (!res) throw new Error("access token 재발급 응답이 없습니다.");
 
-        const data = await res.data;
+        const data = refreshRes.data;
         setAccessToken(data.access_token);
 
         if (res.status === 401) window.location.href = "/login";
@@ -53,7 +56,28 @@ api.interceptors.response.use(
         if (err.response?.status === 401) {
           setAccessToken(null);
         }
+        return Promise.reject(err);
       }
     }
+
+    return Promise.reject(error);
   }
 );
+// api.interceptors.response.use(
+//   (res) => res,
+//   async (error) => {
+//     if (error.response?.status === 401) {
+//       try {
+//         const res = await api.post("/api/token/refresh/");
+//         if (!res) throw new Error("access token 재발급 응답이 없습니다.");
+
+//         const data = await res.data;
+//         setAccessToken(data.access_token);
+//       } catch (err) {
+//         if (err.response?.status === 401) {
+//           setAccessToken(null);
+//         }
+//       }
+//     }
+//   }
+// );

@@ -2,9 +2,17 @@ import { useState } from "react";
 import PlusButton from "../components/common/PlusButton";
 import TabButton from "../components/common/TabButton";
 import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
+import useScheduleStore from "../stores/useScheduleStore";
 
 const Someday = () => {
   const [isAddScheduleOpen, setIsAddScheduleOpen] = useState(false);
+  const { clearMainSchedule } = useScheduleStore();
+
+  const handlePlusClick = () => {
+    clearMainSchedule();
+    setIsAddScheduleOpen(true);
+  };
+
   return (
     <div className="w-full">
       <TabButton tabs={["전체", "내가작성글", "공유스토리"]} />
@@ -16,7 +24,7 @@ const Someday = () => {
           + 버튼을 눌러 일정을 등록해보세요.
         </p>
       </div>
-      <PlusButton onClick={() => setIsAddScheduleOpen(true)} />
+      <PlusButton onClick={handlePlusClick} />
       {isAddScheduleOpen && (
         <AddScheduleModal onClose={() => setIsAddScheduleOpen(false)} />
       )}

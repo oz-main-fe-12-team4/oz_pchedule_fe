@@ -9,7 +9,7 @@ import {
 } from "../utils/dateFormat";
 import { fetchPostSchedule, fetchPutSchedules } from "../services/scheduleApi";
 
-const MOCK_TEST = true;
+const MOCK_TEST = false;
 
 const useAddScheduleHandlers = (props) => {
   const {
@@ -41,7 +41,15 @@ const useAddScheduleHandlers = (props) => {
     saveMainSchedule,
     setLoading,
     setSubSchedules,
+    clearMainSchedule,
   } = useScheduleStore();
+
+  // 신규일정 등록일때, 스토어 전체 초기화 (최초 1회만 실행)
+  useEffect(() => {
+    if (!id) {
+      clearMainSchedule;
+    }
+  }, []);
 
   useEffect(() => {
     if (title != null) setMainSchedule("title", title);

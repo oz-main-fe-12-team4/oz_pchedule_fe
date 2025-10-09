@@ -5,6 +5,7 @@ import Button from "../components/common/Button";
 import PlusButton from "../components/common/PlusButton";
 import { useState } from "react";
 import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
+import useScheduleStore from "../stores/useScheduleStore";
 // import useUserStore from "../stores/userStore";
 // import { useNavigate } from "react-router";
 // import { useEffect } from "react";
@@ -15,6 +16,7 @@ const Main = () => {
   const thisMonth = currentDate.getMonth() + 1;
   const [isAddScheduleOpen, setIsAddScheduleOpen] = useState(false);
   const [pickedDate, setPickedDate] = useState(null);
+  const { clearMainSchedule } = useScheduleStore();
   // const { isAdmin } = useUserStore();
   // const navigate = useNavigate();
 
@@ -31,6 +33,12 @@ const Main = () => {
 
   const handleDayClick = (date) => {
     setPickedDate(date);
+    setIsAddScheduleOpen(true);
+  };
+
+  const handlePlusClick = () => {
+    clearMainSchedule();
+    setPickedDate(null);
     setIsAddScheduleOpen(true);
   };
 
@@ -57,7 +65,7 @@ const Main = () => {
           onDayClick={handleDayClick}
         />
 
-        <PlusButton onClick={() => setIsAddScheduleOpen(true)} />
+        <PlusButton onClick={handlePlusClick} />
         {isAddScheduleOpen && (
           <AddScheduleModal
             defaultStartDate={pickedDate}
