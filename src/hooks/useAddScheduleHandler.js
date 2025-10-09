@@ -47,7 +47,7 @@ const useAddScheduleHandlers = (props) => {
   // 신규일정 등록일때, 스토어 전체 초기화 (최초 1회만 실행)
   useEffect(() => {
     if (!id) {
-      clearMainSchedule;
+      clearMainSchedule();
     }
   }, []);
 
