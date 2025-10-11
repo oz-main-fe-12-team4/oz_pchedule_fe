@@ -51,7 +51,7 @@ api.interceptors.response.use(
         if (res.status === 401) window.location.href = "/login";
       } catch (err) {
         if (err.response?.status === 401) {
-          setAccessToken(null);
+          clearAccessToken();
         }
       }
     }
