@@ -8,7 +8,7 @@ import { useState } from "react";
 import { getColorOfPriority } from "../utils/getColorOfPriority";
 
 const ScheduleCard = ({ post }) => {
-  const { priority, start_time, is_shared, title, is_completed, schedule } =
+  const { priority, start_time, share_type, title, is_completed, schedule } =
     post;
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const priorityColor = getColorOfPriority(priority);
@@ -25,7 +25,7 @@ const ScheduleCard = ({ post }) => {
       <div className="flex flex-col items-start min-w-[140px]">
         <p className="text-l font-bold text-gray-700 flex items-center gap-2">
           {start_time ? new Date(start_time).toLocaleDateString("ko-KR") : "-"}
-          {is_shared ? (
+          {share_type !== "비공개" ? (
             <IoShare className="text-gray-500" />
           ) : (
             <FaUser className="text-gray-500" />
