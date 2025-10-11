@@ -12,6 +12,7 @@ import { useNavigate } from "react-router";
 import useUserStore from "../../stores/userStore";
 import { useEffect } from "react";
 import { fetchGetUserData } from "../../services/userApi";
+// import { fetchGetNotificationList } from "../../services/notificationApi";
 
 const Header = () => {
   const [isDropdownProfile, setIsDropdownProfile] = useState(false);
@@ -20,6 +21,9 @@ const Header = () => {
   const navigate = useNavigate();
   const { isAdmin, setIsAdmin } = useUserStore();
   const clearIsAdminStorage = useUserStore.persist.clearStorage;
+  // const getNotificationList = async () => await fetchGetNotificationList();
+
+  // const notificationList = getNotificationList();
 
   const sortedNotificationList = notificationList.data.sort(
     (a, b) => b.id - a.id
@@ -50,13 +54,14 @@ const Header = () => {
         </Link>
         <div className="flex justify-evenly gap-7 text-[#192A2D]">
           <IoSearch size={34} />
-          <div
-            onClick={() => (
-              setIsDropdownNotification((prev) => !prev),
-              setIsDropdownProfile(false)
-            )}
-          >
-            <IoMdNotifications size={34} />
+          <div>
+            <IoMdNotifications
+              size={34}
+              onClick={() => (
+                setIsDropdownNotification((prev) => !prev),
+                setIsDropdownProfile(false)
+              )}
+            />
             {isDropdownNotification && (
               <div className="p-5 rounded-2xl bg-white shadow-[0_0_40px_-10px_#0000003f] absolute top-20 right-5 flex flex-col justify-center items-center gap-3 z-50 text-gray-400">
                 {sortedNotificationList.map((el) => (
