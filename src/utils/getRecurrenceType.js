@@ -1,12 +1,12 @@
 export const getRecurrenceType = (type) => {
   switch (type) {
-    case "daily":
+    case "DAILY":
       return "매일";
-    case "weekly":
+    case "WEEKLY":
       return "매주";
-    case "monthly":
+    case "MONTHLY":
       return "매달";
-    case "yearly":
+    case "YEARLY":
       return "매년";
   }
 };

@@ -7,24 +7,31 @@ import { BsList } from "react-icons/bs";
 import { CiCalendar } from "react-icons/ci";
 import { useState } from "react";
 import FilterButtons from "../components/common/FilterButtons";
-import { posts } from "../assets/data/dummyPostList";
 import RoutineCard from "../components/RoutineCard";
 import TabButton from "../components/common/TabButton";
 import PlusButton from "../components/common/PlusButton";
 import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
+import { RoutineSchedules } from "../assets/data/dummyRoutine";
+import { toTime } from "../utils/dateFormat";
 
 const Routine = () => {
   const [isWeekly, setIsWeekly] = useState(true);
   const [currentDate, setCurrentDate] = useState(new Date());
-  const thisYear = currentDate.getFullYear();
-  const thisMonth = currentDate.getMonth() + 1;
   const currentDayOfThisWeek = currentDate.getDay();
-  const firstDateOfThisWeek = currentDate.getDate() - currentDayOfThisWeek;
-  const lastDateOfThisWeek = currentDate.getDate() + (6 - currentDayOfThisWeek);
+  const firstDateOfThisWeek = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate() - currentDayOfThisWeek
+  );
+  const lastDateOfThisWeek = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate() + (6 - currentDayOfThisWeek)
+  );
 
   const [isAddScheduleOpen, setIsAddScheduleOpen] = useState(false);
   const filterKeys = ["period", "date", "priority"];
-  const list = posts.data;
+  const list = RoutineSchedules;
 
   const handleClickListButton = () => {
     setIsWeekly(false);
@@ -63,24 +70,28 @@ const Routine = () => {
       {isWeekly && (
         <div className="h-[100%] flex flex-col gap-3 mx-5">
           <Button onClick={() => setCurrentDate(new Date())}>오늘</Button>
-          <h1 className="flex items-center gap-1 text-2xl font-bold pb-3">
-            <div className="w-[270px]">
-              {thisYear}.{thisMonth}.{firstDateOfThisWeek} ~ {thisYear}.
-              {thisMonth}.{lastDateOfThisWeek}
+          <h1 className="flex items-center gap-1 text-xl font-bold pb-3">
+            <div className="w-[350px] flex flex-col">
+              {toTime(firstDateOfThisWeek)} ~ {toTime(lastDateOfThisWeek)}
             </div>
             <MdOutlineNavigateBefore onClick={handleClickPrev} />
             <MdOutlineNavigateNext onClick={handleClickNext} />
           </h1>
           <DisplayDays />
-          <Weekly firstDateOfThisWeek={firstDateOfThisWeek} />
+          <Weekly
+            currentDate={currentDate}
+            currentDayOfThisWeek={currentDayOfThisWeek}
+            firstDateOfThisWeek={firstDateOfThisWeek}
+            lastDateOfThisWeek={lastDateOfThisWeek}
+          />
         </div>
       )}
       {!isWeekly && (
         <div className="flex flex-col gap-1  mx-6">
           <FilterButtons keys={filterKeys} />
           <h1 className="flex items-center gap-3 pb-3">
-            {thisYear}.{thisMonth}.{firstDateOfThisWeek} ~ {thisYear}.
-            {thisMonth}.{lastDateOfThisWeek}
+            {toTime(firstDateOfThisWeek)} ~
+            <span>{toTime(lastDateOfThisWeek)}</span>
           </h1>
           <div className="w-full -mx-6">
             <TabButton />

@@ -9,10 +9,17 @@ import { useState } from "react";
 import ConfirmModal from "./common/ConfirmModal.jsx";
 
 const RoutineCard = ({ post }) => {
-  const { priority, recurrence, start_period, is_shared, title, is_completed } =
-    post;
+  const {
+    priority,
+    recurrence_rule,
+    start_period,
+    end_period,
+    share_type,
+    title,
+    is_completed,
+  } = post;
   const priorityColor = getColorOfPriority(priority);
-  const recurrenceType = getRecurrenceType(recurrence.type);
+  const recurrenceType = getRecurrenceType(recurrence_rule.recurrence_type);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const handleClickDeleteButton = () => {
@@ -24,12 +31,12 @@ const RoutineCard = ({ post }) => {
       className={`flex items-center gap-4 border-l-4 ${priorityColor} pl-3 py-2`}
     >
       {/* 왼쪽: 날짜 + 아이콘 */}
-      <div className="flex flex-col items-start min-w-[140px]">
+      <div className="w-[200px] flex flex-col items-start min-w-[140px]">
         <p className="text-l font-bold text-gray-700 flex items-center gap-2">
           {start_period
             ? new Date(start_period).toLocaleDateString("ko-KR")
             : "-"}
-          {is_shared ? (
+          {share_type !== "비공개" ? (
             <IoShare className="text-gray-500" />
           ) : (
             <FaUser className="text-gray-500" />
@@ -37,7 +44,10 @@ const RoutineCard = ({ post }) => {
         </p>
         <p className="text-sm text-[#C2C2C2]">
           {recurrenceType}반복 :{" "}
-          <RenderRecurrenceByType recurrence={recurrence} />
+          <RenderRecurrenceByType
+            endPeriod={end_period}
+            recurrence={recurrence_rule}
+          />
         </p>
       </div>
 
