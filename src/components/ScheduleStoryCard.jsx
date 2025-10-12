@@ -40,7 +40,7 @@ function ScheduleStoryCard({ schedule }) {
             <div className="absolute bottom-2 right-2">
               <DeleteButton
                 size={25}
-                className={"bg-white rounded-full"}
+                className={"bg-white rounded-full z-10"}
                 onClick={handleClickDeleteButton}
               />
             </div>

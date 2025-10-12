@@ -54,6 +54,7 @@ let router = createBrowserRouter([
       {
         path: "/admin/user_list",
         loader: async () => await fetchGetUserList(),
+        hydrateFallback: () => <p> 유저 목록을 받아오고 있습니다. </p>,
         Component: AdminPage,
       },
       {
