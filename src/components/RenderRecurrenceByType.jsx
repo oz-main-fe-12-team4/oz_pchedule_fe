@@ -1,7 +1,9 @@
-const RenderRecurrenceByType = ({ recurrence }) => {
-  switch (recurrence.type) {
+const RenderRecurrenceByType = ({ endPeriod, recurrence }) => {
+  switch (recurrence.recurrence_type) {
     case "DAILY":
-      return "";
+      return `~ ${new Date(endPeriod).getFullYear()}.${
+        new Date(endPeriod).getMonth() + 1
+      }.${new Date(endPeriod).getDate()}`;
     case "WEEKLY":
       return recurrence.weekdays.map((day, i) => <span key={i}>{day} </span>);
     case "MONTHLY":
