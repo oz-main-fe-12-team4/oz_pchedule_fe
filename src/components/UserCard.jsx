@@ -4,6 +4,7 @@ import DeleteButton from "./common/DeleteButton";
 import ConfirmModal from "./common/ConfirmModal";
 import { useState } from "react";
 import {
+  fetchDeleteUser,
   fetchPostUserActivate,
   fetchPostUserDeactivate,
 } from "../services/userApi";
@@ -20,6 +21,12 @@ export default function UserCard({ user }) {
 
   const handleClickDeleteButton = () => {
     setIsConfirmModalOpen(true);
+  };
+
+  const handleClickDeleteUserButton = async (userId) => {
+    await fetchDeleteUser(userId);
+    setIsConfirmModalOpen(false);
+    location.reload();
   };
 
   return (
@@ -61,7 +68,7 @@ export default function UserCard({ user }) {
           message={"삭제 하시겠습니까?"}
           leftBtnText={"예"}
           rightBtnText={"아니요"}
-          onLeftClick={() => {}}
+          onLeftClick={() => handleClickDeleteUserButton(id)}
           onRightClick={() => setIsConfirmModalOpen(false)}
           onClose={() => setIsConfirmModalOpen(false)}
         />

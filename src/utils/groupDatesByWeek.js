@@ -8,6 +8,7 @@ export const groupDatesByWeek = (firstDay, lastDay) => {
   if (dayOfFirstDay !== 0) {
     for (let i = 0; i < dayOfFirstDay; i++) {
       week.push({
+        year: "",
         month: "",
         date: "",
       });
@@ -16,6 +17,7 @@ export const groupDatesByWeek = (firstDay, lastDay) => {
 
   while (currentDay <= lastDay) {
     week.push({
+      year: currentDay.getFullYear(),
       month: currentDay.getMonth() + 1,
       date: currentDay.getDate(),
     });
@@ -31,6 +33,7 @@ export const groupDatesByWeek = (firstDay, lastDay) => {
     // 마지막주 처리 (마지막 날이 토요일이 아닐때)
     for (let i = 6 - dayOfLastDay; i > 0; i--) {
       week.push({
+        year: "",
         month: "",
         date: "",
       });

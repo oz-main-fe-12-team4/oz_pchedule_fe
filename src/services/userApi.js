@@ -19,7 +19,7 @@ export const fetchGetUserList = async () => {
   try {
     const res = await api.get("/user/users/");
 
-    if (res.status === 200) return res.data;
+    if (res.status === 200) return res.data.data;
 
     if (res.status === 403 || res.status === 401)
       return alert("권한이 없습니다.");
@@ -33,10 +33,10 @@ export const fetchGetUserList = async () => {
 
 export const fetchPostUserActivate = async (userId) => {
   try {
-    const res = await api.post(`/user/users/${userId}/activate`);
+    const res = await api.post(`/user/users/${userId}/activate/`);
     if (!res) throw new Error("유저를 활성화 할 수 없습니다.");
 
-    if (res.status === 200) return res.data;
+    if (res.status === 200) return location.reload();
   } catch (err) {
     console.error(err);
     alert(err?.message);
@@ -46,12 +46,24 @@ export const fetchPostUserActivate = async (userId) => {
 
 export const fetchPostUserDeactivate = async (userId) => {
   try {
-    const res = await api.post(`/user/users/${userId}/deactivate`);
+    const res = await api.post(`/user/users/${userId}/deactivate/`);
     if (!res) throw new Error("유저를 활성화 할 수 없습니다.");
+
+    if (res.status === 200) return location.reload();
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+};
+
+export const fetchDeleteUser = async (userId) => {
+  try {
+    const res = await api.delete(`/user/${userId}/withdraw/`);
+    if (!res) throw new Error("회원을 삭제할 수 없습니다.");
 
     if (res.status === 200) return res.data;
   } catch (err) {
-    console.error(err);
+    console.log(err);
     return false;
   }
 };

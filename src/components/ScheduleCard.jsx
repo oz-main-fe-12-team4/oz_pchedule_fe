@@ -6,16 +6,28 @@ import DeleteButton from "./common/DeleteButton";
 import ConfirmModal from "./common/ConfirmModal";
 import { useState } from "react";
 import { getColorOfPriority } from "../utils/getColorOfPriority";
+import { getCategoryEmoji } from "../utils/getCategoryEmoji";
 
-const ScheduleCard = ({ post }) => {
-  const { priority, start_time, share_type, title, is_completed, schedule } =
-    post;
+const ScheduleCard = ({ schedule }) => {
+  const {
+    priority,
+    category_code,
+    start_period,
+    share_type,
+    title,
+    detail_schedule,
+  } = schedule;
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const priorityColor = getColorOfPriority(priority);
+  const emoji = getCategoryEmoji(category_code);
 
   const handleClickDeleteButton = () => {
     setIsConfirmModalOpen(true);
   };
+
+  detail_schedule.sort(
+    (a, b) => new Date(a.start_time) - new Date(b.start_time)
+  );
 
   return (
     <div
@@ -24,7 +36,9 @@ const ScheduleCard = ({ post }) => {
       {/* 왼쪽: 날짜 + 아이콘 */}
       <div className="flex flex-col items-start min-w-[140px]">
         <p className="text-l font-bold text-gray-700 flex items-center gap-2">
-          {start_time ? new Date(start_time).toLocaleDateString("ko-KR") : "-"}
+          {start_period
+            ? new Date(start_period).toLocaleDateString("ko-KR")
+            : "-"}
           {share_type !== "비공개" ? (
             <IoShare className="text-gray-500" />
           ) : (
@@ -36,11 +50,18 @@ const ScheduleCard = ({ post }) => {
       {/* 오른쪽: 일정 내용 */}
       <div className="flex w-full justify-between items-center gap-4">
         <div className="flex flex-col items-start justify-start p-3 px-6 gap-2 bg-white rounded-xl shadow-sm w-full">
-          <p className="font-bold text-gray-800 cursor-pointer">{title}</p>
-          <div className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-            {is_completed ? <FaCheckSquare /> : <FaRegSquare />}
-            <span>{schedule}</span>
-          </div>
+          <p className="font-bold text-gray-800 cursor-pointer">
+            {emoji} {title}
+          </p>
+          {detail_schedule.map((schedule) => (
+            <div
+              key={schedule.id}
+              className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer"
+            >
+              {schedule.is_completed ? <FaCheckSquare /> : <FaRegSquare />}
+              <span>{schedule.title}</span>
+            </div>
+          ))}
         </div>
 
         <DeleteButton onClick={handleClickDeleteButton} />

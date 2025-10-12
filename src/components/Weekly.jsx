@@ -54,7 +54,9 @@ const Weekly = ({
                 ) &&
                 schedule.recurrence_rule.recurrence_type === "DAILY"
               ) {
-                return <DailyRoutineCard schedule={schedule} />;
+                return (
+                  <DailyRoutineCard key={schedule.id} schedule={schedule} />
+                );
               }
             })}
           </div>

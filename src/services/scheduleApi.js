@@ -29,6 +29,7 @@ export const fetchPostSchedule = async (payload) => {
 export const fetchGetDetailSchedules = async (schedulesId) => {
   try {
     const res = await api.get(`/schedule/schedules/${schedulesId}/`);
+    const res = await api.get(`/schedule/schedules/${schedulesId}/`);
     if (!res) throw new Error("상세일정을 받아올 수 없습니다.");
 
     // if (res.status === 200) return res.data;

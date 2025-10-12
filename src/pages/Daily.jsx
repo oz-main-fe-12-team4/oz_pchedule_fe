@@ -4,11 +4,27 @@ import FilterButtons from "../components/common/FilterButtons";
 import PlusButton from "../components/common/PlusButton";
 import TabButton from "../components/common/TabButton";
 import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
+import { useEffect } from "react";
+import { fetchGetScheduleList } from "../services/scheduleApi";
 import useScheduleStore from "../stores/useScheduleStore";
 
-const Daily = ({ posts }) => {
-  const list = posts?.data ?? [];
+const Daily = () => {
   const [isAddScheduleOpen, setIsAddScheduleOpen] = useState(false);
+  const [scheduleListData, setScheduleListData] = useState();
+
+  useEffect(() => {
+    const getScheduleList = async () => {
+      const res = await fetchGetScheduleList();
+      setScheduleListData(res);
+    };
+    getScheduleList();
+  }, []);
+
+  console.log(scheduleListData);
+  scheduleListData?.sort(
+    (a, b) => new Date(a.start_period) - new Date(b.start_period)
+  );
+
   const { clearMainSchedule } = useScheduleStore();
 
   const handlePlusClick = () => {
@@ -24,9 +40,9 @@ const Daily = ({ posts }) => {
         <TabButton tabs={["전체", "완료된일", "해야할일"]} />
       </div>
       <div className="divide-y-[0.5px] divide-gray-200">
-        {list.map((post) => (
-          <div key={post.post_id} className="py-4">
-            <ScheduleCard post={post} />
+        {scheduleListData?.map((schedule) => (
+          <div key={schedule.id} className="py-4">
+            <ScheduleCard schedule={schedule} />
           </div>
         ))}
       </div>

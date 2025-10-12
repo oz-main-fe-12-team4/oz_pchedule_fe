@@ -3,9 +3,9 @@ import { getColorOfPriority } from "../utils/getColorOfPriority.js";
 import { getCategoryEmoji } from "../utils/getCategoryEmoji.js";
 
 const DailyRoutineCard = ({ schedule }) => {
-  const { priority, category_name, title, is_completed } = schedule;
+  const { priority, category_code, title, is_completed } = schedule;
   const priorityColor = getColorOfPriority(priority);
-  const categoryEmoji = getCategoryEmoji(category_name);
+  const categoryEmoji = getCategoryEmoji(category_code);
 
   return (
     <div
