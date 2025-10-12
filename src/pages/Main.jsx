@@ -6,9 +6,9 @@ import PlusButton from "../components/common/PlusButton";
 import { useState } from "react";
 import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
 import useScheduleStore from "../stores/useScheduleStore";
-// import useUserStore from "../stores/userStore";
-// import { useNavigate } from "react-router";
-// import { useEffect } from "react";
+import useUserStore from "../stores/userStore";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 const Main = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -17,12 +17,12 @@ const Main = () => {
   const [isAddScheduleOpen, setIsAddScheduleOpen] = useState(false);
   const [pickedDate, setPickedDate] = useState(null);
   const { clearMainSchedule } = useScheduleStore();
-  // const { isAdmin } = useUserStore();
-  // const navigate = useNavigate();
+  const { isAdmin } = useUserStore();
+  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (isAdmin === null) navigate("/login");
-  // }, [isAdmin, navigate]);
+  useEffect(() => {
+    if (isAdmin === null) navigate("/login");
+  }, [isAdmin, navigate]);
 
   const handleClickPrev = () => {
     setCurrentDate((prev) => new Date(prev.setMonth(prev.getMonth() - 1)));

@@ -1,5 +1,4 @@
-// 날짜 문자열("YYYY-MM-DD") 받아 "월.일 요일" 반환
-function formatDateAndDay(dateString) {
+export function formatDateAndDay(dateString) {
   const date = new Date(dateString);
   if (isNaN(date)) return "날짜 오류";
   const month = date.getMonth() + 1;
@@ -9,4 +8,5 @@ function formatDateAndDay(dateString) {
 
   return `${month}.${day} ${dayName}`;
 }
-export default formatDateAndDay;
+
+export const WEEKDAYS_KR = ["일", "월", "화", "수", "목", "금", "토"];

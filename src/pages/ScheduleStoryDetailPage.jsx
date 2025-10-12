@@ -5,7 +5,7 @@ import BookmarkButton from "../components/common/BookmarkButton";
 import myScheduleData from "../assets/data/dummyDetailSchedule";
 import { RiAlarmWarningFill } from "react-icons/ri";
 import { IoChevronBackSharp } from "react-icons/io5";
-import formatDateAndDay from "../utils/formatDateAndDay";
+import { formatDateAndDay } from "../utils/formatDateAndDay";
 import groupSchedulesByDate from "../utils/groupSchedulesByDate";
 import getDayCounts from "../utils/getDayCounts";
 import { useNavigate } from "react-router";

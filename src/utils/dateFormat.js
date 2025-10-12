@@ -6,6 +6,7 @@
 
 // 문자열을 Date형식으로 바꾸기
 export const toDate = (value) => {
+  if (!value) return new Date();
   if (value instanceof Date) return value;
 
   // 문자열로 바꾸고 나서 날짜와 시간 분리하기
@@ -21,7 +22,9 @@ export const toDate = (value) => {
 // 시간을 00:00 형식으로 만들기
 export const toTimeString = (value) => {
   const date = toDate(value);
-  return date.toTimeString().slice(0, 5);
+  const hh = String(date.getHours()).padStart(2, "0");
+  const mm = String(date.getMinutes()).padStart(2, "0");
+  return `${hh}:${mm}`;
 };
 
 // 날짜와 시간을 문자열로 바꾸기
@@ -33,17 +36,30 @@ export const toTime = (value) => {
 };
 
 // 날짜와 기간을 합쳐서 api 보낼때
-export const toApiDate = (dateInput, timeString = "00:00") => {
-  const date = toDate(dateInput);
+export const toApiDate = (dateInput, timeString = "00:00:00") => {
+  const date = toDate(dateInput); // 이미 있는 toDate 재사용
   if (!date) return "";
-  const [hh = "00", mm = "00"] = String(timeString).split(":");
-  const H = String(hh).padStart(2, "0");
-  const M = String(mm).padStart(2, "0");
 
-  const y = date.getFullYear();
-  const m = date.getMonth() + 1;
-  const d = date.getDate();
-  return `${y}-${m}-${d} ${H}:${M}:00`;
+  const [hh = "00", mm = "00", ss = "00"] = String(timeString).split(":");
+  const local = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    Number(hh),
+    Number(mm),
+    Number(ss)
+  );
+  return local.toISOString();
+};
+
+// period에서 문자열로 시간만 가져오기
+export const toApiTime = (TimeInput) => {
+  if (!TimeInput) return "00:00";
+  const dateObj = new Date(TimeInput);
+  const hours = String(dateObj.getHours()).padStart(2, "0");
+  const minutes = String(dateObj.getMinutes()).padStart(2, "0");
+
+  return `${hours}:${minutes}`;
 };
 
 // 수정 모달창에서 제한된 기간으로 설정하기

@@ -13,12 +13,12 @@ export const FILTER_LABELS = {
 };
 
 export const CATEGORY_OPTION_LIST = [
-  { value: "daily", name: "🏠 일상" },
-  { value: "hobby", name: "🎨 취미/여가" },
-  { value: "travel", name: "✈️ 여행" },
-  { value: "learning", name: "📚 자기계발/학습" },
-  { value: "event", name: "🎉 특별이벤트" },
-  { value: "other", name: "🌀 기타" },
+  { id: 1, value: "daily", name: "🏠 일상" },
+  { id: 2, value: "hobby", name: "🎨 취미/여가" },
+  { id: 3, value: "travel", name: "✈️ 여행" },
+  { id: 4, value: "learning", name: "📚 자기계발/학습" },
+  { id: 5, value: "event", name: "🎉 특별이벤트" },
+  { id: 6, value: "other", name: "🌀 기타" },
 ];
 
 export const PRIORITY_OPTION_LIST = [
@@ -35,7 +35,7 @@ export const PRIORITY_OPTION_LIST = [
 ];
 
 export const SHARE_OPTION = [
-  { value: "나만보기", name: "개인일정", Icon: FaUser },
+  { value: "비공개", name: "개인일정", Icon: FaUser },
   { value: "전체공개", name: "공유하기", Icon: FaShareAlt },
 ];
 

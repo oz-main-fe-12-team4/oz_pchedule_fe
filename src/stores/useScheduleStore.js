@@ -1,32 +1,36 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { toTimeString } from "../utils/dateFormat";
-
-const mainScheduleTemplate = {
-  id: null,
-  title: "",
-  description: "",
-  startDate: new Date(),
-  endDate: new Date(),
-  startTime: "00:00",
-  endTime: "23:59",
-  filters: {
-    category: "daily",
-    priority: "medium",
-    share: "personalSchedule",
-    repeat: "none",
-    repeatSub: null,
-  },
-  mainScheduleSaved: false,
-  savedContent: "",
-};
+import { toTimeString, toDate } from "../utils/dateFormat";
 
 const subScheduleTemplate = {
   title: "",
   description: "",
-  start_time: new Date(),
-  end_time: new Date(),
+  start_time: "",
+  end_time: "",
   is_completed: false,
+};
+
+const mainScheduleTemplate = {
+  title: "",
+  start_period: "",
+  end_period: "",
+  startTime: "00:00",
+  endTime: "23:59",
+  category: "daily",
+  priority: "",
+  share_type: "",
+  is_recurrence: false,
+  is_someday: false,
+  is_completed: false,
+  mainScheduleSaved: false,
+  savedContent: "",
+  recurrence_rule: {
+    recurrence_type: "DAILY",
+    weekdays: [], //id
+    month_of_year: 12,
+    day_of_month: 31,
+  },
+  detail_schedule: subScheduleTemplate,
 };
 
 const useScheduleStore = create(
@@ -47,6 +51,59 @@ const useScheduleStore = create(
         }));
       },
 
+      setRecurrenceRule(key, value) {
+        set((state) => ({
+          mainSchedule: {
+            ...state.mainSchedule,
+            recurrence_rule: {
+              ...state.mainSchedule.recurrence_rule,
+              [key]: value,
+            },
+          },
+        }));
+      },
+
+      // 시간만 변경하고 start_period도 함께 업데이트
+      setStartTime(timeString) {
+        set((state) => {
+          const currentDate = state.mainSchedule.start_period
+            ? toDate(state.mainSchedule.start_period)
+            : new Date();
+
+          const [hh, mm] = timeString.split(":");
+          currentDate.setHours(parseInt(hh, 10));
+          currentDate.setMinutes(parseInt(mm, 10));
+
+          return {
+            mainSchedule: {
+              ...state.mainSchedule,
+              startTime: timeString,
+              start_period: currentDate.toISOString(),
+            },
+          };
+        });
+      },
+
+      setEndTime(timeString) {
+        set((state) => {
+          const currentDate = state.mainSchedule.end_period
+            ? toDate(state.mainSchedule.end_period)
+            : new Date();
+
+          const [hh, mm] = timeString.split(":");
+          currentDate.setHours(parseInt(hh, 10));
+          currentDate.setMinutes(parseInt(mm, 10));
+
+          return {
+            mainSchedule: {
+              ...state.mainSchedule,
+              endTime: timeString,
+              end_period: currentDate.toISOString(),
+            },
+          };
+        });
+      },
+
       setMainScheduleFilters(key, value) {
         set((state) => ({
           mainSchedule: {
@@ -60,9 +117,9 @@ const useScheduleStore = create(
         set({ subSchedules: subs }); // 배열 전체 교체
       },
 
-      addSubSchedule() {
+      addSubSchedule(newSub) {
         set((state) => ({
-          subSchedules: [...state.subSchedules, { ...subScheduleTemplate }],
+          subSchedules: [...state.subSchedules, newSub],
         }));
       },
 
@@ -91,35 +148,34 @@ const useScheduleStore = create(
       },
 
       saveMainSchedule({
-        id,
         title,
         description,
         start_time,
         end_time,
-        filters,
+        start_period,
+        end_period,
       }) {
         set((state) => {
+          const start = start_time ?? start_period;
+          const end = end_time ?? end_period;
+
           const nextStartTime =
-            typeof start_time === "string"
-              ? toTimeString(start_time)
+            typeof start === "string"
+              ? toTimeString(start)
               : state.mainSchedule.startTime;
 
           const nextEndTime =
-            typeof end_time === "string"
-              ? toTimeString(end_time)
+            typeof end === "string"
+              ? toTimeString(end)
               : state.mainSchedule.endTime;
 
           const payload = {
-            id,
-            title,
-            description,
-            start_time,
-            end_time,
+            start_period: start,
+            end_period: end,
             startTime: nextStartTime,
             endTime: nextEndTime,
-            filters,
             mainScheduleSaved: true,
-            savedContent: description || title,
+            savedContent: description || title || "",
           };
 
           return { mainSchedule: { ...state.mainSchedule, ...payload } };

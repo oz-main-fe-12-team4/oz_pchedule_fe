@@ -38,7 +38,7 @@ const Input = ({
       </label>
       <input
         id={inputId}
-        value={value}
+        value={value || ""}
         className={`w-[100%] h-10 p-[0_25px] rounded-xl border border-[#C2C2C2]`}
         onChange={handleChange}
         {...props}

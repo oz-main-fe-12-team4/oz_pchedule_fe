@@ -5,10 +5,10 @@ import TimePicker from "./TimePicker";
 import Button from "../common/Button";
 import { FaPlusCircle, FaTrash } from "react-icons/fa";
 import { toTime } from "../../utils/dateFormat";
+import useScheduleStore from "../../stores/useScheduleStore";
 
 const SubScheduleModal = ({
   subSchedules,
-  setSubSchedules,
   savedContent,
   startDate,
   endDate,
@@ -30,12 +30,17 @@ const SubScheduleModal = ({
   const [subSelectedDate, setSubSelectedDate] = useState(startDate);
   const [subStartTime, setSubStartTime] = useState(startTime);
   const [subEndTime, setSubEndTime] = useState(endTime);
+  const { addSubSchedule, setSubSchedules } = useScheduleStore();
 
   useEffect(() => {
     setSubSelectedDate(startDate);
   }, [startDate]);
 
   const handleAddSubSchedule = () => {
+    setSubContent("");
+    setSubSelectedDate(startDate);
+    setSubStartTime(startTime);
+    setSubEndTime(endTime);
     const newSub = {
       mainContent: savedContent || "메인 일정",
       content: subContent,
@@ -44,11 +49,7 @@ const SubScheduleModal = ({
       startTime: subStartTime,
       endTime: subEndTime,
     };
-    setSubSchedules([...subSchedules, newSub]);
-    setSubContent("");
-    setSubSelectedDate(startDate);
-    setSubStartTime(startTime);
-    setSubEndTime(endTime);
+    addSubSchedule(newSub);
   };
 
   const handleDeleteSub = (idx) => {
@@ -99,7 +100,7 @@ const SubScheduleModal = ({
         </div>
 
         {/* 시작 시간 */}
-        <div className="relative w-28 z-50">
+        <div className="relative w-28">
           <TimePicker
             value={subStartTime}
             onChange={setSubStartTime}
@@ -112,7 +113,7 @@ const SubScheduleModal = ({
         </div>
         <span className="text-gray-400">~</span>
         {/* 종료 시간 */}
-        <div className="relative w-28 z-50">
+        <div className="relative w-28">
           <TimePicker
             value={subEndTime}
             onChange={setSubEndTime}
