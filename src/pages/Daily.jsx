@@ -4,10 +4,17 @@ import FilterButtons from "../components/common/FilterButtons";
 import PlusButton from "../components/common/PlusButton";
 import TabButton from "../components/common/TabButton";
 import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
+import useScheduleStore from "../stores/useScheduleStore";
 
 const Daily = ({ posts }) => {
   const list = posts?.data ?? [];
   const [isAddScheduleOpen, setIsAddScheduleOpen] = useState(false);
+  const { clearMainSchedule } = useScheduleStore();
+
+  const handlePlusClick = () => {
+    clearMainSchedule();
+    setIsAddScheduleOpen(true);
+  };
   return (
     <div className="w-full px-4 md:px-6 lg:px-8 py-4 text-left">
       <div className="flex flex-row gap-3 mt-4">
@@ -23,7 +30,7 @@ const Daily = ({ posts }) => {
           </div>
         ))}
       </div>
-      <PlusButton onClick={() => setIsAddScheduleOpen(true)} />
+      <PlusButton onClick={handlePlusClick} />
       {isAddScheduleOpen && (
         <AddScheduleModal onClose={() => setIsAddScheduleOpen(false)} />
       )}

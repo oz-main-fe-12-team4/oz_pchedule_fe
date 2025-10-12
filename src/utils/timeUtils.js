@@ -4,7 +4,11 @@ const pad = (n) => n.toString().padStart(2, "0");
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
 // 시간 객체를 분 단위로 변환 {h: 13, m: 45} → 825
-const toMinutes = ({ h, m }) => h * 60 + m;
+export const toMinutes = (time) => {
+  if (!time || typeof time !== "string") return 0;
+  const [h, m] = time.split(":").map((v) => Number(v) || 0);
+  return h * 60 + m;
+};
 
 // 분 단위를 시간 객체로 변환 825 → {h: 13, m: 45}
 const fromMinutes = (minutes) => {

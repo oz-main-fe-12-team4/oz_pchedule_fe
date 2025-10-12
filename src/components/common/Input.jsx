@@ -18,8 +18,13 @@ const Input = ({
       // 여기서 검색 API 호출 등 작업 추가 가능해
     }
   }, [debouncedInput]);
+
   const handleChange = (e) => {
-    setValue(e.target.value);
+    const next = e.target.value;
+
+    if (typeof setValue === "function") {
+      setValue(next);
+    }
 
     const isValid = e.target.validity.valid;
 
@@ -33,6 +38,7 @@ const Input = ({
       </label>
       <input
         id={inputId}
+        value={value || ""}
         className={`w-[100%] h-10 p-[0_25px] rounded-xl border border-[#C2C2C2]`}
         onChange={handleChange}
         {...props}

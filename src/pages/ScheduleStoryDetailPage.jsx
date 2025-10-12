@@ -5,7 +5,7 @@ import BookmarkButton from "../components/common/BookmarkButton";
 import myScheduleData from "../assets/data/dummyDetailSchedule";
 import { RiAlarmWarningFill } from "react-icons/ri";
 import { IoChevronBackSharp } from "react-icons/io5";
-import formatDateAndDay from "../utils/formatDateAndDay";
+import { formatDateAndDay } from "../utils/formatDateAndDay";
 import groupSchedulesByDate from "../utils/groupSchedulesByDate";
 import getDayCounts from "../utils/getDayCounts";
 import { useNavigate } from "react-router";
@@ -144,7 +144,7 @@ function ScheduleStoryDetailPage() {
             <div className="relative flex flex-col">
               {/* 왼쪽 점선 */}
               <div
-                className="absolute top-5 left-12 h-[calc(100%-2rem)] border-l-4 border-dashed border-gray-400"
+                className="absolute top-4 left-12 ml-15  h-[calc(100%-2rem)] border-l-2 border-dashed border-[#223F43]"
                 style={{ zIndex: 0 }}
               />
 
@@ -153,7 +153,7 @@ function ScheduleStoryDetailPage() {
                 ({ id, start_time, end_time, title, description }) => (
                   <div
                     key={id}
-                    className="flex items-center mb-6 last:mb-0 relative z-10"
+                    className="flex items-center mb-6 ml-15 last:mb-0 relative z-10"
                   >
                     <TimeCard
                       time={`${toTimeString(start_time)}~${toTimeString(

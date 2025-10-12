@@ -1,4 +1,4 @@
-import { fetchPostSchedule, fetchPutSchedules } from "@/services/scheduleApi";
+import { fetchPostSchedule, fetchPutSchedules } from "../services/scheduleApi";
 import { toApiDate } from "../utils/dateFormat";
 
 export async function saveScheduleUtil({

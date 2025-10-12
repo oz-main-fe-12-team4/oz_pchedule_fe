@@ -33,7 +33,7 @@ api.interceptors.request.use(
     return config;
   },
   (err) => {
-    Promise.reject(err);
+    return Promise.reject(err);
   }
 );
 
@@ -47,8 +47,6 @@ api.interceptors.response.use(
 
         const data = await res.data;
         setAccessToken(data.access_token);
-
-        if (res.status === 401) window.location.href = "/login";
       } catch (err) {
         if (err.response?.status === 401) {
           clearAccessToken();

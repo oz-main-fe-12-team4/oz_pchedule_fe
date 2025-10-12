@@ -6,7 +6,13 @@ import Button from "../common/Button";
 import FilterButtons from "../common/FilterButtons";
 import FilterOptionList from "../common/FilterOptionList";
 import CalendarModal from "../common/CalendarModal";
-import { FILTERS } from "../../constants/filterList";
+import {
+  FILTERS,
+  CATEGORY_OPTION_LIST,
+  PRIORITY_OPTION_LIST,
+  SHARE_OPTION,
+  REPEAT_OPTION_LIST,
+} from "../../constants/filterList";
 import { toTime } from "../../utils/dateFormat";
 
 const MainScheduleModal = ({
@@ -22,7 +28,6 @@ const MainScheduleModal = ({
   setStartTime,
   setEndTime,
   mainScheduleSaved,
-  filters,
   openFilter,
   handleFilterToggle,
   handleFilterChange,
@@ -35,22 +40,17 @@ const MainScheduleModal = ({
   showSub,
   maxDate,
   minDate,
+  filters,
 }) => {
-  const ensureTimeRange = (nextStart, nextEnd) => {
-    const sameDay = startDate.toDateString() === endDate.toDateString();
-    if (!sameDay) return { nextStart, nextEnd };
-    const toMinutes = (t) =>
-      t
-        .split(":")
-        .map(Number)
-        .reduce((a, b, i) => (i === 0 ? a + b * 60 : a + b), 0);
-    if (toMinutes(nextEnd) < toMinutes(nextStart))
-      return { nextStart, nextEnd: nextStart };
-    return { nextStart, nextEnd };
-  };
+  console.log("[MainScheduleModal] filters:", filters);
+  console.log("[MainScheduleModal] filters.category:", filters.category);
+  console.log(
+    "[MainScheduleModal] CATEGORY_OPTION_LIST:",
+    CATEGORY_OPTION_LIST
+  );
 
   return (
-    <div>
+    <div className="w-full">
       {/* 메인 일정 제목 */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1 mt-2">
@@ -114,44 +114,42 @@ const MainScheduleModal = ({
         {filters.category && (
           <span className="px-2 py-1 bg-gray-200 rounded text-sm">
             {
-              FILTERS.category.options.find(
-                (opt) => opt.value === filters.category
-              )?.name
+              CATEGORY_OPTION_LIST.find((opt) => opt.value === filters.category)
+                ?.name
             }
           </span>
         )}
         {filters.priority && (
           <span className="px-2 py-1 bg-gray-200 rounded text-sm flex items-center gap-1">
-            {React.createElement(
-              FILTERS.priority.options.find(
+            {(() => {
+              const opt = PRIORITY_OPTION_LIST.find(
                 (opt) => opt.value === filters.priority
-              )?.Icon,
-              { size: 12 }
-            )}
+              );
+              const Icon = opt && opt.Icon;
+              return Icon ? <Icon size={12} className={opt.iconClass} /> : null;
+            })()}
             {
-              FILTERS.priority.options.find(
-                (opt) => opt.value === filters.priority
-              )?.name
+              PRIORITY_OPTION_LIST.find((opt) => opt.value === filters.priority)
+                ?.name
             }
           </span>
         )}
         {filters.share && (
           <span className="px-2 py-1 bg-gray-200 rounded text-sm flex items-center gap-1">
-            {React.createElement(
-              FILTERS.share.options.find((opt) => opt.value === filters.share)
-                ?.Icon,
-              { size: 12 }
-            )}
-            {
-              FILTERS.share.options.find((opt) => opt.value === filters.share)
-                ?.name
-            }
+            {(() => {
+              const opt = SHARE_OPTION.find(
+                (opt) => opt.value === filters.share
+              );
+              const Icon = opt && opt.Icon;
+              return Icon ? <Icon size={12} /> : null;
+            })()}
+            {SHARE_OPTION.find((opt) => opt.value === filters.share)?.name}
           </span>
         )}
         {filters.repeat && (
           <span className="px-2 py-1 bg-gray-200 rounded text-sm">
             {(() => {
-              const repeatOption = FILTERS.repeat.options.find(
+              const repeatOption = REPEAT_OPTION_LIST.find(
                 (opt) => opt.value === filters.repeat
               );
               if (!repeatOption) return "";
@@ -175,13 +173,14 @@ const MainScheduleModal = ({
       {/* 시간 선택 */}
       <div className="flex items-center gap-2 mb-4">
         <TimePicker
-          value={startTime}
-          onChange={(t) => {
-            const { nextStart, nextEnd } = ensureTimeRange(t, endTime);
-            setStartTime(nextStart);
-            setEndTime(nextEnd);
+          value={startTime || "00:00"}
+          onChange={(selectedTime) => {
+            console.log(
+              "[MainScheduleModal] startTime onChange:",
+              selectedTime
+            );
+            setStartTime(selectedTime);
           }}
-          format="hh:mm a"
           minuteStep={1}
           min="00:00"
           max="23:59"
@@ -189,15 +188,11 @@ const MainScheduleModal = ({
         />
         <span className="text-gray-400">~</span>
         <TimePicker
-          value={endTime}
-          onChange={(t) => {
-            const { nextStart, nextEnd } = ensureTimeRange(startTime, t);
-            setStartTime(nextStart);
-            setEndTime(nextEnd);
-          }}
-          format="hh:mm a"
+          value={endTime || "23:59"}
+          onChange={(selectedTime) => setEndTime(selectedTime)}
+          format="hh:mm"
           minuteStep={1}
-          min={startTime}
+          min={startTime || "00:00"}
           max="23:59"
           className="w-full"
         />

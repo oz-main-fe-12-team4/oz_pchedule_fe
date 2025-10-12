@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import timeUtils from "../../utils/timeUtils";
 import Button from "../common/Button";
 
-const { clamp, toMinutes, fromMinutes, parseInput, formatTime, snapToStep } =
-  timeUtils;
+const { clamp, fromMinutes, parseInput, formatTime, snapToStep } = timeUtils;
 
 const ITEM_H = 36;
 const range = (n) => Array.from({ length: n }, (_, i) => i);
@@ -23,14 +22,26 @@ const TimePicker = ({
   const hourRef = useRef(null);
   const minuteRef = useRef(null);
 
+  const [selectedHourIdx, setSelectedHourIdx] = useState(null);
+  const [selectedMinuteIdx, setSelectedMinuteIdx] = useState(null);
+
   //제한된 시간만 선택할 수 있게
-  const minMins = min ? toMinutes(parseInput(min)) : 0;
-  const maxMins = max ? toMinutes(parseInput(max)) : 23 * 60 + 59;
+  const parsedMin = parseInput(min || "00:00");
+  const parsedMax = parseInput(max || "23:59");
+  const minMins = parsedMin.h * 60 + parsedMin.m;
+  const maxMins = parsedMax.h * 60 + parsedMax.m;
 
   // 현재 value를 기준으로 시간 계산
   const parsed = parseInput(value ?? "00:00") ?? { h: 0, m: 0 }; // value가 없으면 "00:00" 사용
   const curHourIdx = parsed.h; //시간은 그대로 인덱스로 사용 (15시 = 인덱스 15)
   const curMinuteIdx = Math.floor(parsed.m / minuteStep); //Wheel의 인덱스번호로 시간 선택하기위해서
+
+  useEffect(() => {
+    if (open) {
+      setSelectedHourIdx(curHourIdx);
+      setSelectedMinuteIdx(curMinuteIdx);
+    }
+  }, [open, curHourIdx, curMinuteIdx]);
 
   //선택을 실제 시간으로 변환
   const applyByIndex = (hIdx, mIdx) => {
@@ -64,12 +75,18 @@ const TimePicker = ({
 
       {open && (
         <div
-          className={`absolute z-30 mt-2 w-[180px] rounded-md border border-gray-200 bg-white shadow-lg ${
+          className={`absolute -bottom-30 z-30 mt-2 w-[180px] rounded-md border border-gray-200 bg-white shadow-lg ${
             disabled ? "opacity-60 pointer-events-none" : ""
           }`}
         >
           <div className="flex items-center justify-between px-4 py-3 border-b">
-            <div className="font-semibold">{value || "00:00"}</div>
+            <div className="font-semibold">
+              {selectedHourIdx !== null && selectedMinuteIdx !== null
+                ? `${String(selectedHourIdx).padStart(2, "0")}:${String(
+                    selectedMinuteIdx * minuteStep
+                  ).padStart(2, "0")}`
+                : value || "00:00"}
+            </div>
             <button
               type="button"
               onClick={setFromNow}
@@ -90,7 +107,10 @@ const TimePicker = ({
                 refEl={hourRef}
                 items={range(24)}
                 activeIndex={curHourIdx}
-                onSnap={(idx) => applyByIndex(idx, curMinuteIdx)}
+                onSnap={(idx) => {
+                  setSelectedHourIdx(idx);
+                  setSelectedMinuteIdx(selectedMinuteIdx ?? curMinuteIdx);
+                }}
               />
             </div>
             <div className="col-span-1">
@@ -100,7 +120,10 @@ const TimePicker = ({
                   String(index * minuteStep).padStart(2, "0")
                 )}
                 activeIndex={curMinuteIdx}
-                onSnap={(idx) => applyByIndex(curHourIdx, idx)}
+                onSnap={(idx) => {
+                  setSelectedMinuteIdx(idx);
+                  setSelectedHourIdx(selectedHourIdx ?? curHourIdx);
+                }}
               />
             </div>
           </div>
@@ -122,13 +145,15 @@ const TimePicker = ({
               variant="confirm"
               type="button"
               onClick={() => {
-                const hIdx = hourRef.current?.dataset.idx
-                  ? Number(hourRef.current.dataset.idx)
-                  : curHourIdx;
-                const mIdx = minuteRef.current?.dataset.idx
-                  ? Number(minuteRef.current.dataset.idx)
-                  : curMinuteIdx;
+                const hIdx = selectedHourIdx ?? curHourIdx;
+                const mIdx = selectedMinuteIdx ?? curMinuteIdx;
+
+                console.log("[TimePicker] 저장 클릭:", { hIdx, mIdx });
+                console.log("[TimePicker] 현재 value:", value);
+
                 applyByIndex(hIdx, mIdx);
+
+                console.log("[TimePicker] applyByIndex 호출 완료");
                 setOpen(false);
               }}
             >
@@ -150,7 +175,7 @@ const Wheel = ({ refEl, items, activeIndex, onSnap }) => {
     const el = refEl?.current || localRef.current; //외부/내부 ref 모두 지원
     if (el) {
       el.scrollTop = activeIndex * ITEM_H;
-      el.dataset.idx = activeIndex;
+      el.dataset.idx = String(activeIndex);
     }
     setCurrentIndex(activeIndex);
   }, [activeIndex, refEl]); //사용자가 다른 시간을 선택했을 때 , 컴포넌트가 처음 마운트될 때
@@ -172,7 +197,7 @@ const Wheel = ({ refEl, items, activeIndex, onSnap }) => {
         );
         el.scrollTo({ top: idx * ITEM_H, behavior: "smooth" });
         setCurrentIndex(idx);
-        el.dataset.idx = idx; // 현재 선택 인덱스를 ref DOM에 기록
+        el.dataset.idx = String(idx); // 현재 선택 인덱스를 ref DOM에 기록
         onSnap?.(idx);
       }, 80);
     };
