@@ -5,15 +5,15 @@ import { toTimeString, toDate } from "../utils/dateFormat";
 const subScheduleTemplate = {
   title: "",
   description: "",
-  start_time: "",
-  end_time: "",
+  start_time: null,
+  end_time: null,
   is_completed: false,
 };
 
 const mainScheduleTemplate = {
   title: "",
-  start_period: "",
-  end_period: "",
+  start_period: null,
+  end_period: null,
   startTime: "00:00",
   endTime: "23:59",
   category: "daily",
@@ -25,10 +25,10 @@ const mainScheduleTemplate = {
   mainScheduleSaved: false,
   savedContent: "",
   recurrence_rule: {
-    recurrence_type: "DAILY",
+    recurrence_type: null,
     weekdays: [], //id
-    month_of_year: 12,
-    day_of_month: 31,
+    month_of_year: null,
+    day_of_month: null,
   },
   detail_schedule: subScheduleTemplate,
 };

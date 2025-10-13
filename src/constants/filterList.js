@@ -22,12 +22,12 @@ export const CATEGORY_OPTION_LIST = [
 ];
 
 export const PRIORITY_OPTION_LIST = [
-  { value: "urgent", name: "긴급", Icon: FaCircle, iconClass: "text-red-500" },
-  { value: "high", name: "상", Icon: FaCircle, iconClass: "text-orange-500" },
-  { value: "medium", name: "중", Icon: FaCircle, iconClass: "text-yellow-500" },
-  { value: "low", name: "하", Icon: FaCircle, iconClass: "text-green-500" },
+  { value: "긴급", name: "긴급", Icon: FaCircle, iconClass: "text-red-500" },
+  { value: "높음", name: "상", Icon: FaCircle, iconClass: "text-orange-500" },
+  { value: "중간", name: "중", Icon: FaCircle, iconClass: "text-yellow-500" },
+  { value: "낮음", name: "하", Icon: FaCircle, iconClass: "text-green-500" },
   {
-    value: "holding",
+    value: "보류",
     name: "보류",
     Icon: FaCircle,
     iconClass: "text-blue-400",
@@ -40,20 +40,20 @@ export const SHARE_OPTION = [
 ];
 
 export const REPEAT_OPTION_LIST = [
-  { value: "none", name: "반복없음" },
-  { value: "daily", name: "매일반복" },
+  { value: null, name: "반복없음" },
+  { value: "DAILY", name: "매일반복" },
   {
-    value: "weekly",
+    value: "WEEKLY",
     name: "매주반복",
     subOptions: ["월", "화", "수", "목", "금", "토", "일"],
   },
   {
-    value: "monthly",
+    value: "MONTHLY",
     name: "매달반복",
     subOptions: Array.from({ length: 31 }, (_, i) => i + 1),
   },
   {
-    value: "yearly",
+    value: "YEARLY",
     name: "매년반복",
     subOptions: {
       months: Array.from({ length: 12 }, (_, i) => i + 1),

@@ -1,4 +1,4 @@
-import { posts } from "../assets/data/dummyPostList";
+import { useLoaderData } from "react-router";
 import FilterButtons from "../components/common/FilterButtons";
 import ScheduleStoryCard from "../components/ScheduleStoryCard";
 import useUserStore from "../stores/userStore";
@@ -7,6 +7,11 @@ const ScheduleStory = () => {
   const { isAdmin } = useUserStore();
   const userFilterButtons = ["category", "latest", "period"];
   const adminFilterButtons = ["category", "latest", "period", "reported"];
+
+  const scheduleList = useLoaderData();
+  const scheduleStoryList = scheduleList?.filter(
+    (schedule) => schedule.share_type === "전체공개"
+  );
 
   return (
     <div className="w-full flex flex-col p-4">
@@ -17,13 +22,13 @@ const ScheduleStory = () => {
       </div>
 
       <div className="text-sm p-4 border-t border-gray-200 pb-2">
-        <p>전체 : {posts.schedule_count}</p>
+        <p>전체 : {scheduleStoryList.length}</p>
       </div>
 
       <div className="flex flex-wrap justify-center items-center gap-2">
-        {posts.data.map((post) => (
-          <div key={post.id}>
-            <ScheduleStoryCard schedule={post} />
+        {scheduleStoryList?.map((schedule) => (
+          <div key={schedule.id}>
+            <ScheduleStoryCard schedule={schedule} />
           </div>
         ))}
       </div>

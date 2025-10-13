@@ -7,6 +7,7 @@ import ConfirmModal from "./common/ConfirmModal";
 import { useState } from "react";
 import { getColorOfPriority } from "../utils/getColorOfPriority";
 import { getCategoryEmoji } from "../utils/getCategoryEmoji";
+import { fetchDeleteSchedules } from "../services/scheduleApi";
 
 const ScheduleCard = ({ schedule }) => {
   const {
@@ -23,6 +24,12 @@ const ScheduleCard = ({ schedule }) => {
 
   const handleClickDeleteButton = () => {
     setIsConfirmModalOpen(true);
+  };
+
+  const handleClickDeleteScheduleButton = async (scheduleId) => {
+    await fetchDeleteSchedules(scheduleId);
+    setIsConfirmModalOpen(false);
+    location.reload();
   };
 
   detail_schedule.sort(
@@ -71,7 +78,7 @@ const ScheduleCard = ({ schedule }) => {
           message={"삭제 하시겠습니까?"}
           leftBtnText={"예"}
           rightBtnText={"아니요"}
-          onLeftClick={() => {}}
+          onLeftClick={() => handleClickDeleteScheduleButton(schedule.id)}
           onRightClick={() => setIsConfirmModalOpen(false)}
           onClose={() => setIsConfirmModalOpen(false)}
         />

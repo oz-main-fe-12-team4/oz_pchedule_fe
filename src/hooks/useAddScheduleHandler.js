@@ -236,8 +236,8 @@ const useAddScheduleHandlers = (props) => {
       id,
       title: mainSchedule.title || title || "",
       description: mainSchedule.description || content || "",
-      start_period: mainSchedule.start_period,
-      end_period: mainSchedule.end_period,
+      start_period: mainSchedule.start_period || null,
+      end_period: mainSchedule.end_period || null,
       // filters: mainSchedule.filters,
       mainScheduleSaved: true,
       savedContent: mainSchedule.description || content || "",
@@ -269,15 +269,17 @@ const useAddScheduleHandlers = (props) => {
 
     const payload = {
       title: mainSchedule.title || title || "",
-      start_period: mainSchedule.start_period,
-      end_period: mainSchedule.end_period,
+      start_period: mainSchedule.start_period || null,
+      end_period: mainSchedule.end_period || null,
       category:
         CATEGORY_OPTION_LIST.find((o) => o.value === mainSchedule.category)
           ?.id || 1,
       priority: mainSchedule.priority || "중간",
       share_type: mainSchedule.share_type || "비공개",
-      is_someday: Boolean(mainSchedule.is_someday),
-      is_recurrence: Boolean(mainSchedule.is_recurrence),
+      is_someday:
+        mainSchedule.start_period && mainSchedule.end_period ? false : true,
+      is_recurrence:
+        mainSchedule.recurrence_rule.recurrence_type === null ? false : true,
       is_reported: Boolean(mainSchedule.is_reported),
       detail_schedule: detailSchedulesPayload,
       recurrence_rule: {

@@ -1,4 +1,3 @@
-import { RoutineSchedules } from "../assets/data/dummyRoutine";
 import DailyRoutineCard from "./DailyRoutineCard";
 import moment from "moment/moment";
 
@@ -7,8 +6,9 @@ const Weekly = ({
   currentDayOfThisWeek,
   firstDateOfThisWeek,
   lastDateOfThisWeek,
+  routineScheduleList,
 }) => {
-  const routineScheduleList = RoutineSchedules.filter(
+  const filteredRoutineScheduleList = routineScheduleList.filter(
     (schedule) =>
       new Date(schedule.start_period) <= lastDateOfThisWeek &&
       new Date(schedule.end_period) >= firstDateOfThisWeek
@@ -42,7 +42,7 @@ const Weekly = ({
         >
           {el.getDate()}
           <div className="w-full flex flex-col gap-3 text-black">
-            {routineScheduleList.map((schedule) => {
+            {filteredRoutineScheduleList.map((schedule) => {
               if (
                 moment(el).isSameOrAfter(
                   new Date(schedule.start_period),

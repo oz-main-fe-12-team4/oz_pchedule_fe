@@ -153,16 +153,16 @@ const MainScheduleModal = ({
                 (opt) => opt.value === filters.repeat
               );
               if (!repeatOption) return "";
-              if (repeatOption.value === "none") return repeatOption.name;
+              if (repeatOption.value === null) return repeatOption.name;
               const sub = filters.repeatSub;
               let subText = "";
               if (
-                (repeatOption.value === "weekly" ||
-                  repeatOption.value === "monthly") &&
+                (repeatOption.value === "WEEKLY" ||
+                  repeatOption.value === "MONTHLY") &&
                 Array.isArray(sub)
               )
                 subText = sub.join(",");
-              if (repeatOption.value === "yearly" && Array.isArray(sub))
+              if (repeatOption.value === "YEARLY" && Array.isArray(sub))
                 subText = sub.map((s) => `${s.month}월${s.day}일`).join(", ");
               return `${repeatOption.name}${subText ? ` (${subText})` : ""}`;
             })()}

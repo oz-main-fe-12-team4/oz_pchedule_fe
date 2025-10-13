@@ -123,8 +123,6 @@ const DisplaySchedules = ({ week }) => {
       return day >= schedule.start && day <= schedule.end;
     })
   );
-  console.log(week);
-  console.log(filteredScheduleList);
 
   return (
     <div className="w-full absolute top-[30px] grid grid-cols-7 gap-1">

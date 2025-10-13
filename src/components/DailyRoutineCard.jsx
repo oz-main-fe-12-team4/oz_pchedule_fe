@@ -3,7 +3,7 @@ import { getColorOfPriority } from "../utils/getColorOfPriority.js";
 import { getCategoryEmoji } from "../utils/getCategoryEmoji.js";
 
 const DailyRoutineCard = ({ schedule }) => {
-  const { priority, category_code, title, is_completed } = schedule;
+  const { priority, category_code, title } = schedule;
   const priorityColor = getColorOfPriority(priority);
   const categoryEmoji = getCategoryEmoji(category_code);
 
@@ -14,7 +14,7 @@ const DailyRoutineCard = ({ schedule }) => {
       <span className="truncate">
         {categoryEmoji} {title}
       </span>
-      {is_completed ? <FaCheckSquare /> : <FaRegSquare />}
+      {/* {is_completed ? <FaCheckSquare /> : <FaRegSquare />} */}
     </div>
   );
 };

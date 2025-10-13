@@ -7,6 +7,7 @@ import { getColorOfPriority } from "../utils/getColorOfPriority.js";
 import DeleteButton from "./common/DeleteButton.jsx";
 import { useState } from "react";
 import ConfirmModal from "./common/ConfirmModal.jsx";
+import { getCategoryEmoji } from "../utils/getCategoryEmoji.js";
 
 const RoutineCard = ({ post }) => {
   const {
@@ -16,11 +17,12 @@ const RoutineCard = ({ post }) => {
     end_period,
     share_type,
     title,
-    is_completed,
+    category_code,
   } = post;
   const priorityColor = getColorOfPriority(priority);
   const recurrenceType = getRecurrenceType(recurrence_rule.recurrence_type);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const emoji = getCategoryEmoji(category_code);
 
   const handleClickDeleteButton = () => {
     setIsConfirmModalOpen(true);
@@ -55,8 +57,10 @@ const RoutineCard = ({ post }) => {
       <div className="flex w-full justify-between items-center gap-4">
         <div className="flex flex-col items-start justify-start p-3 px-6 gap-2 bg-white rounded-xl shadow-sm w-full">
           <div className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-            {is_completed ? <FaCheckSquare /> : <FaRegSquare />}
-            <span>{title}</span>
+            {/* {is_completed ? <FaCheckSquare /> : <FaRegSquare />} */}
+            <span>
+              {emoji} {title}
+            </span>
           </div>
         </div>
 

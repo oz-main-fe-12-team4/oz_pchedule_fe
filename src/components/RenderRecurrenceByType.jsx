@@ -5,7 +5,9 @@ const RenderRecurrenceByType = ({ endPeriod, recurrence }) => {
         new Date(endPeriod).getMonth() + 1
       }.${new Date(endPeriod).getDate()}`;
     case "WEEKLY":
-      return recurrence.weekdays.map((day, i) => <span key={i}>{day} </span>);
+      return recurrence.weekdays.map((day, i) => (
+        <span key={i}>{day.name} </span>
+      ));
     case "MONTHLY":
       return recurrence.day_of_month + "일";
     case "YEARLY":
