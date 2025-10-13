@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import UserCard from "../components/UserCard.jsx";
-import { userList } from "../assets/data/dummyUser.js";
+import { userList } from "../assets/data/dummyUserList.js";
 
 function TestL() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isReportedOnly, setIsReportedOnly] = useState(false);
 
-  const filteredUsers = userList.filter((user) => {
+  const filteredUsers = userList.data.filter((user) => {
     const matchesSearch =
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase());
