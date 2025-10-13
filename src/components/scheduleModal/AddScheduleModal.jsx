@@ -83,8 +83,8 @@ const AddScheduleModal = (props) => {
                 subSchedules={subSchedules}
                 setSubSchedules={setSubSchedules}
                 savedContent={mainSchedule.savedContent}
-                startDate={mainSchedule.start_period}
-                endDate={mainSchedule.end_period}
+                startDate={new Date(mainSchedule.start_period)}
+                endDate={new Date(mainSchedule.end_period)}
                 startTime={mainSchedule.startTime}
                 endTime={mainSchedule.endTime}
                 filters={mainSchedule.filters}

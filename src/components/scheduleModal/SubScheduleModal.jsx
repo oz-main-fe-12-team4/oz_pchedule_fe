@@ -44,8 +44,8 @@ const SubScheduleModal = ({
     const newSub = {
       mainContent: savedContent || "메인 일정",
       content: subContent,
-      startDate: subSelectedDate,
-      endDate: subSelectedDate,
+      startDate: new Date(subSelectedDate),
+      endDate: new Date(subSelectedDate),
       startTime: subStartTime,
       endTime: subEndTime,
     };

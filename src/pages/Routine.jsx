@@ -11,8 +11,8 @@ import RoutineCard from "../components/RoutineCard";
 import TabButton from "../components/common/TabButton";
 import PlusButton from "../components/common/PlusButton";
 import AddScheduleModal from "../components/scheduleModal/AddScheduleModal";
-import { RoutineSchedules } from "../assets/data/dummyRoutine";
 import { toTime } from "../utils/dateFormat";
+import { useLoaderData } from "react-router";
 
 const Routine = () => {
   const [isWeekly, setIsWeekly] = useState(true);
@@ -29,9 +29,14 @@ const Routine = () => {
     currentDate.getDate() + (6 - currentDayOfThisWeek)
   );
 
+  const scheduleList = useLoaderData();
+  console.log(scheduleList);
+  const routineScheduleList = scheduleList.filter(
+    (schedule) => schedule.is_recurrence === true
+  );
+
   const [isAddScheduleOpen, setIsAddScheduleOpen] = useState(false);
   const filterKeys = ["period", "date", "priority"];
-  const list = RoutineSchedules;
 
   const handleClickListButton = () => {
     setIsWeekly(false);
@@ -83,6 +88,7 @@ const Routine = () => {
             currentDayOfThisWeek={currentDayOfThisWeek}
             firstDateOfThisWeek={firstDateOfThisWeek}
             lastDateOfThisWeek={lastDateOfThisWeek}
+            routineScheduleList={routineScheduleList}
           />
         </div>
       )}
@@ -97,7 +103,7 @@ const Routine = () => {
             <TabButton />
           </div>
           <div className="divide-y-[0.5px] divide-gray-200">
-            {list.map((post) => (
+            {routineScheduleList.map((post) => (
               <div key={post.id} className="py-4">
                 <RoutineCard post={post} />
               </div>

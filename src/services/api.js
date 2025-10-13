@@ -46,7 +46,7 @@ api.interceptors.response.use(
         if (!res) throw new Error("access token 재발급 응답이 없습니다.");
 
         const data = await res.data;
-        setAccessToken(data.access_token);
+        setAccessToken(data.data.access_token);
       } catch (err) {
         if (err.response?.status === 401) {
           clearAccessToken();
