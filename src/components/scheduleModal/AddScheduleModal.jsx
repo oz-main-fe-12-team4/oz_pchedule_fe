@@ -36,7 +36,7 @@ const AddScheduleModal = (props) => {
   console.log("[AddScheduleModal] mainSchedule:", mainSchedule);
 
   const filters = {
-    category: mainSchedule.category_code,
+    category: mainSchedule.category,
     priority: mainSchedule.priority,
     share: mainSchedule.share_type,
     repeat: mainSchedule.recurrence_rule.recurrence_type,
