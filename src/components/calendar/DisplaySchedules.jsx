@@ -53,21 +53,13 @@ const DisplaySchedules = ({ week }) => {
     const startDate = toDate(schedule.start_period);
     const endDate = toDate(schedule.end_period);
 
-    const isInThisWeek = (date) => {
-      const weekStart = new Date(week[0].year, week[0].month - 1, week[0].date);
-
-      const weekEnd = new Date(
-        week[week.length - 1].year,
-        week[week.length - 1].month - 1,
-        week[week.length - 1].date
+    const isInThisWeek = (date) =>
+      week.some(
+        (d) =>
+          d.date === date.getDate() &&
+          (d.month == null || d.month === date.getMonth() + 1) &&
+          (d.year == null || d.year === date.getFullYear())
       );
-
-      // 자정 기준 정규화
-      weekStart.setHours(0, 0, 0, 0);
-      weekEnd.setHours(23, 59, 59, 999);
-
-      return date >= weekStart && date <= weekEnd;
-    };
 
     // ✅ 반복 일정 처리
     if (schedule.is_recurrence && schedule.recurrence_rule) {
@@ -117,12 +109,11 @@ const DisplaySchedules = ({ week }) => {
     (a, b) => b.end - b.start - (a.end - a.start) || a.start - b.start
   );
 
-  const filteredScheduleList = scheduleList?.filter((schedule) =>
-    week.some((d) => {
-      const day = new Date(d.year, d.month - 1, d.date);
-      return day >= schedule.start && day <= schedule.end;
-    })
+  const filteredScheduleList = scheduleList?.filter(
+    (schedule) => schedule.isStart === true || schedule.isEnd === true
   );
+
+  console.log(filteredScheduleList);
 
   return (
     <div className="w-full absolute top-[30px] grid grid-cols-7 gap-1">
